@@ -47,7 +47,7 @@ export default function Contact() {
 
   const mutation = useMutation({
     mutationFn: async (data: InsertContact) => {
-      return await apiRequest("POST", "/api/contact", data);
+      return await apiRequest("post", "/api/contact", data);
     },
     onSuccess: () => {
       toast({
