@@ -1,49 +1,57 @@
-import { Link } from "wouter";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
-import type { News } from "@/types";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import type { TNews } from "@/types/news.type";
+import { ArrowRight, Calendar, Clock } from "lucide-react";
+import { Link } from "wouter";
 
 interface NewsCardProps {
-  news: News;
+  news: TNews;
 }
 
 export function NewsCard({ news }: NewsCardProps) {
   return (
     <Link href={`/news/${news.slug}`}>
-      <a data-testid={`card-news-${news.id}`}>
-        <Card className="h-full overflow-hidden hover-elevate active-elevate-2 transition-all duration-200 hover:-translate-y-1">
+      <a data-testid={`card-news-${news._id}`}>
+        <Card className="hover-elevate active-elevate-2 h-full overflow-hidden transition-all duration-200 hover:-translate-y-1">
           <div className="relative aspect-video overflow-hidden">
             <img
-              src={news.imageUrl}
+              src={news.image}
               alt={news.title}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               loading="lazy"
             />
-            <Badge className="absolute top-3 right-3 bg-background/80 backdrop-blur">
-              {news.category}
+            <Badge className="bg-background/80 absolute top-3 right-3 backdrop-blur">
+              {news?.category?.name || "Uncategorized"}
             </Badge>
           </div>
           <CardHeader className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
-              <Calendar className="h-3.5 w-3.5" />
-              <span>{news.date}</span>
-            </div>
-            <h3 className="text-xl font-semibold line-clamp-2 leading-tight">
+            {news?.published_at && (
+              <div className="text-muted-foreground flex items-center gap-2 font-mono text-xs">
+                <Calendar className="h-3.5 w-3.5" />
+                <span>{new Date(news?.published_at).toDateString()}</span>
+              </div>
+            )}
+
+            <h3 className="line-clamp-2 text-xl leading-tight font-semibold">
               {news.title}
             </h3>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+            <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
               {news.summary}
             </p>
           </CardContent>
           <CardFooter className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-xs">
               <Clock className="h-3.5 w-3.5" />
-              <span>{news.readTime}</span>
+              <span>{news?.read_time}</span>
             </div>
-            <div className="flex items-center gap-1 text-xs font-medium text-primary">
+            <div className="text-primary flex items-center gap-1 text-xs font-medium">
               <span>Read More</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </div>

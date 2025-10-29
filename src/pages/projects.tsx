@@ -1,18 +1,19 @@
-import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { ProjectCard } from "@/components/cards/project-card";
 import { SearchFilter } from "@/components/search-filter";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Project } from "@/types";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
+import type { TProject } from "@/types/project.type";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
 
 export default function Projects() {
   usePageSEO({
     title: "Research Projects",
-    description: "Explore Mehedi Hasan Rafi's research projects in atmospheric science, climate modeling, remote sensing, and environmental studies. Discover innovative approaches to understanding Earth's atmosphere.",
+    description:
+      "Explore Mehedi Hasan Rafi's research projects in atmospheric science, climate modeling, remote sensing, and environmental studies. Discover innovative approaches to understanding Earth's atmosphere.",
   });
-  const { data: projects = [], isLoading } = useQuery<Project[]>({
+  const { data: projects = [], isLoading } = useQuery<TProject[]>({
     queryKey: ["/api/projects"],
   });
 
@@ -22,7 +23,7 @@ export default function Projects() {
 
   // Get unique categories
   const categories = useMemo(() => {
-    const cats = new Set(projects.map((p) => p.category));
+    const cats = new Set(projects.map((p) => p?.category?._id));
     return Array.from(cats).sort();
   }, [projects]);
 
@@ -37,22 +38,28 @@ export default function Projects() {
         (p) =>
           p?.title?.toLowerCase().includes(query) ||
           p?.description?.toLowerCase().includes(query) ||
-          p?.tags?.some((tag) => tag.toLowerCase().includes(query))
+          p?.tags?.some((tag) => tag.toLowerCase().includes(query)),
       );
     }
 
     // Category filter
     if (selectedCategory !== "all") {
-      filtered = filtered.filter((p) => p.category === selectedCategory);
+      filtered = filtered.filter((p) => p?.category?._id === selectedCategory);
     }
 
     // Sort
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "date-desc":
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          return (
+            new Date(b.published_at).getTime() -
+            new Date(a.published_at).getTime()
+          );
         case "date-asc":
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
+          return (
+            new Date(a.published_at).getTime() -
+            new Date(b.published_at).getTime()
+          );
         case "title-asc":
           return a.title.localeCompare(b.title);
         case "title-desc":
@@ -72,15 +79,15 @@ export default function Projects() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       {/* Header Section */}
-      <section className="py-12 lg:py-16 border-b bg-accent/20">
+      <section className="bg-accent/20 border-b py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="max-w-3xl">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+            <h1 className="mb-4 text-4xl font-bold lg:text-5xl">
               Research Projects
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               Explore my research initiatives in atmospheric science, climate
               modeling, and environmental studies. Each project represents a
               unique contribution to understanding our planet's atmosphere.
@@ -90,7 +97,7 @@ export default function Projects() {
       </section>
 
       {/* Projects Section */}
-      <section className="py-12 lg:py-16 flex-1">
+      <section className="flex-1 py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
           {/* Search and Filter */}
           <div className="mb-8 lg:mb-12">
@@ -109,11 +116,11 @@ export default function Projects() {
 
           {/* Projects Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {[...Array(6)].map((_, i) => (
                 <Card key={i} className="overflow-hidden">
                   <Skeleton className="aspect-video w-full" />
-                  <div className="p-6 space-y-3">
+                  <div className="space-y-3 p-6">
                     <Skeleton className="h-6 w-3/4" />
                     <Skeleton className="h-4 w-full" />
                     <Skeleton className="h-4 w-5/6" />
@@ -122,9 +129,9 @@ export default function Projects() {
               ))}
             </div>
           ) : filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={project._id} project={project} />
               ))}
             </div>
           ) : (
@@ -132,7 +139,7 @@ export default function Projects() {
               <CardDescription className="text-lg">
                 No projects found matching your criteria.
                 {(searchQuery || selectedCategory !== "all") && (
-                  <span className="block mt-2">
+                  <span className="mt-2 block">
                     Try adjusting your filters or search query.
                   </span>
                 )}

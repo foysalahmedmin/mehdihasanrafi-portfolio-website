@@ -1,28 +1,37 @@
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { NewsCard } from "@/components/cards/news-card";
 import { ProjectCard } from "@/components/cards/project-card";
 import { PublicationCard } from "@/components/cards/publication-card";
-import { NewsCard } from "@/components/cards/news-card";
-import { ArrowRight, BookOpen, FolderKanban } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import type { Project, Publication, News } from "@/types";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
+import type { TNews } from "@/types/news.type";
+import type { TProject } from "@/types/project.type";
+import type { TPublication } from "@/types/publication.type";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowRight, BookOpen, FolderKanban } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Home() {
   usePageSEO({
     title: "Home",
-    description: "Mehedi Hasan Rafi is a PhD researcher specializing in atmospheric studies, climate modeling, and environmental science. Explore research projects, publications, and academic contributions.",
+    description:
+      "Mehedi Hasan Rafi is a PhD researcher specializing in atmospheric studies, climate modeling, and environmental science. Explore research projects, publications, and academic contributions.",
   });
-  const { data: projects = [] } = useQuery<Project[]>({
+  const { data: projects = [] } = useQuery<TProject[]>({
     queryKey: ["/api/projects"],
   });
 
-  const { data: publications = [] } = useQuery<Publication[]>({
+  const { data: publications = [] } = useQuery<TPublication[]>({
     queryKey: ["/api/publications"],
   });
 
-  const { data: news = [] } = useQuery<News[]>({
+  const { data: news = [] } = useQuery<TNews[]>({
     queryKey: ["/api/news"],
   });
 
@@ -33,35 +42,39 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="min-h-[600px] lg:min-h-[700px] flex items-center border-b bg-gradient-to-b from-background to-accent/20">
-        <div className="container mx-auto px-6 lg:px-8 py-16 lg:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+      <section className="from-background to-accent/20 flex min-h-[600px] items-center border-b bg-gradient-to-b lg:min-h-[700px]">
+        <div className="container mx-auto px-6 py-16 lg:px-8 lg:py-24">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-5">
             {/* Text Content */}
-            <div className="lg:col-span-3 space-y-6">
+            <div className="space-y-6 lg:col-span-3">
               <div className="space-y-3">
-                <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+                <h1 className="text-5xl leading-tight font-bold lg:text-6xl">
                   Mehedi Hasan Rafi
                 </h1>
-                <p className="text-xl lg:text-2xl text-muted-foreground font-medium">
+                <p className="text-muted-foreground text-xl font-medium lg:text-2xl">
                   PhD Researcher in Atmospheric Studies
                 </p>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
-                Exploring the complexities of Earth's atmosphere through advanced
-                climate modeling, remote sensing, and data analysis. Committed to
-                understanding atmospheric processes and their impact on our planet's
-                climate system.
+              <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed">
+                Exploring the complexities of Earth's atmosphere through
+                advanced climate modeling, remote sensing, and data analysis.
+                Committed to understanding atmospheric processes and their
+                impact on our planet's climate system.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link href="/projects">
                   <Button size="lg" data-testid="button-explore-research">
-                    <FolderKanban className="h-5 w-5 mr-2" />
+                    <FolderKanban className="mr-2 h-5 w-5" />
                     Explore Research
                   </Button>
                 </Link>
                 <Link href="/publications">
-                  <Button size="lg" variant="outline" data-testid="button-view-publications">
-                    <BookOpen className="h-5 w-5 mr-2" />
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    data-testid="button-view-publications"
+                  >
+                    <BookOpen className="mr-2 h-5 w-5" />
                     View Publications
                   </Button>
                 </Link>
@@ -70,12 +83,12 @@ export default function Home() {
 
             {/* Portrait Image */}
             <div className="lg:col-span-2">
-              <div className="relative max-w-md mx-auto">
-                <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-xl">
+              <div className="relative mx-auto max-w-md">
+                <div className="aspect-[3/4] overflow-hidden rounded-lg shadow-xl">
                   <img
                     src={"/images/profile.png"}
                     alt="Mehedi Hasan Rafi"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </div>
@@ -85,30 +98,35 @@ export default function Home() {
       </section>
 
       {/* About Preview Section */}
-      <section className="py-16 lg:py-24 border-b">
+      <section className="border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
+          <div className="mx-auto max-w-4xl">
             <Card className="border-2">
               <CardHeader>
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <CardTitle className="text-3xl lg:text-4xl">About Me</CardTitle>
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <CardTitle className="text-3xl lg:text-4xl">
+                    About Me
+                  </CardTitle>
                   <Link href="/about">
-                    <Button variant="outline" data-testid="button-read-more-about">
+                    <Button
+                      variant="outline"
+                      data-testid="button-read-more-about"
+                    >
                       Read More
-                      <ArrowRight className="h-4 w-4 ml-2" />
+                      <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-base leading-relaxed text-muted-foreground">
+                <p className="text-muted-foreground text-base leading-relaxed">
                   I am a passionate PhD researcher specializing in atmospheric
                   studies with a focus on climate modeling and environmental
                   science. My research investigates the intricate dynamics of
                   Earth's atmosphere, utilizing cutting-edge remote sensing
                   technologies and advanced computational models.
                 </p>
-                <p className="text-base leading-relaxed text-muted-foreground">
+                <p className="text-muted-foreground text-base leading-relaxed">
                   With a strong foundation in physics and environmental science,
                   I aim to contribute meaningful insights into climate change,
                   atmospheric composition, and weather prediction systems.
@@ -120,11 +138,11 @@ export default function Home() {
       </section>
 
       {/* Projects Preview Section */}
-      <section className="py-16 lg:py-24 bg-accent/20 border-b">
+      <section className="bg-accent/20 border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8 lg:mb-12">
+          <div className="mb-8 flex items-center justify-between lg:mb-12">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-semibold mb-2">
+              <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
                 Recent Projects
               </h2>
               <p className="text-muted-foreground">
@@ -134,15 +152,15 @@ export default function Home() {
             <Link href="/projects">
               <Button variant="outline" data-testid="button-see-all-projects">
                 See All Projects
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
 
           {recentProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {recentProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={project._id} project={project} />
               ))}
             </div>
           ) : (
@@ -154,11 +172,11 @@ export default function Home() {
       </section>
 
       {/* Publications Preview Section */}
-      <section className="py-16 lg:py-24 border-b">
+      <section className="border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8 lg:mb-12">
+          <div className="mb-8 flex items-center justify-between lg:mb-12">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-semibold mb-2">
+              <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
                 Recent Publications
               </h2>
               <p className="text-muted-foreground">
@@ -166,17 +184,23 @@ export default function Home() {
               </p>
             </div>
             <Link href="/publications">
-              <Button variant="outline" data-testid="button-see-all-publications">
+              <Button
+                variant="outline"
+                data-testid="button-see-all-publications"
+              >
                 See All Publications
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
 
           {recentPublications.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {recentPublications.map((publication) => (
-                <PublicationCard key={publication.id} publication={publication} />
+                <PublicationCard
+                  key={publication._id}
+                  publication={publication}
+                />
               ))}
             </div>
           ) : (
@@ -188,11 +212,11 @@ export default function Home() {
       </section>
 
       {/* News Preview Section */}
-      <section className="py-16 lg:py-24 bg-accent/20">
+      <section className="bg-accent/20 py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8 lg:mb-12">
+          <div className="mb-8 flex items-center justify-between lg:mb-12">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-semibold mb-2">
+              <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
                 Latest News
               </h2>
               <p className="text-muted-foreground">
@@ -202,15 +226,15 @@ export default function Home() {
             <Link href="/news">
               <Button variant="outline" data-testid="button-see-all-news">
                 See All News
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
 
           {recentNews.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {recentNews.map((item) => (
-                <NewsCard key={item.id} news={item} />
+                <NewsCard key={item._id} news={item} />
               ))}
             </div>
           ) : (

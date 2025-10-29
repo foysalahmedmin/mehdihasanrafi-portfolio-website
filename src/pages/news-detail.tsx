@@ -1,30 +1,30 @@
-import { useRoute, Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { NewsCard } from "@/components/cards/news-card";
-import { Calendar, Clock, ArrowLeft } from "lucide-react";
-import type { News } from "@/types";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { TNews } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { Link, useRoute } from "wouter";
 
 export default function NewsDetail() {
   const [, params] = useRoute("/news/:slug");
   const slug = params?.slug;
 
-  const { data: newsItem, isLoading } = useQuery<News>({
+  const { data: newsItem, isLoading } = useQuery<TNews>({
     queryKey: ["/api/news", slug],
     queryFn: async () => {
       const response = await fetch(`/api/news/${slug}`);
       if (!response.ok) {
-        throw new Error('News article not found');
+        throw new Error("News article not found");
       }
       return response.json();
     },
     enabled: !!slug,
   });
 
-  const { data: allNews = [] } = useQuery<News[]>({
+  const { data: allNews = [] } = useQuery<TNews[]>({
     queryKey: ["/api/news"],
   });
 
@@ -35,13 +35,13 @@ export default function NewsDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex min-h-screen flex-col">
         <section className="py-12 lg:py-16">
-          <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-            <Skeleton className="h-8 w-32 mb-8" />
-            <Skeleton className="h-12 w-3/4 mb-4" />
-            <Skeleton className="h-6 w-1/2 mb-8" />
-            <Skeleton className="aspect-[21/9] w-full mb-8" />
+          <div className="container mx-auto max-w-4xl px-6 lg:px-8">
+            <Skeleton className="mb-8 h-8 w-32" />
+            <Skeleton className="mb-4 h-12 w-3/4" />
+            <Skeleton className="mb-8 h-6 w-1/2" />
+            <Skeleton className="mb-8 aspect-[21/9] w-full" />
             <div className="space-y-4">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
@@ -55,14 +55,14 @@ export default function NewsDetail() {
 
   if (!newsItem) {
     return (
-      <div className="flex flex-col min-h-screen items-center justify-center">
-        <Card className="p-12 text-center max-w-md">
-          <CardDescription className="text-lg mb-4">
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <Card className="max-w-md p-12 text-center">
+          <CardDescription className="mb-4 text-lg">
             News article not found
           </CardDescription>
           <Link href="/news">
             <Button>
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to News
             </Button>
           </Link>
@@ -74,11 +74,11 @@ export default function NewsDetail() {
   return (
     <div className="flex flex-col">
       {/* Breadcrumb */}
-      <section className="py-6 border-b">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
+      <section className="border-b py-6">
+        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <Link href="/news">
             <Button variant="ghost" size="sm" data-testid="button-back-news">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to News
             </Button>
           </Link>
@@ -86,13 +86,13 @@ export default function NewsDetail() {
       </section>
 
       {/* News Header */}
-      <section className="py-12 lg:py-16 border-b">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
+      <section className="border-b py-12 lg:py-16">
+        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <div className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Badge className="text-sm">{newsItem.category}</Badge>
-                <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-4 font-mono text-xs">
                   <div className="flex items-center gap-1.5">
                     <Calendar className="h-3.5 w-3.5" />
                     <span>{newsItem.date}</span>
@@ -103,20 +103,20 @@ export default function NewsDetail() {
                   </div>
                 </div>
               </div>
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+              <h1 className="text-4xl leading-tight font-bold lg:text-5xl">
                 {newsItem.title}
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground text-xl leading-relaxed">
                 {newsItem.summary}
               </p>
             </div>
 
             {/* Featured Image */}
-            <div className="aspect-[21/9] rounded-lg overflow-hidden shadow-lg">
+            <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
               <img
                 src={newsItem.imageUrl}
                 alt={newsItem.title}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
           </div>
@@ -124,11 +124,11 @@ export default function NewsDetail() {
       </section>
 
       {/* News Content */}
-      <section className="py-12 lg:py-16 border-b">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-          <div className="prose prose-lg max-w-none dark:prose-invert">
+      <section className="border-b py-12 lg:py-16">
+        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
+          <div className="prose prose-lg dark:prose-invert max-w-none">
             <div
-              className="whitespace-pre-line leading-relaxed"
+              className="leading-relaxed whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: newsItem.content }}
             />
           </div>
@@ -137,12 +137,12 @@ export default function NewsDetail() {
 
       {/* Related News */}
       {relatedNews.length > 0 && (
-        <section className="py-12 lg:py-16 bg-accent/20">
+        <section className="bg-accent/20 py-12 lg:py-16">
           <div className="container mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl lg:text-3xl font-semibold mb-8">
+            <h2 className="mb-8 text-2xl font-semibold lg:text-3xl">
               Related News
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {relatedNews.map((related) => (
                 <NewsCard key={related.id} news={related} />
               ))}

@@ -1,11 +1,4 @@
-import { TNews } from "./news.type";
-import { TProject } from "./project.type";
-import { TPublication } from "./publication.type";
-
-export type News = TNews
-export type Publication = TPublication
-export type Project = TProject
-export type InsertContact = {
+export type TInsertContact = {
   name: string;
   email: string;
   subject: string;

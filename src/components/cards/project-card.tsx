@@ -1,47 +1,54 @@
-import { Link } from "wouter";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import type { TProject } from "@/types/project.type";
 import { Calendar, Clock } from "lucide-react";
-import type { Project } from "@/types";
+import { Link } from "wouter";
 
 interface ProjectCardProps {
-  project: Project;
+  project: TProject;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link href={`/projects/${project.slug}`}>
-      <a data-testid={`card-project-${project.id}`}>
-        <Card className="h-full overflow-hidden hover-elevate active-elevate-2 transition-all duration-200 hover:-translate-y-1">
+      <a data-testid={`card-project-${project._id}`}>
+        <Card className="hover-elevate active-elevate-2 h-full overflow-hidden transition-all duration-200 hover:-translate-y-1">
           <div className="relative aspect-video overflow-hidden">
             <img
-              src={project.imageUrl}
+              src={project.thumbnail}
               alt={project.title}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               loading="lazy"
             />
-            <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">
-              {project.category}
+            <Badge className="bg-primary text-primary-foreground absolute top-3 left-3">
+              {project?.category?.name || "Uncategorized"}
             </Badge>
           </div>
           <CardHeader className="space-y-2">
-            <h3 className="text-xl font-semibold line-clamp-2 leading-tight">
+            <h3 className="line-clamp-2 text-xl leading-tight font-semibold">
               {project.title}
             </h3>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+            <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
               {project.description}
             </p>
           </CardContent>
-          <CardFooter className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-3.5 w-3.5" />
-              <span>{project.date}</span>
-            </div>
+          <CardFooter className="text-muted-foreground flex items-center gap-4 font-mono text-xs">
+            {project?.published_at && (
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-3.5 w-3.5" />
+                <span>{new Date(project?.published_at).toDateString()}</span>
+              </div>
+            )}
             <div className="flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5" />
-              <span>{project.readTime}</span>
+              <span>{project.read_time}</span>
             </div>
           </CardFooter>
         </Card>

@@ -1,18 +1,19 @@
-import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { NewsCard } from "@/components/cards/news-card";
 import { SearchFilter } from "@/components/search-filter";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
-import type { News } from "@/types";
+import type { TNews } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
 
 export default function NewsPage() {
   usePageSEO({
     title: "News & Updates",
-    description: "Stay updated with the latest news, conference presentations, awards, and research milestones from Mehedi Hasan Rafi's academic journey in atmospheric science.",
+    description:
+      "Stay updated with the latest news, conference presentations, awards, and research milestones from Mehedi Hasan Rafi's academic journey in atmospheric science.",
   });
-  const { data: news = [], isLoading } = useQuery<News[]>({
+  const { data: news = [], isLoading } = useQuery<TNews[]>({
     queryKey: ["/api/news"],
   });
 
@@ -37,7 +38,7 @@ export default function NewsPage() {
         (n) =>
           n.title.toLowerCase().includes(query) ||
           n.summary.toLowerCase().includes(query) ||
-          n.content.toLowerCase().includes(query)
+          n.content.toLowerCase().includes(query),
       );
     }
 
@@ -72,15 +73,15 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       {/* Header Section */}
-      <section className="py-12 lg:py-16 border-b bg-accent/20">
+      <section className="bg-accent/20 border-b py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="max-w-3xl">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+            <h1 className="mb-4 text-4xl font-bold lg:text-5xl">
               News & Updates
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               Stay informed about the latest developments in my research,
               conference presentations, awards, and other significant milestones
               in my academic journey.
@@ -90,7 +91,7 @@ export default function NewsPage() {
       </section>
 
       {/* News Section */}
-      <section className="py-12 lg:py-16 flex-1">
+      <section className="flex-1 py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
           {/* Search and Filter */}
           <div className="mb-8 lg:mb-12">
@@ -109,11 +110,11 @@ export default function NewsPage() {
 
           {/* News Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {[...Array(6)].map((_, i) => (
                 <Card key={i} className="overflow-hidden">
                   <Skeleton className="aspect-video w-full" />
-                  <div className="p-6 space-y-3">
+                  <div className="space-y-3 p-6">
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-6 w-3/4" />
                     <Skeleton className="h-4 w-full" />
@@ -123,7 +124,7 @@ export default function NewsPage() {
               ))}
             </div>
           ) : filteredNews.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {filteredNews.map((item) => (
                 <NewsCard key={item.id} news={item} />
               ))}
@@ -133,7 +134,7 @@ export default function NewsPage() {
               <CardDescription className="text-lg">
                 No news found matching your criteria.
                 {(searchQuery || selectedCategory !== "all") && (
-                  <span className="block mt-2">
+                  <span className="mt-2 block">
                     Try adjusting your filters or search query.
                   </span>
                 )}

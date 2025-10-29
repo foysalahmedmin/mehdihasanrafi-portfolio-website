@@ -1,30 +1,30 @@
-import { useRoute, Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { PublicationCard } from "@/components/cards/publication-card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { TPublication } from "@/types/publication.type";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ExternalLink, FileText, Tag } from "lucide-react";
-import type { Publication } from "@/types";
+import { Link, useRoute } from "wouter";
 
 export default function PublicationDetail() {
   const [, params] = useRoute("/publications/:slug");
   const slug = params?.slug;
 
-  const { data: publication, isLoading } = useQuery<Publication>({
+  const { data: publication, isLoading } = useQuery<TPublication>({
     queryKey: ["/api/publications", slug],
     queryFn: async () => {
       const response = await fetch(`/api/publications/${slug}`);
       if (!response.ok) {
-        throw new Error('Publication not found');
+        throw new Error("Publication not found");
       }
       return response.json();
     },
     enabled: !!slug,
   });
 
-  const { data: allPublications = [] } = useQuery<Publication[]>({
+  const { data: allPublications = [] } = useQuery<TPublication[]>({
     queryKey: ["/api/publications"],
   });
 
@@ -38,12 +38,12 @@ export default function PublicationDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex min-h-screen flex-col">
         <section className="py-12 lg:py-16">
-          <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-            <Skeleton className="h-8 w-32 mb-8" />
-            <Skeleton className="h-12 w-3/4 mb-4" />
-            <Skeleton className="h-6 w-1/2 mb-8" />
+          <div className="container mx-auto max-w-4xl px-6 lg:px-8">
+            <Skeleton className="mb-8 h-8 w-32" />
+            <Skeleton className="mb-4 h-12 w-3/4" />
+            <Skeleton className="mb-8 h-6 w-1/2" />
             <div className="space-y-4">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
@@ -57,14 +57,14 @@ export default function PublicationDetail() {
 
   if (!publication) {
     return (
-      <div className="flex flex-col min-h-screen items-center justify-center">
-        <Card className="p-12 text-center max-w-md">
-          <CardDescription className="text-lg mb-4">
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <Card className="max-w-md p-12 text-center">
+          <CardDescription className="mb-4 text-lg">
             Publication not found
           </CardDescription>
           <Link href="/publications">
             <Button>
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Publications
             </Button>
           </Link>
@@ -73,18 +73,22 @@ export default function PublicationDetail() {
     );
   }
 
-  const highlightedAuthors = publication.authors.map((author) =>
-    author.includes("Rafi") ? `<strong>${author}</strong>` : author
+  const highlightedAuthors = publication?.authors?.map((author) =>
+    author?.includes("Rafi") ? `<strong>${author}</strong>` : author,
   );
 
   return (
     <div className="flex flex-col">
       {/* Breadcrumb */}
-      <section className="py-6 border-b">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
+      <section className="border-b py-6">
+        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <Link href="/publications">
-            <Button variant="ghost" size="sm" data-testid="button-back-publications">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+            <Button
+              variant="ghost"
+              size="sm"
+              data-testid="button-back-publications"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Publications
             </Button>
           </Link>
@@ -92,23 +96,25 @@ export default function PublicationDetail() {
       </section>
 
       {/* Publication Header */}
-      <section className="py-12 lg:py-16 border-b bg-accent/20">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
+      <section className="bg-accent/20 border-b py-12 lg:py-16">
+        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <div className="space-y-6">
-            <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+            <h1 className="text-4xl leading-tight font-bold lg:text-5xl">
               {publication.title}
             </h1>
 
             {/* Authors */}
-            <p
-              className="text-lg"
-              dangerouslySetInnerHTML={{
-                __html: highlightedAuthors.join(", "),
-              }}
-            />
+            {highlightedAuthors && (
+              <p
+                className="text-lg"
+                dangerouslySetInnerHTML={{
+                  __html: highlightedAuthors?.join(", "),
+                }}
+              />
+            )}
 
             {/* Publication Details */}
-            <div className="flex flex-wrap items-center gap-4 text-sm font-mono text-muted-foreground">
+            <div className="text-muted-foreground flex flex-wrap items-center gap-4 font-mono text-sm">
               <span>{publication.venue}</span>
               <span>•</span>
               <span>{publication.date}</span>
@@ -117,17 +123,25 @@ export default function PublicationDetail() {
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 pt-4">
               {publication.pdfUrl && (
-                <a href={publication.pdfUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={publication.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button variant="default" data-testid="button-download-pdf">
-                    <FileText className="h-4 w-4 mr-2" />
+                    <FileText className="mr-2 h-4 w-4" />
                     Download PDF
                   </Button>
                 </a>
               )}
               {publication.externalUrl && (
-                <a href={publication.externalUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={publication.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button variant="outline" data-testid="button-external-link">
-                    <ExternalLink className="h-4 w-4 mr-2" />
+                    <ExternalLink className="mr-2 h-4 w-4" />
                     View Publication
                   </Button>
                 </a>
@@ -149,31 +163,31 @@ export default function PublicationDetail() {
       </section>
 
       {/* Abstract */}
-      <section className="py-12 lg:py-16 border-b">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-          <h2 className="text-2xl font-semibold mb-6">Abstract</h2>
-          <p className="text-lg leading-relaxed text-muted-foreground">
+      <section className="border-b py-12 lg:py-16">
+        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
+          <h2 className="mb-6 text-2xl font-semibold">Abstract</h2>
+          <p className="text-muted-foreground text-lg leading-relaxed">
             {publication.abstract}
           </p>
         </div>
       </section>
 
       {/* Full Content */}
-      <section className="py-12 lg:py-16 border-b">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-          <div className="prose prose-lg max-w-none dark:prose-invert">
+      <section className="border-b py-12 lg:py-16">
+        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
+          <div className="prose prose-lg dark:prose-invert max-w-none">
             <div
-              className="whitespace-pre-line leading-relaxed"
+              className="leading-relaxed whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: publication.content }}
             />
           </div>
 
           {/* Tags */}
           {publication?.tags && publication?.tags?.length > 0 && (
-            <div className="mt-12 pt-8 border-t">
-              <div className="flex items-center gap-2 mb-4">
-                <Tag className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium text-muted-foreground">
+            <div className="mt-12 border-t pt-8">
+              <div className="mb-4 flex items-center gap-2">
+                <Tag className="text-muted-foreground h-4 w-4" />
+                <span className="text-muted-foreground text-sm font-medium">
                   Research Areas
                 </span>
               </div>
@@ -191,14 +205,17 @@ export default function PublicationDetail() {
 
       {/* Related Publications */}
       {relatedPublications.length > 0 && (
-        <section className="py-12 lg:py-16 bg-accent/20">
+        <section className="bg-accent/20 py-12 lg:py-16">
           <div className="container mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl lg:text-3xl font-semibold mb-8">
+            <h2 className="mb-8 text-2xl font-semibold lg:text-3xl">
               Related Publications
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {relatedPublications.map((relatedPub) => (
-                <PublicationCard key={relatedPub.id} publication={relatedPub} />
+                <PublicationCard
+                  key={relatedPub._id}
+                  publication={relatedPub}
+                />
               ))}
             </div>
           </div>
