@@ -38,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { TipTapEditor } from "@/components/editor/TipTapEditor";
 import { Plus, Pencil, Trash2, Eye } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/utils/useToast";
@@ -277,12 +278,12 @@ export default function AdminProjectsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Content *</Label>
-                  <Textarea
-                    rows={6}
-                    value={formData.content}
-                    onChange={(e) =>
-                      setFormData({ ...formData, content: e.target.value })
+                  <TipTapEditor
+                    content={formData.content || ""}
+                    onChange={(content) =>
+                      setFormData({ ...formData, content })
                     }
+                    placeholder="Write the project content here..."
                   />
                 </div>
                 <div className="space-y-2">

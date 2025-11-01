@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { TBulkNewsResponse, TNewsResponse } from "@/types/news.type";
+import { URLS } from "@/config/urls";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, ExternalLink, Tag, User } from "lucide-react";
 import { Link, useRoute } from "wouter";
 
 export default function NewsDetail() {
@@ -119,14 +120,54 @@ export default function NewsDetail() {
               </p>
             </div>
 
+            {/* Author */}
+            {news?.author && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <User className="h-4 w-4" />
+                <span className="text-sm">{news.author}</span>
+              </div>
+            )}
+
+            {/* Source Link */}
+            {news?.link && (
+              <div>
+                <a
+                  href={news.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary hover:underline"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  <span>View Original Source</span>
+                </a>
+              </div>
+            )}
+
             {/* Featured Image */}
-            <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
-              <img
-                src={news.thumbnail}
-                alt={news.title}
-                className="h-full w-full object-cover"
-              />
-            </div>
+            {news?.thumbnail && (
+              <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
+                <img
+                  src={news.thumbnail.startsWith("http") ? news.thumbnail : `${URLS.news.thumbnail}/${news.thumbnail}`}
+                  alt={news.title}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* Additional Images */}
+            {news?.images && news.images.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                {news.images.map((image, index) => (
+                  <div key={index} className="overflow-hidden rounded-lg shadow-lg">
+                    <img
+                      src={image.startsWith("http") ? image : `${URLS.news.image}/${image}`}
+                      alt={`${news.title} - Image ${index + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -136,10 +177,29 @@ export default function NewsDetail() {
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <div className="prose prose-lg dark:prose-invert max-w-none">
             <div
-              className="leading-relaxed whitespace-pre-line"
+              className="leading-relaxed"
               dangerouslySetInnerHTML={{ __html: news.content }}
             />
           </div>
+
+          {/* Tags */}
+          {news?.tags && news.tags.length > 0 && (
+            <div className="mt-12 border-t pt-8">
+              <div className="mb-4 flex items-center gap-2">
+                <Tag className="text-muted-foreground h-4 w-4" />
+                <span className="text-muted-foreground text-sm font-medium">
+                  Tags
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {news.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

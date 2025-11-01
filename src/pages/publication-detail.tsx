@@ -7,13 +7,23 @@ import type {
   TBulkPublicationResponse,
   TPublicationResponse,
 } from "@/types/publication.type";
+import { URLS } from "@/config/urls";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ExternalLink, FileText, Tag } from "lucide-react";
+import { ArrowLeft, ExternalLink, FileText, Tag, Calendar, Clock, User, BookOpen, Building2, Download, Eye } from "lucide-react";
 import { Link, useRoute } from "wouter";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function PublicationDetail() {
   const [, params] = useRoute("/publications/:slug");
   const slug = params?.slug;
+  const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
 
   const { data: publicationResponse, isLoading } =
     useQuery<TPublicationResponse>({
@@ -80,6 +90,12 @@ export default function PublicationDetail() {
     );
   }
 
+  const pdfUrl = publication?.pdf 
+    ? (publication.pdf.startsWith("http") 
+        ? publication.pdf 
+        : `${URLS.publications.pdf}/${publication.pdf}`)
+    : null;
+
   const highlightedAuthors = publication?.authors?.map((author) =>
     author?.includes("Rafi") ? `<strong>${author}</strong>` : author,
   );
@@ -106,109 +122,230 @@ export default function PublicationDetail() {
       <section className="bg-accent/20 border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <div className="space-y-6">
-            <h1 className="text-4xl leading-tight font-bold lg:text-5xl">
-              {publication.title}
-            </h1>
+            <div className="space-y-4">
+              {publication.category && (
+                <Badge className="text-sm">{publication.category}</Badge>
+              )}
+              <h1 className="text-4xl leading-tight font-bold lg:text-5xl">
+                {publication.title}
+              </h1>
 
-            {/* Authors */}
-            {highlightedAuthors && (
-              <p
-                className="text-lg"
-                dangerouslySetInnerHTML={{
-                  __html: highlightedAuthors?.join(", "),
-                }}
-              />
-            )}
+              {/* Authors */}
+              {publication.authors && publication.authors.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <p
+                    className="text-lg"
+                    dangerouslySetInnerHTML={{
+                      __html: highlightedAuthors?.join(", ") || publication.authors.join(", "),
+                    }}
+                  />
+                </div>
+              )}
 
-            {/* Publication Details */}
-            <div className="text-muted-foreground flex flex-wrap items-center gap-4 font-mono text-sm">
-              <span>{publication.venue}</span>
-              <span>•</span>
-              <span>{publication.published_at}</span>
+              {/* Publication Details */}
+              <div className="text-muted-foreground flex flex-wrap items-center gap-4 font-mono text-sm">
+                {publication.venue && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <Building2 className="h-3.5 w-3.5" />
+                      <span>{publication.venue}</span>
+                    </div>
+                    <span>•</span>
+                  </>
+                )}
+                {publication.journal && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="h-3.5 w-3.5" />
+                      <span>{publication.journal}</span>
+                    </div>
+                    <span>•</span>
+                  </>
+                )}
+                {publication.publisher && (
+                  <>
+                    <span>{publication.publisher}</span>
+                    <span>•</span>
+                  </>
+                )}
+                {publication.volume && (
+                  <>
+                    <span>Vol. {publication.volume}</span>
+                    <span>•</span>
+                  </>
+                )}
+                {publication.published_at && (
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>{new Date(publication.published_at).toDateString()}</span>
+                  </div>
+                )}
+                {publication.read_time && (
+                  <>
+                    <span>•</span>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-3.5 w-3.5" />
+                      <span>{publication.read_time}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* DOI */}
+              {publication.doi && (
+                <div>
+                  <a
+                    href={`https://doi.org/${publication.doi}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-primary hover:underline text-sm"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span>DOI: {publication.doi}</span>
+                  </a>
+                </div>
+              )}
+
+              {/* Source Link */}
+              {publication.link && (
+                <div>
+                  <a
+                    href={publication.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-primary hover:underline"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    <span>View Publication Source</span>
+                  </a>
+                </div>
+              )}
             </div>
+
+            {/* Thumbnail */}
+            {publication.thumbnail && (
+              <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
+                <img
+                  src={publication.thumbnail.startsWith("http") 
+                    ? publication.thumbnail 
+                    : `${URLS.publications.thumbnail}/${publication.thumbnail}`}
+                  alt={publication.title}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 pt-4">
-              {publication.pdf && (
-                <a
-                  href={publication.pdf}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="default" data-testid="button-download-pdf">
-                    <FileText className="mr-2 h-4 w-4" />
-                    Download PDF
+              {pdfUrl && (
+                <>
+                  <Button 
+                    variant="default" 
+                    onClick={() => setPdfViewerOpen(true)}
+                    data-testid="button-view-pdf"
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    View PDF
                   </Button>
-                </a>
-              )}
-              {publication.link && (
-                <a
-                  href={publication.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" data-testid="button-external-link">
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    View Publication
-                  </Button>
-                </a>
-              )}
-              {publication.doi && (
-                <a
-                  href={`https://doi.org/${publication.doi}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" data-testid="button-doi">
-                    DOI: {publication.doi}
-                  </Button>
-                </a>
+                  <a
+                    href={pdfUrl}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" data-testid="button-download-pdf">
+                      <Download className="mr-2 h-4 w-4" />
+                      Download PDF
+                    </Button>
+                  </a>
+                </>
               )}
             </div>
+
+            {/* Additional Images */}
+            {publication.images && publication.images.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                {publication.images.map((image, index) => (
+                  <div key={index} className="overflow-hidden rounded-lg shadow-lg">
+                    <img
+                      src={image.startsWith("http") 
+                        ? image 
+                        : `${URLS.publications.image}/${image}`}
+                      alt={`${publication.title} - Image ${index + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* Abstract */}
-      <section className="border-b py-12 lg:py-16">
-        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <h2 className="mb-6 text-2xl font-semibold">Abstract</h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            {publication.abstract}
-          </p>
-        </div>
-      </section>
+      {publication.abstract && (
+        <section className="border-b py-12 lg:py-16">
+          <div className="container mx-auto max-w-4xl px-6 lg:px-8">
+            <h2 className="mb-6 text-2xl font-semibold">Abstract</h2>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              {publication.abstract}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Full Content */}
-      <section className="border-b py-12 lg:py-16">
-        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="prose prose-lg dark:prose-invert max-w-none">
-            <div
-              className="leading-relaxed whitespace-pre-line"
-              dangerouslySetInnerHTML={{ __html: publication.content }}
-            />
-          </div>
-
-          {/* Tags */}
-          {publication?.tags && publication?.tags?.length > 0 && (
-            <div className="mt-12 border-t pt-8">
-              <div className="mb-4 flex items-center gap-2">
-                <Tag className="text-muted-foreground h-4 w-4" />
-                <span className="text-muted-foreground text-sm font-medium">
-                  Research Areas
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {publication?.tags?.map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+      {publication.content && (
+        <section className="border-b py-12 lg:py-16">
+          <div className="container mx-auto max-w-4xl px-6 lg:px-8">
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <div
+                className="leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: publication.content }}
+              />
             </div>
-          )}
-        </div>
-      </section>
+
+            {/* Tags */}
+            {publication.tags && publication.tags.length > 0 && (
+              <div className="mt-12 border-t pt-8">
+                <div className="mb-4 flex items-center gap-2">
+                  <Tag className="text-muted-foreground h-4 w-4" />
+                  <span className="text-muted-foreground text-sm font-medium">
+                    Research Areas
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {publication.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* PDF Viewer Dialog */}
+      {pdfUrl && (
+        <Dialog open={pdfViewerOpen} onOpenChange={setPdfViewerOpen}>
+          <DialogContent className="max-w-6xl max-h-[90vh]">
+            <DialogHeader>
+              <DialogTitle>{publication.title}</DialogTitle>
+              <DialogDescription>PDF Viewer</DialogDescription>
+            </DialogHeader>
+            <div className="w-full h-[80vh]">
+              <iframe
+                src={pdfUrl}
+                className="w-full h-full border rounded"
+                title="PDF Viewer"
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Related Publications */}
       {relatedPublications.length > 0 && (

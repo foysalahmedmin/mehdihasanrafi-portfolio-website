@@ -7,8 +7,9 @@ import type {
   TBulkProjectResponse,
   TProjectResponse,
 } from "@/types/project.type";
+import { URLS } from "@/config/urls";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Tag, ExternalLink, User } from "lucide-react";
 import { Link, useRoute } from "wouter";
 
 export default function ProjectDetail() {
@@ -100,10 +101,15 @@ export default function ProjectDetail() {
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <div className="space-y-6">
             <div className="space-y-4">
-              <Badge className="text-sm">{project?.category?.name}</Badge>
+              <Badge className="text-sm">{project?.category || "Uncategorized"}</Badge>
               <h1 className="text-4xl leading-tight font-bold lg:text-5xl">
                 {project.title}
               </h1>
+              {project.description && (
+                <p className="text-muted-foreground text-xl leading-relaxed">
+                  {project.description}
+                </p>
+              )}
               <div className="text-muted-foreground flex flex-wrap items-center gap-4 font-mono text-sm">
                 {project?.published_at && (
                   <div className="flex items-center gap-2">
@@ -113,21 +119,63 @@ export default function ProjectDetail() {
                     </span>
                   </div>
                 )}
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  <span>{project.read_time}</span>
-                </div>
+                {project?.read_time && (
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    <span>{project.read_time}</span>
+                  </div>
+                )}
               </div>
             </div>
 
+            {/* Author */}
+            {project?.author && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <User className="h-4 w-4" />
+                <span className="text-sm">{project.author}</span>
+              </div>
+            )}
+
+            {/* Source Link */}
+            {project?.link && (
+              <div>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary hover:underline"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  <span>View Project Source</span>
+                </a>
+              </div>
+            )}
+
             {/* Featured Image */}
-            <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
-              <img
-                src={project.thumbnail}
-                alt={project.title}
-                className="h-full w-full object-cover"
-              />
-            </div>
+            {project?.thumbnail && (
+              <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
+                <img
+                  src={project.thumbnail.startsWith("http") ? project.thumbnail : `${URLS.projects.thumbnail}/${project.thumbnail}`}
+                  alt={project.title}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* Additional Images */}
+            {project?.images && project.images.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                {project.images.map((image, index) => (
+                  <div key={index} className="overflow-hidden rounded-lg shadow-lg">
+                    <img
+                      src={image.startsWith("http") ? image : `${URLS.projects.image}/${image}`}
+                      alt={`${project.title} - Image ${index + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -136,11 +184,8 @@ export default function ProjectDetail() {
       <section className="border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
           <div className="prose prose-lg dark:prose-invert max-w-none">
-            <p className="text-muted-foreground mb-8 text-xl leading-relaxed">
-              {project.description}
-            </p>
             <div
-              className="leading-relaxed whitespace-pre-line"
+              className="leading-relaxed"
               dangerouslySetInnerHTML={{ __html: project.content }}
             />
           </div>

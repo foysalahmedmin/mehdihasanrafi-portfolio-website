@@ -12,4 +12,13 @@ export const URLS = {
       image: `${ENV.api_url}/uploads/news/seo/images`,
     },
   },
+  projects: {
+    thumbnail: `${ENV.api_url}/uploads/projects/images`,
+    image: `${ENV.api_url}/uploads/projects/images`,
+  },
+  publications: {
+    thumbnail: `${ENV.api_url}/uploads/publications/images`,
+    image: `${ENV.api_url}/uploads/publications/images`,
+    pdf: `${ENV.api_url}/uploads/publications/pdfs`,
+  },
 };
