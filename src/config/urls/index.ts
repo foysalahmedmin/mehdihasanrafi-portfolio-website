@@ -21,4 +21,8 @@ export const URLS = {
     image: `${ENV.api_url}/uploads/publications/images`,
     pdf: `${ENV.api_url}/uploads/publications/pdfs`,
   },
+  gallery: {
+    image: `${ENV.api_url}/uploads/gallery/images`,
+    video: `${ENV.api_url}/uploads/gallery/videos`,
+  },
 };

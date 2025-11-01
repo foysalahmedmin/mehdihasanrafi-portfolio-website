@@ -15,6 +15,7 @@ export function Header() {
     { href: "/projects", label: "Research Projects" },
     { href: "/publications", label: "Publications" },
     { href: "/news", label: "News & Updates" },
+    { href: "/gallery", label: "Gallery" },
     { href: "/contact", label: "Contact" },
   ];
 

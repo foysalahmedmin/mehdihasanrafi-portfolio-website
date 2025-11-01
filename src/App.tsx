@@ -8,6 +8,7 @@ import { queryClient } from "./lib/queryClient";
 // Pages
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
+import Gallery from "@/pages/gallery";
 import Home from "@/pages/home";
 import NewsPage from "@/pages/news";
 import NewsDetail from "@/pages/news-detail";
@@ -22,6 +23,7 @@ import { Header } from "./components/partials/Header";
 // Admin Pages
 import AdminWrapper from "@/components/wrappers/AdminWrapper";
 import AdminDashboard from "@/pages/admin/dashboard";
+import AdminGalleryPage from "@/pages/admin/gallery";
 import AdminLogin from "@/pages/admin/login";
 import AdminNewsPage from "@/pages/admin/news";
 import AdminProjectsPage from "@/pages/admin/projects";
@@ -40,6 +42,7 @@ function Router() {
       <Route path="/publications/:slug" component={PublicationDetail} />
       <Route path="/news" component={NewsPage} />
       <Route path="/news/:slug" component={NewsDetail} />
+      <Route path="/gallery" component={Gallery} />
       <Route path="/contact" component={Contact} />
 
       {/* Admin Routes */}
@@ -62,6 +65,11 @@ function Router() {
       <Route path="/admin/publications">
         <AdminWrapper>
           <AdminPublicationsPage />
+        </AdminWrapper>
+      </Route>
+      <Route path="/admin/gallery">
+        <AdminWrapper>
+          <AdminGalleryPage />
         </AdminWrapper>
       </Route>
 

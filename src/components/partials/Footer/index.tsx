@@ -10,6 +10,7 @@ export function Footer() {
     { href: "/projects", label: "Projects" },
     { href: "/publications", label: "Publications" },
     { href: "/news", label: "News" },
+    { href: "/gallery", label: "Gallery" },
     { href: "/contact", label: "Contact" },
   ];
 

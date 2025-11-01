@@ -18,6 +18,7 @@ import { Mail, Phone, MapPin, Github, Linkedin, Twitter } from "lucide-react";
 import { z } from "zod";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
 import { useToast } from "@/hooks/utils/useToast";
+import type { TCreateContact, TContactResponse } from "@/types/contact.type";
 
 export const insertContactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -45,9 +46,9 @@ export default function Contact() {
     },
   });
 
-  const mutation = useMutation({
-    mutationFn: async (data: InsertContact) => {
-      return await apiRequest("post", "/api/contact", data);
+  const mutation = useMutation<TContactResponse, Error, TCreateContact>({
+    mutationFn: async (data: TCreateContact) => {
+      return await apiRequest<TContactResponse>("post", "/api/contact", data);
     },
     onSuccess: () => {
       toast({

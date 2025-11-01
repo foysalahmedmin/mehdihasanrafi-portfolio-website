@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import useUser from "@/hooks/states/useUser";
 import { useToast } from "@/hooks/utils/useToast";
-import { FileText, Home, LogOut, Newspaper, FolderKanban } from "lucide-react";
+import { FileText, Home, LogOut, Newspaper, FolderKanban, Images } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -51,6 +51,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       title: "Publications",
       icon: FileText,
       href: "/admin/publications",
+    },
+    {
+      title: "Gallery",
+      icon: Images,
+      href: "/admin/gallery",
     },
   ];
 
