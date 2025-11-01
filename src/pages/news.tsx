@@ -36,17 +36,17 @@ export default function NewsPage() {
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
+      filtered = filtered?.filter(
         (n) =>
-          n.title.toLowerCase().includes(query) ||
-          n.description.toLowerCase().includes(query) ||
-          n.content.toLowerCase().includes(query),
+          n?.title?.toLowerCase().includes(query) ||
+          n?.description?.toLowerCase().includes(query) ||
+          n?.tags?.some((tag) => tag?.toLowerCase().includes(query)),
       );
     }
 
     // Category filter
     if (selectedCategory !== "all") {
-      filtered = filtered.filter((n) => n.category === selectedCategory);
+      filtered = filtered?.filter((n) => n?.category === selectedCategory);
     }
 
     // Sort
@@ -54,13 +54,13 @@ export default function NewsPage() {
       switch (sortBy) {
         case "date-desc":
           return (
-            new Date(b.published_at).getTime() -
-            new Date(a.published_at).getTime()
+            new Date(b.published_at ?? "").getTime() -
+            new Date(a.published_at ?? "").getTime()
           );
         case "date-asc":
           return (
-            new Date(a.published_at).getTime() -
-            new Date(b.published_at).getTime()
+            new Date(a.published_at ?? "").getTime() -
+            new Date(b.published_at ?? "").getTime()
           );
         case "title-asc":
           return a.title.localeCompare(b.title);

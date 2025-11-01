@@ -26,7 +26,7 @@ export function NewsCard({ news }: NewsCardProps) {
               loading="lazy"
             />
             <Badge className="bg-background/80 absolute top-3 right-3 backdrop-blur">
-              {news?.category?.name || "Uncategorized"}
+              {news?.category || "Uncategorized"}
             </Badge>
           </div>
           <CardHeader className="space-y-2">

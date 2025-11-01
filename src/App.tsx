@@ -19,9 +19,18 @@ import NotFound from "@/pages/not-found";
 import { Header } from "./components/partials/Header";
 import { Footer } from "./components/partials/Footer";
 
+// Admin Pages
+import AdminLogin from "@/pages/admin/login";
+import AdminDashboard from "@/pages/admin/dashboard";
+import AdminNewsPage from "@/pages/admin/news";
+import AdminProjectsPage from "@/pages/admin/projects";
+import AdminPublicationsPage from "@/pages/admin/publications";
+import AdminWrapper from "@/components/wrappers/AdminWrapper";
+
 function Router() {
   return (
     <Switch>
+      {/* Public Routes */}
       <Route path="/" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/projects" component={Projects} />
@@ -31,6 +40,30 @@ function Router() {
       <Route path="/news" component={NewsPage} />
       <Route path="/news/:slug" component={NewsDetail} />
       <Route path="/contact" component={Contact} />
+
+      {/* Admin Routes */}
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin">
+        <AdminWrapper>
+          <AdminDashboard />
+        </AdminWrapper>
+      </Route>
+      <Route path="/admin/news">
+        <AdminWrapper>
+          <AdminNewsPage />
+        </AdminWrapper>
+      </Route>
+      <Route path="/admin/projects">
+        <AdminWrapper>
+          <AdminProjectsPage />
+        </AdminWrapper>
+      </Route>
+      <Route path="/admin/publications">
+        <AdminWrapper>
+          <AdminPublicationsPage />
+        </AdminWrapper>
+      </Route>
+
       <Route component={NotFound} />
     </Switch>
   );

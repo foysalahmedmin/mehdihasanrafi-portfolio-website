@@ -40,7 +40,7 @@ export default function Projects() {
         (p) =>
           p?.title?.toLowerCase().includes(query) ||
           p?.description?.toLowerCase().includes(query) ||
-          p?.tags?.some((tag) => tag.toLowerCase().includes(query)),
+          p?.tags?.some((tag) => tag?.toLowerCase().includes(query)),
       );
     }
 
@@ -54,13 +54,13 @@ export default function Projects() {
       switch (sortBy) {
         case "date-desc":
           return (
-            new Date(b.published_at).getTime() -
-            new Date(a.published_at).getTime()
+            new Date(b.published_at ?? "").getTime() -
+            new Date(a.published_at ?? "").getTime()
           );
         case "date-asc":
           return (
-            new Date(a.published_at).getTime() -
-            new Date(b.published_at).getTime()
+            new Date(a.published_at ?? "").getTime() -
+            new Date(b.published_at ?? "").getTime()
           );
         case "title-asc":
           return a.title.localeCompare(b.title);

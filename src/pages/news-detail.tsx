@@ -94,7 +94,7 @@ export default function NewsDetail() {
           <div className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <Badge className="text-sm">{news?.category?.name}</Badge>
+                <Badge className="text-sm">{news?.category || "Uncategorized"}</Badge>
                 <div className="text-muted-foreground flex items-center gap-4 font-mono text-xs">
                   {news?.published_at && (
                     <div className="flex items-center gap-1.5">

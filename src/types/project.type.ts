@@ -17,7 +17,7 @@ export type TProject = {
   tags?: string[];
   status?: TProjectStatus;
   is_featured?: boolean;
-  published_at: Date | string;
+  published_at?: Date | string;
   created_at?: string;
   updated_at?: string;
 };
