@@ -33,7 +33,7 @@ export function PublicationCard({ publication }: PublicationCardProps) {
             <div className="text-muted-foreground flex items-center gap-2 font-mono text-sm">
               <span>{publication.venue}</span>
               <span>•</span>
-              <span>{publication.date}</span>
+              <span>{publication.published_at}</span>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -47,17 +47,15 @@ export function PublicationCard({ publication }: PublicationCardProps) {
                 </Badge>
               ))}
             </div>
-            {(publication.doi ||
-              publication.externalUrl ||
-              publication.pdfUrl) && (
+            {(publication.doi || publication.link || publication.pdf) && (
               <div className="flex items-center gap-3 pt-2">
-                {publication.pdfUrl && (
+                {publication.pdf && (
                   <div className="text-primary flex items-center gap-1 text-xs">
                     <FileText className="h-3.5 w-3.5" />
                     <span>PDF</span>
                   </div>
                 )}
-                {publication.externalUrl && (
+                {publication.link && (
                   <div className="text-primary flex items-center gap-1 text-xs">
                     <ExternalLink className="h-3.5 w-3.5" />
                     <span>Link</span>

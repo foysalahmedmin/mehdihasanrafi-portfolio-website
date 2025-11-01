@@ -3,7 +3,7 @@ import { SearchFilter } from "@/components/search-filter";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
-import type { TPublication } from "@/types/publication.type";
+import type { TBulkPublicationResponse } from "@/types/publication.type";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
@@ -13,9 +13,12 @@ export default function Publications() {
     description:
       "Browse Mehedi Hasan Rafi's academic publications and research papers in atmospheric science, climate modeling, and environmental studies. Peer-reviewed contributions to scientific literature.",
   });
-  const { data: publications = [], isLoading } = useQuery<TPublication[]>({
-    queryKey: ["/api/publications"],
-  });
+  const { data: publicationsResponse, isLoading } =
+    useQuery<TBulkPublicationResponse>({
+      queryKey: ["/api/publications"],
+    });
+
+  const publications = publicationsResponse?.data || [];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -54,9 +57,15 @@ export default function Publications() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "date-desc":
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          return (
+            new Date(b.published_at).getTime() -
+            new Date(a.published_at).getTime()
+          );
         case "date-asc":
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
+          return (
+            new Date(a.published_at).getTime() -
+            new Date(b.published_at).getTime()
+          );
         case "title-asc":
           return a.title.localeCompare(b.title);
         case "title-desc":

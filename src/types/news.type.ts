@@ -6,25 +6,21 @@ export type TNews = {
   _id: string;
   title: string;
   slug: string;
-  summary: string;
+  link: string;
+  description: string;
   content: string;
-  image: string;
+  thumbnail: string;
   read_time?: string;
-  category: {
-    _id: string;
-    name: string;
-  };
+  category: string;
   author?: {
     _id: string;
     name: string;
   };
-  description?: string;
-  thumbnail?: string;
   images?: string[];
   tags?: string[];
   status?: TNewsStatus;
   is_featured: boolean;
-  published_at?: Date;
+  published_at: Date;
   created_at?: string;
   updated_at?: string;
 };

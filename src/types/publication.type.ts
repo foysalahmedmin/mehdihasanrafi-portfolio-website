@@ -6,24 +6,22 @@ export type TPublication = {
   _id: string;
   title: string;
   slug: string;
+  link?: string;
+  thumbnail?: string;
+  read_time?: string;
   venue: string;
-  date: string;
   abstract: string;
   content: string;
-  doi: string | null;
-  pdfUrl: string | null;
-  externalUrl: string | null;
-  category?: {
-    _id: string;
-    name: string;
-  };
-  author?: {
-    _id: string;
-    name: string;
-  };
+  publisher?: string;
+  journal?: string;
+  volume?: string;
+  code?: string;
+  doi?: string | null;
+  category?: string;
+  author?: string;
   authors?: string[];
   description?: string;
-  thumbnail?: string;
+  pdf?: string | null;
   images?: string[];
   tags?: string[];
   status?: TPublicationStatus;

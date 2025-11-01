@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -6,7 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { Search, X } from "lucide-react";
 
 interface SearchFilterProps {
@@ -36,10 +36,10 @@ export function SearchFilter({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col gap-4 md:flex-row">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             type="search"
             placeholder="Search..."
@@ -52,7 +52,10 @@ export function SearchFilter({
 
         {/* Category Filter */}
         <Select value={selectedCategory} onValueChange={onCategoryChange}>
-          <SelectTrigger className="w-full md:w-48" data-testid="select-category">
+          <SelectTrigger
+            className="w-full md:w-48"
+            data-testid="select-category"
+          >
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
@@ -81,7 +84,10 @@ export function SearchFilter({
 
       {/* Results Count and Clear */}
       <div className="flex items-center justify-between text-sm">
-        <span className="text-muted-foreground" data-testid="text-results-count">
+        <span
+          className="text-muted-foreground"
+          data-testid="text-results-count"
+        >
           {resultsCount} {resultsCount === 1 ? "result" : "results"} found
         </span>
         {hasActiveFilters && (
@@ -91,7 +97,7 @@ export function SearchFilter({
             onClick={onClear}
             data-testid="button-clear-filters"
           >
-            <X className="h-4 w-4 mr-2" />
+            <X className="mr-2 h-4 w-4" />
             Clear Filters
           </Button>
         )}

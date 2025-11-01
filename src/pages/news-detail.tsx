@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { TNews } from "@/types";
+import type { TBulkNewsResponse, TNewsResponse } from "@/types/news.type";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { Link, useRoute } from "wouter";
@@ -12,7 +12,7 @@ export default function NewsDetail() {
   const [, params] = useRoute("/news/:slug");
   const slug = params?.slug;
 
-  const { data: newsItem, isLoading } = useQuery<TNews>({
+  const { data: newsResponse, isLoading } = useQuery<TNewsResponse>({
     queryKey: ["/api/news", slug],
     queryFn: async () => {
       const response = await fetch(`/api/news/${slug}`);
@@ -24,13 +24,16 @@ export default function NewsDetail() {
     enabled: !!slug,
   });
 
-  const { data: allNews = [] } = useQuery<TNews[]>({
+  const { data: bulkNewsResponse } = useQuery<TBulkNewsResponse>({
     queryKey: ["/api/news"],
   });
 
+  const news = newsResponse?.data;
+  const bulkNews = bulkNewsResponse?.data || [];
+
   // Get related news (same category, excluding current)
-  const relatedNews = allNews
-    .filter((n) => n.category === newsItem?.category && n.slug !== slug)
+  const relatedNews = bulkNews
+    .filter((n) => n.category === news?.category && n.slug !== slug)
     .slice(0, 3);
 
   if (isLoading) {
@@ -53,7 +56,7 @@ export default function NewsDetail() {
     );
   }
 
-  if (!newsItem) {
+  if (!news) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center">
         <Card className="max-w-md p-12 text-center">
@@ -91,31 +94,36 @@ export default function NewsDetail() {
           <div className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <Badge className="text-sm">{newsItem.category}</Badge>
+                <Badge className="text-sm">{news?.category?.name}</Badge>
                 <div className="text-muted-foreground flex items-center gap-4 font-mono text-xs">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="h-3.5 w-3.5" />
-                    <span>{newsItem.date}</span>
-                  </div>
+                  {news?.published_at && (
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="h-3.5 w-3.5" />
+                      <span>
+                        {new Date(news?.published_at)?.toDateString()}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-1.5">
                     <Clock className="h-3.5 w-3.5" />
-                    <span>{newsItem.readTime}</span>
+                    <span>{news.read_time}</span>
                   </div>
                 </div>
               </div>
               <h1 className="text-4xl leading-tight font-bold lg:text-5xl">
-                {newsItem.title}
+                {news.title}
               </h1>
               <p className="text-muted-foreground text-xl leading-relaxed">
-                {newsItem.summary}
+                {news.description}
               </p>
             </div>
 
             {/* Featured Image */}
             <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
               <img
-                src={newsItem.imageUrl}
-                alt={newsItem.title}
+                src={news.thumbnail}
+                alt={news.title}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -129,7 +137,7 @@ export default function NewsDetail() {
           <div className="prose prose-lg dark:prose-invert max-w-none">
             <div
               className="leading-relaxed whitespace-pre-line"
-              dangerouslySetInnerHTML={{ __html: newsItem.content }}
+              dangerouslySetInnerHTML={{ __html: news.content }}
             />
           </div>
         </div>
@@ -144,7 +152,7 @@ export default function NewsDetail() {
             </h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {relatedNews.map((related) => (
-                <NewsCard key={related.id} news={related} />
+                <NewsCard key={related?._id} news={related} />
               ))}
             </div>
           </div>

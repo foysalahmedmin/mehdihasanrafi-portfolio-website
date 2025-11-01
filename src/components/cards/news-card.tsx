@@ -20,7 +20,7 @@ export function NewsCard({ news }: NewsCardProps) {
         <Card className="hover-elevate active-elevate-2 h-full overflow-hidden transition-all duration-200 hover:-translate-y-1">
           <div className="relative aspect-video overflow-hidden">
             <img
-              src={news.image}
+              src={news.thumbnail}
               alt={news.title}
               className="h-full w-full object-cover"
               loading="lazy"
@@ -43,7 +43,7 @@ export function NewsCard({ news }: NewsCardProps) {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
-              {news.summary}
+              {news.description}
             </p>
           </CardContent>
           <CardFooter className="flex items-center justify-between">

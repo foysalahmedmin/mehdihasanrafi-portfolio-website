@@ -3,7 +3,7 @@ import { SearchFilter } from "@/components/search-filter";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
-import type { TNews } from "@/types";
+import type { TBulkNewsResponse } from "@/types/news.type";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
@@ -13,9 +13,11 @@ export default function NewsPage() {
     description:
       "Stay updated with the latest news, conference presentations, awards, and research milestones from Mehedi Hasan Rafi's academic journey in atmospheric science.",
   });
-  const { data: news = [], isLoading } = useQuery<TNews[]>({
+  const { data: bulkNewsResponse, isLoading } = useQuery<TBulkNewsResponse>({
     queryKey: ["/api/news"],
   });
+
+  const bulkNews = bulkNewsResponse?.data || [];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -23,13 +25,13 @@ export default function NewsPage() {
 
   // Get unique categories
   const categories = useMemo(() => {
-    const cats = new Set(news.map((n) => n.category));
+    const cats = new Set(bulkNews.map((n) => n.category));
     return Array.from(cats).sort();
-  }, [news]);
+  }, [bulkNews]);
 
   // Filter and sort news
   const filteredNews = useMemo(() => {
-    let filtered = [...news];
+    let filtered = [...bulkNews];
 
     // Search filter
     if (searchQuery) {
@@ -37,7 +39,7 @@ export default function NewsPage() {
       filtered = filtered.filter(
         (n) =>
           n.title.toLowerCase().includes(query) ||
-          n.summary.toLowerCase().includes(query) ||
+          n.description.toLowerCase().includes(query) ||
           n.content.toLowerCase().includes(query),
       );
     }
@@ -51,9 +53,15 @@ export default function NewsPage() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "date-desc":
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          return (
+            new Date(b.published_at).getTime() -
+            new Date(a.published_at).getTime()
+          );
         case "date-asc":
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
+          return (
+            new Date(a.published_at).getTime() -
+            new Date(b.published_at).getTime()
+          );
         case "title-asc":
           return a.title.localeCompare(b.title);
         case "title-desc":
@@ -64,7 +72,7 @@ export default function NewsPage() {
     });
 
     return filtered;
-  }, [news, searchQuery, selectedCategory, sortBy]);
+  }, [bulkNews, searchQuery, selectedCategory, sortBy]);
 
   const handleClear = () => {
     setSearchQuery("");
@@ -126,7 +134,7 @@ export default function NewsPage() {
           ) : filteredNews.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {filteredNews.map((item) => (
-                <NewsCard key={item.id} news={item} />
+                <NewsCard key={item._id} news={item} />
               ))}
             </div>
           ) : (

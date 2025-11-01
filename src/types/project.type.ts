@@ -6,22 +6,17 @@ export type TProject = {
   _id: string;
   title: string;
   slug: string;
+  link?: string;
   content: string;
   thumbnail: string;
-  read_time: string;
-  category: {
-    _id: string;
-    name: string;
-  };
-  author?: {
-    _id: string;
-    name: string;
-  };
+  read_time?: string;
+  category: string;
+  author?: string;
   description?: string;
   images?: string[];
   tags?: string[];
   status?: TProjectStatus;
-  is_featured: boolean;
+  is_featured?: boolean;
   published_at: Date | string;
   created_at?: string;
   updated_at?: string;

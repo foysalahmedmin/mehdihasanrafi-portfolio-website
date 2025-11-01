@@ -10,9 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
-import type { TNews } from "@/types/news.type";
-import type { TProject } from "@/types/project.type";
-import type { TPublication } from "@/types/publication.type";
+import type { TBulkNewsResponse } from "@/types/news.type";
+import type { TBulkProjectResponse } from "@/types/project.type";
+import type { TBulkPublicationResponse } from "@/types/publication.type";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, BookOpen, FolderKanban } from "lucide-react";
 import { Link } from "wouter";
@@ -23,21 +23,25 @@ export default function Home() {
     description:
       "Mehedi Hasan Rafi is a PhD researcher specializing in atmospheric studies, climate modeling, and environmental science. Explore research projects, publications, and academic contributions.",
   });
-  const { data: projects = [] } = useQuery<TProject[]>({
+  const { data: projectsResponse } = useQuery<TBulkProjectResponse>({
     queryKey: ["/api/projects"],
   });
 
-  const { data: publications = [] } = useQuery<TPublication[]>({
+  const { data: publicationsResponse } = useQuery<TBulkPublicationResponse>({
     queryKey: ["/api/publications"],
   });
 
-  const { data: news = [] } = useQuery<TNews[]>({
+  const { data: bulkNewsResponse } = useQuery<TBulkNewsResponse>({
     queryKey: ["/api/news"],
   });
 
+  const projects = projectsResponse?.data || [];
+  const publications = publicationsResponse?.data || [];
+  const bulkNews = bulkNewsResponse?.data || [];
+
   const recentProjects = projects.slice(0, 3);
   const recentPublications = publications.slice(0, 3);
-  const recentNews = news.slice(0, 3);
+  const recentNews = bulkNews.slice(0, 3);
 
   return (
     <div className="flex flex-col">

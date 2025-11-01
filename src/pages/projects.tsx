@@ -3,7 +3,7 @@ import { SearchFilter } from "@/components/search-filter";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
-import type { TProject } from "@/types/project.type";
+import type { TBulkProjectResponse } from "@/types/project.type";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
@@ -13,9 +13,11 @@ export default function Projects() {
     description:
       "Explore Mehedi Hasan Rafi's research projects in atmospheric science, climate modeling, remote sensing, and environmental studies. Discover innovative approaches to understanding Earth's atmosphere.",
   });
-  const { data: projects = [], isLoading } = useQuery<TProject[]>({
+  const { data: projectsResponse, isLoading } = useQuery<TBulkProjectResponse>({
     queryKey: ["/api/projects"],
   });
+
+  const projects = projectsResponse?.data || [];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -23,7 +25,7 @@ export default function Projects() {
 
   // Get unique categories
   const categories = useMemo(() => {
-    const cats = new Set(projects.map((p) => p?.category?._id));
+    const cats = new Set(projects.map((p) => p?.category));
     return Array.from(cats).sort();
   }, [projects]);
 
@@ -44,7 +46,7 @@ export default function Projects() {
 
     // Category filter
     if (selectedCategory !== "all") {
-      filtered = filtered.filter((p) => p?.category?._id === selectedCategory);
+      filtered = filtered.filter((p) => p?.category === selectedCategory);
     }
 
     // Sort

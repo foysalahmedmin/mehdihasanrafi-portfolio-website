@@ -3,7 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { TProject } from "@/types/project.type";
+import type {
+  TBulkProjectResponse,
+  TProjectResponse,
+} from "@/types/project.type";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import { Link, useRoute } from "wouter";
@@ -12,7 +15,7 @@ export default function ProjectDetail() {
   const [, params] = useRoute("/projects/:slug");
   const slug = params?.slug;
 
-  const { data: project, isLoading } = useQuery<TProject>({
+  const { data: projectResponse, isLoading } = useQuery<TProjectResponse>({
     queryKey: ["/api/projects", slug],
     queryFn: async () => {
       const response = await fetch(`/api/projects/${slug}`);
@@ -24,12 +27,15 @@ export default function ProjectDetail() {
     enabled: !!slug,
   });
 
-  const { data: allProjects = [] } = useQuery<TProject[]>({
+  const { data: projectsResponse } = useQuery<TBulkProjectResponse>({
     queryKey: ["/api/projects"],
   });
 
+  const project = projectResponse?.data;
+  const projects = projectsResponse?.data || [];
+
   // Get related projects (same category, excluding current)
-  const relatedProjects = allProjects
+  const relatedProjects = projects
     .filter((p) => p.category === project?.category && p.slug !== slug)
     .slice(0, 3);
 

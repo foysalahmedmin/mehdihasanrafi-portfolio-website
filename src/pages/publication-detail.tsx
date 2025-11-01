@@ -3,7 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { TPublication } from "@/types/publication.type";
+import type {
+  TBulkPublicationResponse,
+  TPublicationResponse,
+} from "@/types/publication.type";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ExternalLink, FileText, Tag } from "lucide-react";
 import { Link, useRoute } from "wouter";
@@ -12,24 +15,28 @@ export default function PublicationDetail() {
   const [, params] = useRoute("/publications/:slug");
   const slug = params?.slug;
 
-  const { data: publication, isLoading } = useQuery<TPublication>({
-    queryKey: ["/api/publications", slug],
-    queryFn: async () => {
-      const response = await fetch(`/api/publications/${slug}`);
-      if (!response.ok) {
-        throw new Error("Publication not found");
-      }
-      return response.json();
-    },
-    enabled: !!slug,
-  });
+  const { data: publicationResponse, isLoading } =
+    useQuery<TPublicationResponse>({
+      queryKey: ["/api/publications", slug],
+      queryFn: async () => {
+        const response = await fetch(`/api/publications/${slug}`);
+        if (!response.ok) {
+          throw new Error("Publication not found");
+        }
+        return response.json();
+      },
+      enabled: !!slug,
+    });
 
-  const { data: allPublications = [] } = useQuery<TPublication[]>({
+  const { data: publicationsResponse } = useQuery<TBulkPublicationResponse>({
     queryKey: ["/api/publications"],
   });
 
+  const publication = publicationResponse?.data;
+  const publications = publicationsResponse?.data || [];
+
   // Get related publications (publications with overlapping tags)
-  const relatedPublications = allPublications
+  const relatedPublications = publications
     .filter((p) => {
       if (p.slug === slug) return false;
       return publication?.tags?.some((tag) => p?.tags?.includes(tag));
@@ -117,14 +124,14 @@ export default function PublicationDetail() {
             <div className="text-muted-foreground flex flex-wrap items-center gap-4 font-mono text-sm">
               <span>{publication.venue}</span>
               <span>•</span>
-              <span>{publication.date}</span>
+              <span>{publication.published_at}</span>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 pt-4">
-              {publication.pdfUrl && (
+              {publication.pdf && (
                 <a
-                  href={publication.pdfUrl}
+                  href={publication.pdf}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -134,9 +141,9 @@ export default function PublicationDetail() {
                   </Button>
                 </a>
               )}
-              {publication.externalUrl && (
+              {publication.link && (
                 <a
-                  href={publication.externalUrl}
+                  href={publication.link}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
