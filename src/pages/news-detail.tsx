@@ -92,7 +92,7 @@ export default function NewsDetail() {
       {/* News Header */}
       <section className="border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="space-y-6">
+          <div className="space-y-6 fade-up">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Badge className="text-sm">{news?.category || "Uncategorized"}</Badge>
@@ -175,7 +175,7 @@ export default function NewsDetail() {
       {/* News Content */}
       <section className="border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="prose prose-lg dark:prose-invert max-w-none">
+          <div className="prose prose-lg dark:prose-invert max-w-none fade-up">
             <div
               className="leading-relaxed"
               dangerouslySetInnerHTML={{ __html: news.content }}
@@ -207,10 +207,10 @@ export default function NewsDetail() {
       {relatedNews.length > 0 && (
         <section className="bg-accent/20 py-12 lg:py-16">
           <div className="container mx-auto px-6 lg:px-8">
-            <h2 className="mb-8 text-2xl font-semibold lg:text-3xl">
+            <h2 className="mb-8 text-2xl font-semibold lg:text-3xl fade-down">
               Related News
             </h2>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
               {relatedNews.map((related) => (
                 <NewsCard key={related?._id} news={related} />
               ))}

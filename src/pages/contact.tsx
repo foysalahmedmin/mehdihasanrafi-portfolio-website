@@ -101,7 +101,7 @@ export default function Contact() {
       {/* Header Section */}
       <section className="py-12 lg:py-16 border-b bg-accent/20">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl fade-up">
             <h1 className="text-4xl lg:text-5xl font-bold mb-4">
               Get in Touch
             </h1>
@@ -119,7 +119,7 @@ export default function Contact() {
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 max-w-6xl mx-auto">
             {/* Contact Form */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 fade-right">
               <Card className="border-2">
                 <CardHeader>
                   <CardTitle className="text-2xl">Send a Message</CardTitle>
@@ -217,7 +217,7 @@ export default function Contact() {
             </div>
 
             {/* Contact Information */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-6 fade-left">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-xl">Contact Information</CardTitle>

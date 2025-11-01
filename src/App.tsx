@@ -1,31 +1,32 @@
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/theme-provider";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Route, Switch } from "wouter";
+import { queryClient } from "./lib/queryClient";
 
 // Pages
-import Home from "@/pages/home";
 import About from "@/pages/about";
-import Projects from "@/pages/projects";
-import ProjectDetail from "@/pages/project-detail";
-import Publications from "@/pages/publications";
-import PublicationDetail from "@/pages/publication-detail";
+import Contact from "@/pages/contact";
+import Home from "@/pages/home";
 import NewsPage from "@/pages/news";
 import NewsDetail from "@/pages/news-detail";
-import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
-import { Header } from "./components/partials/Header";
+import ProjectDetail from "@/pages/project-detail";
+import Projects from "@/pages/projects";
+import PublicationDetail from "@/pages/publication-detail";
+import Publications from "@/pages/publications";
 import { Footer } from "./components/partials/Footer";
+import { Header } from "./components/partials/Header";
 
 // Admin Pages
-import AdminLogin from "@/pages/admin/login";
+import AdminWrapper from "@/components/wrappers/AdminWrapper";
 import AdminDashboard from "@/pages/admin/dashboard";
+import AdminLogin from "@/pages/admin/login";
 import AdminNewsPage from "@/pages/admin/news";
 import AdminProjectsPage from "@/pages/admin/projects";
 import AdminPublicationsPage from "@/pages/admin/publications";
-import AdminWrapper from "@/components/wrappers/AdminWrapper";
+import AnimationApplier from "./components/appliers/AnimationApplier";
 
 function Router() {
   return (
@@ -74,9 +75,13 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
-          <div className="flex flex-col min-h-screen">
+          <div className="flex min-h-screen flex-col">
             <Header />
             <main className="flex-1">
+              {/* Appliers */}
+              <AnimationApplier />
+
+              {/* Router */}
               <Router />
             </main>
             <Footer />

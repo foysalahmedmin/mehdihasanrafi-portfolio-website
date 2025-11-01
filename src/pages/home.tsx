@@ -50,7 +50,7 @@ export default function Home() {
         <div className="container mx-auto px-6 py-16 lg:px-8 lg:py-24">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-5">
             {/* Text Content */}
-            <div className="space-y-6 lg:col-span-3">
+            <div className="space-y-6 lg:col-span-3 fade-right">
               <div className="space-y-3">
                 <h1 className="text-5xl leading-tight font-bold lg:text-6xl">
                   Mehedi Hasan Rafi
@@ -86,7 +86,7 @@ export default function Home() {
             </div>
 
             {/* Portrait Image */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 fade-left">
               <div className="relative mx-auto max-w-md">
                 <div className="aspect-[3/4] overflow-hidden rounded-lg shadow-xl">
                   <img
@@ -104,7 +104,7 @@ export default function Home() {
       {/* About Preview Section */}
       <section className="border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl">
+          <div className="mx-auto max-w-4xl fade-up">
             <Card className="border-2">
               <CardHeader>
                 <div className="flex flex-wrap items-center justify-between gap-4">
@@ -144,7 +144,7 @@ export default function Home() {
       {/* Projects Preview Section */}
       <section className="bg-accent/20 border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="mb-8 flex items-center justify-between lg:mb-12">
+          <div className="mb-8 flex items-center justify-between lg:mb-12 fade-down">
             <div>
               <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
                 Recent Projects
@@ -162,7 +162,7 @@ export default function Home() {
           </div>
 
           {recentProjects.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
               {recentProjects.map((project) => (
                 <ProjectCard key={project._id} project={project} />
               ))}
@@ -178,7 +178,7 @@ export default function Home() {
       {/* Publications Preview Section */}
       <section className="border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="mb-8 flex items-center justify-between lg:mb-12">
+          <div className="mb-8 flex items-center justify-between lg:mb-12 fade-down">
             <div>
               <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
                 Recent Publications
@@ -199,7 +199,7 @@ export default function Home() {
           </div>
 
           {recentPublications.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
               {recentPublications.map((publication) => (
                 <PublicationCard
                   key={publication._id}
@@ -218,7 +218,7 @@ export default function Home() {
       {/* News Preview Section */}
       <section className="bg-accent/20 py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="mb-8 flex items-center justify-between lg:mb-12">
+          <div className="mb-8 flex items-center justify-between lg:mb-12 fade-down">
             <div>
               <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
                 Latest News
@@ -236,7 +236,7 @@ export default function Home() {
           </div>
 
           {recentNews.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
               {recentNews.map((item) => (
                 <NewsCard key={item._id} news={item} />
               ))}

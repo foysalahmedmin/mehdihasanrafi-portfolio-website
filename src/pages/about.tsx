@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Briefcase, Award, Quote } from "lucide-react";
+import { GraduationCap, Briefcase, Award, Quote, Search } from "lucide-react";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
 
 export default function About() {
@@ -50,6 +50,33 @@ export default function About() {
     { category: "Atmospheric Science", items: ["Weather Prediction", "Atmospheric Chemistry", "Climate Dynamics", "Satellite Data Processing"] },
   ];
 
+  const researchInterests = [
+    {
+      title: "Climate Modeling",
+      description: "Developing advanced computational models to simulate and predict climate patterns, understanding long-term atmospheric dynamics and their impacts on global weather systems.",
+    },
+    {
+      title: "Atmospheric Dynamics",
+      description: "Investigating the physical processes that govern atmospheric circulation, including jet streams, weather systems, and their interactions with Earth's surface.",
+    },
+    {
+      title: "Remote Sensing Applications",
+      description: "Utilizing satellite and ground-based remote sensing technologies to monitor atmospheric composition, cloud properties, and environmental changes.",
+    },
+    {
+      title: "Air Quality & Pollution",
+      description: "Analyzing atmospheric pollutants, their transport mechanisms, and developing strategies for air quality management and environmental protection.",
+    },
+    {
+      title: "Extreme Weather Events",
+      description: "Studying the mechanisms behind extreme weather phenomena such as hurricanes, heatwaves, and heavy precipitation events in the context of climate change.",
+    },
+    {
+      title: "Data Analysis & Machine Learning",
+      description: "Applying advanced statistical methods and machine learning techniques to analyze large-scale atmospheric datasets and improve predictive models.",
+    },
+  ];
+
   const testimonials = [
     {
       quote: "Mehedi demonstrates exceptional analytical skills and dedication to atmospheric research. His work on climate modeling has been instrumental to our team's success.",
@@ -72,7 +99,7 @@ export default function About() {
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Portrait */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 fade-right">
               <div className="sticky top-24">
                 <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
                   <img
@@ -85,7 +112,7 @@ export default function About() {
             </div>
 
             {/* Biography */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-6 fade-left">
               <div>
                 <h1 className="text-4xl lg:text-5xl font-bold mb-4">
                   About Mehedi Hasan Rafi
@@ -129,10 +156,42 @@ export default function About() {
         </div>
       </section>
 
+      {/* Research Interests */}
+      <section className="py-16 lg:py-24 border-b">
+        <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
+          <div className="mb-12 fade-down">
+            <div className="flex items-center gap-3 mb-3">
+              <Search className="h-8 w-8 text-primary" />
+              <h2 className="text-3xl lg:text-4xl font-semibold">
+                Research Interests
+              </h2>
+            </div>
+            <p className="text-muted-foreground">
+              Areas of focus and ongoing research investigations
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 fade-up">
+            {researchInterests.map((interest, index) => (
+              <Card key={index} className="h-full">
+                <CardHeader>
+                  <CardTitle className="text-xl">{interest.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {interest.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Academic Background */}
       <section className="py-16 lg:py-24 bg-accent/20 border-b">
         <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
-          <div className="mb-12">
+          <div className="mb-12 fade-down">
             <div className="flex items-center gap-3 mb-3">
               <GraduationCap className="h-8 w-8 text-primary" />
               <h2 className="text-3xl lg:text-4xl font-semibold">
@@ -144,7 +203,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6 fade-up">
             {education.map((edu, index) => (
               <Card key={index}>
                 <CardHeader>
@@ -174,7 +233,7 @@ export default function About() {
       {/* Research Experience */}
       <section className="py-16 lg:py-24 border-b">
         <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
-          <div className="mb-12">
+          <div className="mb-12 fade-down">
             <div className="flex items-center gap-3 mb-3">
               <Briefcase className="h-8 w-8 text-primary" />
               <h2 className="text-3xl lg:text-4xl font-semibold">
@@ -186,7 +245,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6 fade-up">
             {experience.map((exp, index) => (
               <Card key={index}>
                 <CardHeader>
@@ -216,7 +275,7 @@ export default function About() {
       {/* Skills and Achievements */}
       <section className="py-16 lg:py-24 bg-accent/20 border-b">
         <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
-          <div className="mb-12">
+          <div className="mb-12 fade-down">
             <div className="flex items-center gap-3 mb-3">
               <Award className="h-8 w-8 text-primary" />
               <h2 className="text-3xl lg:text-4xl font-semibold">
@@ -228,7 +287,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 fade-up">
             {skills.map((skillGroup, index) => (
               <Card key={index}>
                 <CardHeader>
@@ -252,7 +311,7 @@ export default function About() {
       {/* Testimonials */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
-          <div className="mb-12">
+          <div className="mb-12 fade-down">
             <div className="flex items-center gap-3 mb-3">
               <Quote className="h-8 w-8 text-primary" />
               <h2 className="text-3xl lg:text-4xl font-semibold">
@@ -264,7 +323,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 fade-up">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="border-2">
                 <CardContent className="pt-6 space-y-4">
