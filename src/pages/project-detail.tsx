@@ -3,13 +3,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { URLS } from "@/config/urls";
+import { getProjectBySlug } from "@/services/project.service";
 import type {
   TBulkProjectResponse,
   TProjectResponse,
 } from "@/types/project.type";
-import { URLS } from "@/config/urls";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Clock, Tag, ExternalLink, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  ExternalLink,
+  Tag,
+  User,
+} from "lucide-react";
 import { Link, useRoute } from "wouter";
 
 export default function ProjectDetail() {
@@ -19,11 +27,7 @@ export default function ProjectDetail() {
   const { data: projectResponse, isLoading } = useQuery<TProjectResponse>({
     queryKey: ["/api/projects", slug],
     queryFn: async () => {
-      const response = await fetch(`/api/projects/${slug}`);
-      if (!response.ok) {
-        throw new Error("Project not found");
-      }
-      return response.json();
+      return await getProjectBySlug(slug!);
     },
     enabled: !!slug,
   });
@@ -42,7 +46,7 @@ export default function ProjectDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col">
         <section className="py-12 lg:py-16">
           <div className="container mx-auto max-w-4xl px-6 lg:px-8">
             <Skeleton className="mb-8 h-8 w-32" />
@@ -62,7 +66,7 @@ export default function ProjectDetail() {
 
   if (!project) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center">
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center">
         <Card className="max-w-md p-12 text-center">
           <CardDescription className="mb-4 text-lg">
             Project not found
@@ -99,9 +103,11 @@ export default function ProjectDetail() {
       {/* Project Header */}
       <section className="border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="space-y-6 fade-up">
+          <div className="fade-up space-y-6">
             <div className="space-y-4">
-              <Badge className="text-sm">{project?.category || "Uncategorized"}</Badge>
+              <Badge className="text-sm">
+                {project?.category || "Uncategorized"}
+              </Badge>
               <h1 className="text-4xl leading-tight font-bold lg:text-5xl">
                 {project.title}
               </h1>
@@ -130,7 +136,7 @@ export default function ProjectDetail() {
 
             {/* Author */}
             {project?.author && (
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <User className="h-4 w-4" />
                 <span className="text-sm">{project.author}</span>
               </div>
@@ -143,7 +149,7 @@ export default function ProjectDetail() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary hover:underline"
+                  className="text-primary inline-flex items-center gap-2 hover:underline"
                 >
                   <ExternalLink className="h-4 w-4" />
                   <span>View Project Source</span>
@@ -155,7 +161,11 @@ export default function ProjectDetail() {
             {project?.thumbnail && (
               <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
                 <img
-                  src={project.thumbnail.startsWith("http") ? project.thumbnail : `${URLS.projects.thumbnail}/${project.thumbnail}`}
+                  src={
+                    project.thumbnail.startsWith("http")
+                      ? project.thumbnail
+                      : `${URLS.projects.thumbnail}/${project.thumbnail}`
+                  }
                   alt={project.title}
                   className="h-full w-full object-cover"
                 />
@@ -164,11 +174,18 @@ export default function ProjectDetail() {
 
             {/* Additional Images */}
             {project?.images && project.images.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {project.images.map((image, index) => (
-                  <div key={index} className="overflow-hidden rounded-lg shadow-lg">
+                  <div
+                    key={index}
+                    className="overflow-hidden rounded-lg shadow-lg"
+                  >
                     <img
-                      src={image.startsWith("http") ? image : `${URLS.projects.image}/${image}`}
+                      src={
+                        image.startsWith("http")
+                          ? image
+                          : `${URLS.projects.image}/${image}`
+                      }
                       alt={`${project.title} - Image ${index + 1}`}
                       className="h-full w-full object-cover"
                     />
@@ -183,7 +200,7 @@ export default function ProjectDetail() {
       {/* Project Content */}
       <section className="border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="prose prose-lg dark:prose-invert max-w-none fade-up">
+          <div className="prose prose-lg dark:prose-invert fade-up max-w-none">
             <div
               className="leading-relaxed"
               dangerouslySetInnerHTML={{ __html: project.content }}
@@ -215,10 +232,10 @@ export default function ProjectDetail() {
       {relatedProjects.length > 0 && (
         <section className="bg-accent/20 py-12 lg:py-16">
           <div className="container mx-auto px-6 lg:px-8">
-            <h2 className="mb-8 text-2xl font-semibold lg:text-3xl fade-down">
+            <h2 className="fade-down mb-8 text-2xl font-semibold lg:text-3xl">
               Related Projects
             </h2>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
+            <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {relatedProjects.map((relatedProject) => (
                 <ProjectCard
                   key={relatedProject._id}

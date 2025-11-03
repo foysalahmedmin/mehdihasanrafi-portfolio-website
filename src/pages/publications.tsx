@@ -85,11 +85,11 @@ export default function Publications() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-[calc(100vh-4rem)] flex-col">
       {/* Header Section */}
       <section className="bg-accent/20 border-b py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="max-w-3xl fade-up">
+          <div className="fade-up max-w-3xl">
             <h1 className="mb-4 text-4xl font-bold lg:text-5xl">
               Publications
             </h1>
@@ -106,7 +106,7 @@ export default function Publications() {
       <section className="flex-1 py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
           {/* Search and Filter */}
-          <div className="mb-8 lg:mb-12 fade-down">
+          <div className="fade-down mb-8 lg:mb-12">
             <SearchFilter
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -134,7 +134,7 @@ export default function Publications() {
               ))}
             </div>
           ) : filteredPublications.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
+            <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {filteredPublications.map((publication) => (
                 <PublicationCard
                   key={publication._id}

@@ -1,14 +1,4 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { TipTapEditor } from "@/components/editor/TipTapEditor";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,6 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -29,7 +21,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -37,20 +28,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { TipTapEditor } from "@/components/editor/TipTapEditor";
-import { Plus, Pencil, Trash2, Eye } from "lucide-react";
-import { useLocation } from "wouter";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/utils/useToast";
 import {
-  getAllProjects,
   createProject,
-  updateProject,
   deleteProject,
+  getAllProjects,
+  updateProject,
   type CreateProjectPayload,
   type UpdateProjectPayload,
 } from "@/services/project.service";
 import type { TProject } from "@/types/project.type";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useLocation } from "wouter";
 import AdminLayout from "./layout";
 
 export default function AdminProjectsPage() {
@@ -71,6 +71,8 @@ export default function AdminProjectsPage() {
   });
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [images, setImages] = useState<File[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-projects"],
@@ -91,15 +93,21 @@ export default function AdminProjectsPage() {
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to create project",
+        description:
+          error?.response?.data?.message || "Failed to create project",
         variant: "destructive",
       });
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: UpdateProjectPayload }) =>
-      updateProject(id, payload),
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: UpdateProjectPayload;
+    }) => updateProject(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-projects"] });
       toast({
@@ -112,7 +120,8 @@ export default function AdminProjectsPage() {
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to update project",
+        description:
+          error?.response?.data?.message || "Failed to update project",
         variant: "destructive",
       });
     },
@@ -131,7 +140,8 @@ export default function AdminProjectsPage() {
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to delete project",
+        description:
+          error?.response?.data?.message || "Failed to delete project",
         variant: "destructive",
       });
     },
@@ -148,11 +158,18 @@ export default function AdminProjectsPage() {
     });
     setThumbnail(null);
     setImages([]);
+    setTags([]);
+    setTagInput("");
     setSelectedProject(null);
   };
 
   const handleCreate = () => {
-    if (!formData.title || !formData.slug || !formData.content || !formData.category) {
+    if (
+      !formData.title ||
+      !formData.slug ||
+      !formData.content ||
+      !formData.category
+    ) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields",
@@ -164,6 +181,7 @@ export default function AdminProjectsPage() {
       ...formData,
       thumbnail: thumbnail || undefined,
       images: images.length > 0 ? images : undefined,
+      tags: tags.length > 0 ? tags : undefined,
     } as CreateProjectPayload);
   };
 
@@ -176,15 +194,25 @@ export default function AdminProjectsPage() {
       category: project.category,
       description: project.description,
       link: project.link,
+      author: project.author,
       status: project.status || "draft",
       is_featured: project.is_featured || false,
       read_time: project.read_time,
+      published_at: project.published_at
+        ? new Date(project.published_at).toISOString()
+        : undefined,
     });
+    setTags(project.tags || []);
     setIsEditDialogOpen(true);
   };
 
   const handleUpdate = () => {
-    if (!selectedProject || !formData.title || !formData.slug || !formData.content) {
+    if (
+      !selectedProject ||
+      !formData.title ||
+      !formData.slug ||
+      !formData.content
+    ) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields",
@@ -198,6 +226,7 @@ export default function AdminProjectsPage() {
         ...formData,
         thumbnail: thumbnail || undefined,
         images: images.length > 0 ? images : undefined,
+        tags: tags.length > 0 ? tags : undefined,
       },
     });
   };
@@ -213,6 +242,24 @@ export default function AdminProjectsPage() {
     }
   };
 
+  const addTag = () => {
+    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+
+  const handleTagKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addTag();
+    }
+  };
+
   const projects = data?.data || [];
 
   return (
@@ -225,14 +272,17 @@ export default function AdminProjectsPage() {
               Create, edit, and manage projects
             </p>
           </div>
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button onClick={() => resetForm()}>
                 <Plus className="mr-2 h-4 w-4" />
                 Add Project
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Create Project</DialogTitle>
                 <DialogDescription>
@@ -240,42 +290,58 @@ export default function AdminProjectsPage() {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Title *</Label>
-                  <Input
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Title *</Label>
+                    <Input
+                      value={formData.title}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Slug *</Label>
+                    <Input
+                      value={formData.slug}
+                      onChange={(e) =>
+                        setFormData({ ...formData, slug: e.target.value })
+                      }
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label>Slug *</Label>
-                  <Input
-                    value={formData.slug}
-                    onChange={(e) =>
-                      setFormData({ ...formData, slug: e.target.value })
-                    }
-                  />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Category *</Label>
+                    <Input
+                      value={formData.category}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Author</Label>
+                    <Input
+                      value={formData.author || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, author: e.target.value })
+                      }
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label>Category *</Label>
-                  <Input
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
-                    }
-                  />
-                </div>
+
                 <div className="space-y-2">
                   <Label>Description</Label>
                   <Textarea
-                    value={formData.description}
+                    value={formData.description || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label>Content *</Label>
                   <TipTapEditor
@@ -286,46 +352,134 @@ export default function AdminProjectsPage() {
                     placeholder="Write the project content here..."
                   />
                 </div>
+
                 <div className="space-y-2">
-                  <Label>Thumbnail</Label>
+                  <Label>Link</Label>
                   <Input
-                    type="file"
-                    accept="image/*"
+                    value={formData.link || ""}
                     onChange={(e) =>
-                      setThumbnail(e.target.files?.[0] || null)
+                      setFormData({ ...formData, link: e.target.value })
                     }
+                    placeholder="https://example.com"
                   />
                 </div>
+
                 <div className="space-y-2">
-                  <Label>Status</Label>
-                  <Select
-                    value={formData.status}
-                    onValueChange={(value: any) =>
-                      setFormData({ ...formData, status: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="published">Published</SelectItem>
-                      <SelectItem value="archived">Archived</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="featured"
-                    checked={formData.is_featured}
+                  <Label>Published At</Label>
+                  <Input
+                    type="datetime-local"
+                    value={formData.published_at || ""}
                     onChange={(e) =>
-                      setFormData({ ...formData, is_featured: e.target.checked })
+                      setFormData({ ...formData, published_at: e.target.value })
                     }
                   />
-                  <Label htmlFor="featured">Featured</Label>
                 </div>
+
+                <div className="space-y-2">
+                  <Label>Tags</Label>
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <Input
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        onKeyPress={handleTagKeyPress}
+                        placeholder="Add a tag and press Enter"
+                      />
+                      <Button type="button" onClick={addTag} variant="outline">
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {tag}
+                          <button
+                            type="button"
+                            onClick={() => removeTag(tag)}
+                            className="hover:text-destructive ml-1"
+                          >
+                            ×
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Thumbnail</Label>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        setThumbnail(e.target.files?.[0] || null)
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Additional Images</Label>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) =>
+                        setImages(Array.from(e.target.files || []))
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Status</Label>
+                    <Select
+                      value={formData.status}
+                      onValueChange={(value: any) =>
+                        setFormData({ ...formData, status: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="draft">Draft</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="published">Published</SelectItem>
+                        <SelectItem value="archived">Archived</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Read Time</Label>
+                    <Input
+                      value={formData.read_time || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, read_time: e.target.value })
+                      }
+                      placeholder="5 min read"
+                    />
+                  </div>
+                  <div className="flex items-center space-x-2 pt-8">
+                    <input
+                      type="checkbox"
+                      id="featured"
+                      checked={formData.is_featured}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          is_featured: e.target.checked,
+                        })
+                      }
+                    />
+                    <Label htmlFor="featured">Featured</Label>
+                  </div>
+                </div>
+
                 <Button
                   onClick={handleCreate}
                   disabled={createMutation.isPending}
@@ -382,9 +536,7 @@ export default function AdminProjectsPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() =>
-                            setLocation(`/projects/${item.slug}`)
-                          }
+                          onClick={() => setLocation(`/projects/${item.slug}`)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -400,7 +552,7 @@ export default function AdminProjectsPage() {
                           size="sm"
                           onClick={() => handleDelete(item)}
                         >
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                          <Trash2 className="text-destructive h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -412,98 +564,198 @@ export default function AdminProjectsPage() {
         )}
 
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Project</DialogTitle>
               <DialogDescription>Update project details</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Title *</Label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Title *</Label>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Slug *</Label>
+                  <Input
+                    value={formData.slug}
+                    onChange={(e) =>
+                      setFormData({ ...formData, slug: e.target.value })
+                    }
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>Slug *</Label>
-                <Input
-                  value={formData.slug}
-                  onChange={(e) =>
-                    setFormData({ ...formData, slug: e.target.value })
-                  }
-                />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Category *</Label>
+                  <Input
+                    value={formData.category}
+                    onChange={(e) =>
+                      setFormData({ ...formData, category: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Author</Label>
+                  <Input
+                    value={formData.author || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, author: e.target.value })
+                    }
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>Category *</Label>
-                <Input
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
-                  }
-                />
-              </div>
+
               <div className="space-y-2">
                 <Label>Description</Label>
                 <Textarea
-                  value={formData.description}
+                  value={formData.description || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
                 />
               </div>
+
               <div className="space-y-2">
                 <Label>Content *</Label>
-                <Textarea
-                  rows={6}
-                  value={formData.content}
-                  onChange={(e) =>
-                    setFormData({ ...formData, content: e.target.value })
-                  }
+                <TipTapEditor
+                  content={formData.content || ""}
+                  onChange={(content) => setFormData({ ...formData, content })}
+                  placeholder="Write the project content here..."
                 />
               </div>
+
               <div className="space-y-2">
-                <Label>Thumbnail (leave empty to keep current)</Label>
+                <Label>Link</Label>
                 <Input
-                  type="file"
-                  accept="image/*"
+                  value={formData.link || ""}
                   onChange={(e) =>
-                    setThumbnail(e.target.files?.[0] || null)
+                    setFormData({ ...formData, link: e.target.value })
                   }
+                  placeholder="https://example.com"
                 />
               </div>
+
               <div className="space-y-2">
-                <Label>Status</Label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(value: any) =>
-                    setFormData({ ...formData, status: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                    <SelectItem value="archived">Archived</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="edit-featured"
-                  checked={formData.is_featured}
+                <Label>Published At</Label>
+                <Input
+                  type="datetime-local"
+                  value={formData.published_at || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, is_featured: e.target.checked })
+                    setFormData({ ...formData, published_at: e.target.value })
                   }
                 />
-                <Label htmlFor="edit-featured">Featured</Label>
               </div>
+
+              <div className="space-y-2">
+                <Label>Tags</Label>
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <Input
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      onKeyPress={handleTagKeyPress}
+                      placeholder="Add a tag and press Enter"
+                    />
+                    <Button type="button" onClick={addTag} variant="outline">
+                      Add
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {tags?.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => removeTag(tag)}
+                          className="hover:text-destructive ml-1"
+                        >
+                          ×
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Thumbnail (leave empty to keep current)</Label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Additional Images</Label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) =>
+                      setImages(Array.from(e.target.files || []))
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value: any) =>
+                      setFormData({ ...formData, status: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                      <SelectItem value="archived">Archived</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Read Time</Label>
+                  <Input
+                    value={formData.read_time || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, read_time: e.target.value })
+                    }
+                    placeholder="5 min read"
+                  />
+                </div>
+                <div className="flex items-center space-x-2 pt-8">
+                  <input
+                    type="checkbox"
+                    id="edit-featured"
+                    checked={formData.is_featured}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        is_featured: e.target.checked,
+                      })
+                    }
+                  />
+                  <Label htmlFor="edit-featured">Featured</Label>
+                </div>
+              </div>
+
               <Button
                 onClick={handleUpdate}
                 disabled={updateMutation.isPending}
@@ -515,7 +767,10 @@ export default function AdminProjectsPage() {
           </DialogContent>
         </Dialog>
 
-        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -539,4 +794,3 @@ export default function AdminProjectsPage() {
     </AdminLayout>
   );
 }
-

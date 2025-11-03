@@ -1,9 +1,5 @@
 import api from "@/lib/api";
-import type {
-  TBulkNewsResponse,
-  TNews,
-  TNewsResponse,
-} from "@/types/news.type";
+import type { TBulkNewsResponse, TNewsResponse } from "@/types/news.type";
 import type { Response } from "@/types/response.type";
 
 export type CreateNewsPayload = {
@@ -51,7 +47,7 @@ export async function createNews(
   formData.append("slug", payload.slug);
   formData.append("content", payload.content);
   formData.append("category", payload.category);
-  
+
   if (payload.link) formData.append("link", payload.link);
   if (payload.description) formData.append("description", payload.description);
   if (payload.author) formData.append("author", payload.author);
@@ -59,17 +55,18 @@ export async function createNews(
   if (payload.video) formData.append("video", payload.video);
   if (payload.youtube) formData.append("youtube", payload.youtube);
   if (payload.read_time) formData.append("read_time", payload.read_time);
-  if (payload.published_at) formData.append("published_at", payload.published_at);
-  
+  if (payload.published_at)
+    formData.append("published_at", payload.published_at);
+
   if (payload.status) formData.append("status", payload.status);
   if (payload.is_featured !== undefined) {
     formData.append("is_featured", String(payload.is_featured));
   }
-  
+
   if (payload.tags?.length) {
     payload.tags.forEach((tag) => formData.append("tags", tag));
   }
-  
+
   if (payload.images?.length) {
     payload.images.forEach((image) => formData.append("images", image));
   }
@@ -86,7 +83,7 @@ export async function updateNews(
   payload: UpdateNewsPayload,
 ): Promise<TNewsResponse> {
   const formData = new FormData();
-  
+
   if (payload.title) formData.append("title", payload.title);
   if (payload.slug) formData.append("slug", payload.slug);
   if (payload.content) formData.append("content", payload.content);
@@ -97,8 +94,9 @@ export async function updateNews(
   if (payload.video) formData.append("video", payload.video);
   if (payload.youtube) formData.append("youtube", payload.youtube);
   if (payload.read_time) formData.append("read_time", payload.read_time);
-  if (payload.published_at) formData.append("published_at", payload.published_at);
-  
+  if (payload.published_at)
+    formData.append("published_at", payload.published_at);
+
   if (payload.thumbnail !== undefined) {
     if (payload.thumbnail instanceof File) {
       formData.append("thumbnail", payload.thumbnail);
@@ -106,16 +104,16 @@ export async function updateNews(
       formData.append("thumbnail", "");
     }
   }
-  
+
   if (payload.status) formData.append("status", payload.status);
   if (payload.is_featured !== undefined) {
     formData.append("is_featured", String(payload.is_featured));
   }
-  
+
   if (payload.tags) {
     payload.tags.forEach((tag) => formData.append("tags", tag));
   }
-  
+
   if (payload.images) {
     payload.images.forEach((image) => formData.append("images", image));
   }
@@ -131,4 +129,3 @@ export async function deleteNews(id: string): Promise<Response<null>> {
   const response = await api.delete(`/api/news/${id}/permanent`);
   return response.data as Response<null>;
 }
-

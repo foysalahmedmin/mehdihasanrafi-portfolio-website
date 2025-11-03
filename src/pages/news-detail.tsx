@@ -3,10 +3,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { TBulkNewsResponse, TNewsResponse } from "@/types/news.type";
 import { URLS } from "@/config/urls";
+import { getNewsBySlug } from "@/services/news.service";
+import type { TBulkNewsResponse, TNewsResponse } from "@/types/news.type";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Clock, ExternalLink, Tag, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  ExternalLink,
+  Tag,
+  User,
+} from "lucide-react";
 import { Link, useRoute } from "wouter";
 
 export default function NewsDetail() {
@@ -16,11 +24,7 @@ export default function NewsDetail() {
   const { data: newsResponse, isLoading } = useQuery<TNewsResponse>({
     queryKey: ["/api/news", slug],
     queryFn: async () => {
-      const response = await fetch(`/api/news/${slug}`);
-      if (!response.ok) {
-        throw new Error("News article not found");
-      }
-      return response.json();
+      return await getNewsBySlug(slug!);
     },
     enabled: !!slug,
   });
@@ -39,7 +43,7 @@ export default function NewsDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col">
         <section className="py-12 lg:py-16">
           <div className="container mx-auto max-w-4xl px-6 lg:px-8">
             <Skeleton className="mb-8 h-8 w-32" />
@@ -59,7 +63,7 @@ export default function NewsDetail() {
 
   if (!news) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center">
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center">
         <Card className="max-w-md p-12 text-center">
           <CardDescription className="mb-4 text-lg">
             News article not found
@@ -92,10 +96,12 @@ export default function NewsDetail() {
       {/* News Header */}
       <section className="border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="space-y-6 fade-up">
+          <div className="fade-up space-y-6">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <Badge className="text-sm">{news?.category || "Uncategorized"}</Badge>
+                <Badge className="text-sm">
+                  {news?.category || "Uncategorized"}
+                </Badge>
                 <div className="text-muted-foreground flex items-center gap-4 font-mono text-xs">
                   {news?.published_at && (
                     <div className="flex items-center gap-1.5">
@@ -122,7 +128,7 @@ export default function NewsDetail() {
 
             {/* Author */}
             {news?.author && (
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <User className="h-4 w-4" />
                 <span className="text-sm">{news.author}</span>
               </div>
@@ -135,7 +141,7 @@ export default function NewsDetail() {
                   href={news.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary hover:underline"
+                  className="text-primary inline-flex items-center gap-2 hover:underline"
                 >
                   <ExternalLink className="h-4 w-4" />
                   <span>View Original Source</span>
@@ -147,7 +153,11 @@ export default function NewsDetail() {
             {news?.thumbnail && (
               <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
                 <img
-                  src={news.thumbnail.startsWith("http") ? news.thumbnail : `${URLS.news.thumbnail}/${news.thumbnail}`}
+                  src={
+                    news.thumbnail.startsWith("http")
+                      ? news.thumbnail
+                      : `${URLS.news.thumbnail}/${news.thumbnail}`
+                  }
                   alt={news.title}
                   className="h-full w-full object-cover"
                 />
@@ -156,11 +166,18 @@ export default function NewsDetail() {
 
             {/* Additional Images */}
             {news?.images && news.images.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {news.images.map((image, index) => (
-                  <div key={index} className="overflow-hidden rounded-lg shadow-lg">
+                  <div
+                    key={index}
+                    className="overflow-hidden rounded-lg shadow-lg"
+                  >
                     <img
-                      src={image.startsWith("http") ? image : `${URLS.news.image}/${image}`}
+                      src={
+                        image.startsWith("http")
+                          ? image
+                          : `${URLS.news.image}/${image}`
+                      }
                       alt={`${news.title} - Image ${index + 1}`}
                       className="h-full w-full object-cover"
                     />
@@ -175,7 +192,7 @@ export default function NewsDetail() {
       {/* News Content */}
       <section className="border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="prose prose-lg dark:prose-invert max-w-none fade-up">
+          <div className="prose prose-lg dark:prose-invert fade-up max-w-none">
             <div
               className="leading-relaxed"
               dangerouslySetInnerHTML={{ __html: news.content }}
@@ -207,10 +224,10 @@ export default function NewsDetail() {
       {relatedNews.length > 0 && (
         <section className="bg-accent/20 py-12 lg:py-16">
           <div className="container mx-auto px-6 lg:px-8">
-            <h2 className="mb-8 text-2xl font-semibold lg:text-3xl fade-down">
+            <h2 className="fade-down mb-8 text-2xl font-semibold lg:text-3xl">
               Related News
             </h2>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
+            <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {relatedNews.map((related) => (
                 <NewsCard key={related?._id} news={related} />
               ))}

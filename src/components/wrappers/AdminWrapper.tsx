@@ -1,8 +1,12 @@
+import useUser from "@/hooks/states/useUser";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import useUser from "@/hooks/states/useUser";
 
-export default function AdminWrapper({ children }: { children: React.ReactNode }) {
+export default function AdminWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [, setLocation] = useLocation();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +34,7 @@ export default function AdminWrapper({ children }: { children: React.ReactNode }
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <div>Loading...</div>
       </div>
     );
@@ -38,4 +42,3 @@ export default function AdminWrapper({ children }: { children: React.ReactNode }
 
   return <>{children}</>;
 }
-

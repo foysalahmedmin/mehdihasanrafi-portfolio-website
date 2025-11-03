@@ -15,7 +15,7 @@ export function PublicationCard({ publication }: PublicationCardProps) {
 
   return (
     <Link href={`/publications/${publication.slug}`}>
-      <a data-testid={`card-publication-${publication._id}`}>
+      <div data-testid={`card-publication-${publication._id}`}>
         <Card className="hover-elevate active-elevate-2 h-full transition-all duration-200 hover:-translate-y-1">
           <CardHeader className="space-y-3">
             <h3 className="line-clamp-2 text-xl leading-tight font-semibold">
@@ -33,7 +33,11 @@ export function PublicationCard({ publication }: PublicationCardProps) {
             <div className="text-muted-foreground flex items-center gap-2 font-mono text-sm">
               <span>{publication.venue}</span>
               <span>•</span>
-              <span>{publication.published_at}</span>
+              <span>
+                {publication.published_at
+                  ? new Date(publication.published_at).toLocaleDateString()
+                  : ""}
+              </span>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -65,7 +69,7 @@ export function PublicationCard({ publication }: PublicationCardProps) {
             )}
           </CardContent>
         </Card>
-      </a>
+      </div>
     </Link>
   );
 }

@@ -1,7 +1,6 @@
 import api from "@/lib/api";
 import type {
   TBulkProjectResponse,
-  TProject,
   TProjectResponse,
 } from "@/types/project.type";
 import type { Response } from "@/types/response.type";
@@ -129,4 +128,3 @@ export async function deleteProject(id: string): Promise<Response<null>> {
   const response = await api.delete(`/api/projects/${id}/permanent`);
   return response.data as Response<null>;
 }
-

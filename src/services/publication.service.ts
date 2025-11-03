@@ -1,7 +1,6 @@
 import api from "@/lib/api";
 import type {
   TBulkPublicationResponse,
-  TPublication,
   TPublicationResponse,
 } from "@/types/publication.type";
 import type { Response } from "@/types/response.type";
@@ -172,4 +171,3 @@ export async function deletePublication(id: string): Promise<Response<null>> {
   const response = await api.delete(`/api/publications/${id}/permanent`);
   return response.data as Response<null>;
 }
-

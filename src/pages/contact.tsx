@@ -1,7 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -10,15 +8,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import { Mail, Phone, MapPin, Github, Linkedin, Twitter } from "lucide-react";
-import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
 import { useToast } from "@/hooks/utils/useToast";
-import type { TCreateContact, TContactResponse } from "@/types/contact.type";
+import { apiRequest } from "@/lib/queryClient";
+import type { TContactResponse, TCreateContact } from "@/types/contact.type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Github, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export const insertContactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -32,7 +32,8 @@ export type InsertContact = z.infer<typeof insertContactSchema>;
 export default function Contact() {
   usePageSEO({
     title: "Contact",
-    description: "Get in touch with Mehedi Hasan Rafi for research collaborations, speaking opportunities, or questions about atmospheric science. Contact information and message form available.",
+    description:
+      "Get in touch with Mehedi Hasan Rafi for research collaborations, speaking opportunities, or questions about atmospheric science. Contact information and message form available.",
   });
   const { toast } = useToast();
 
@@ -98,15 +99,15 @@ export default function Contact() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-[calc(100vh-4rem)] flex-col">
       {/* Header Section */}
-      <section className="py-12 lg:py-16 border-b bg-accent/20">
+      <section className="bg-accent/20 border-b py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="max-w-3xl fade-up">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+          <div className="fade-up max-w-3xl">
+            <h1 className="mb-4 text-4xl font-bold lg:text-5xl">
               Get in Touch
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               I'm always interested in discussing research collaborations,
               speaking opportunities, or answering questions about my work in
               atmospheric science. Feel free to reach out!
@@ -116,18 +117,21 @@ export default function Contact() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-12 lg:py-16 flex-1">
+      <section className="flex-1 py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 max-w-6xl mx-auto">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 lg:grid-cols-5 lg:gap-12">
             {/* Contact Form */}
-            <div className="lg:col-span-3 fade-right">
+            <div className="fade-right lg:col-span-3">
               <Card className="border-2">
                 <CardHeader>
                   <CardTitle className="text-2xl">Send a Message</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-6"
+                    >
                       <FormField
                         control={form.control}
                         name="name"
@@ -218,7 +222,7 @@ export default function Contact() {
             </div>
 
             {/* Contact Information */}
-            <div className="lg:col-span-2 space-y-6 fade-left">
+            <div className="fade-left space-y-6 lg:col-span-2">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-xl">Contact Information</CardTitle>
@@ -226,19 +230,19 @@ export default function Contact() {
                 <CardContent className="space-y-4">
                   {contactInfo.map((info) => (
                     <div key={info.label} className="flex gap-3">
-                      <info.icon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <info.icon className="text-primary mt-0.5 h-5 w-5 flex-shrink-0" />
                       <div className="space-y-1">
                         <p className="text-sm font-medium">{info.label}</p>
                         {info.href ? (
                           <a
                             href={info.href}
-                            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                            className="text-muted-foreground hover:text-primary text-sm transition-colors"
                             data-testid={`link-${info.label.toLowerCase()}`}
                           >
                             {info.value}
                           </a>
                         ) : (
-                          <p className="text-sm text-muted-foreground whitespace-pre-line">
+                          <p className="text-muted-foreground text-sm whitespace-pre-line">
                             {info.value}
                           </p>
                         )}
@@ -260,7 +264,7 @@ export default function Contact() {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center w-12 h-12 rounded-md bg-accent hover-elevate active-elevate-2 transition-all"
+                        className="bg-accent hover-elevate active-elevate-2 flex h-12 w-12 items-center justify-center rounded-md transition-all"
                         data-testid={`link-social-${social.label.toLowerCase()}`}
                         aria-label={social.label}
                       >
@@ -268,20 +272,23 @@ export default function Contact() {
                       </a>
                     ))}
                   </div>
-                  <p className="text-sm text-muted-foreground mt-4">
-                    Connect with me on social media to stay updated with my latest
-                    research and academic activities.
+                  <p className="text-muted-foreground mt-4 text-sm">
+                    Connect with me on social media to stay updated with my
+                    latest research and academic activities.
                   </p>
                 </CardContent>
               </Card>
 
               <Card className="bg-primary/5 border-primary/20">
                 <CardContent className="pt-6">
-                  <p className="text-sm text-muted-foreground">
-                    <strong className="text-foreground">Office Hours:</strong><br />
-                    Monday - Friday<br />
-                    10:00 AM - 4:00 PM<br />
-                    <span className="text-xs mt-2 block">
+                  <p className="text-muted-foreground text-sm">
+                    <strong className="text-foreground">Office Hours:</strong>
+                    <br />
+                    Monday - Friday
+                    <br />
+                    10:00 AM - 4:00 PM
+                    <br />
+                    <span className="mt-2 block text-xs">
                       (Please schedule appointments in advance)
                     </span>
                   </p>

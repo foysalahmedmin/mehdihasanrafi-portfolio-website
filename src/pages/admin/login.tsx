@@ -8,15 +8,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "@/services/auth.service";
 import useUser from "@/hooks/states/useUser";
 import { useToast } from "@/hooks/utils/useToast";
+import { signIn } from "@/services/auth.service";
 import { useState } from "react";
-import { useLocation, useNavigate } from "wouter";
+import { useLocation } from "wouter";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
-  const navigate = useNavigate();
   const { setUser } = useUser();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -51,14 +50,13 @@ export default function AdminLogin() {
           }),
         );
 
-        // Check if user is admin
         const role = response.data.info.role;
         if (role === "admin" || role === "super-admin" || role === "author") {
           toast({
             title: "Login successful!",
             description: "Welcome to the admin panel",
           });
-          navigate("/admin");
+          setLocation("/admin");
         } else {
           toast({
             title: "Access denied",
@@ -90,7 +88,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="bg-background flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
@@ -135,4 +133,3 @@ export default function AdminLogin() {
     </div>
   );
 }
-

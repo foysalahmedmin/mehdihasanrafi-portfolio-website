@@ -63,7 +63,7 @@ export default function Gallery() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-[calc(100vh-4rem)] flex-col">
       {/* Header Section */}
       <section className="bg-accent/20 border-b py-12 lg:py-16">
         <div className="container mx-auto px-6 lg:px-8">

@@ -5,6 +5,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { URLS } from "@/config";
 import type { TNews } from "@/types/news.type";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
 import { Link } from "wouter";
@@ -16,11 +17,15 @@ interface NewsCardProps {
 export function NewsCard({ news }: NewsCardProps) {
   return (
     <Link href={`/news/${news.slug}`}>
-      <a data-testid={`card-news-${news._id}`}>
+      <div data-testid={`card-news-${news._id}`}>
         <Card className="hover-elevate active-elevate-2 h-full overflow-hidden transition-all duration-200 hover:-translate-y-1">
           <div className="relative aspect-video overflow-hidden">
             <img
-              src={news.thumbnail}
+              src={
+                news.thumbnail
+                  ? `${URLS.news}/${news.thumbnail}`
+                  : "/images/thumbnail.png"
+              }
               alt={news.title}
               className="h-full w-full object-cover"
               loading="lazy"
@@ -57,7 +62,7 @@ export function NewsCard({ news }: NewsCardProps) {
             </div>
           </CardFooter>
         </Card>
-      </a>
+      </div>
     </Link>
   );
 }

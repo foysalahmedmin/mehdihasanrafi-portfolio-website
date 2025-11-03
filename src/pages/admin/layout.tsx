@@ -1,22 +1,34 @@
-import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import useUser from "@/hooks/states/useUser";
 import { useToast } from "@/hooks/utils/useToast";
-import { FileText, Home, LogOut, Newspaper, FolderKanban, Images } from "lucide-react";
+import {
+  FileText,
+  FolderKanban,
+  Home,
+  Images,
+  LogOut,
+  Newspaper,
+} from "lucide-react";
 import { Link, useLocation } from "wouter";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [, setLocation] = useLocation();
   const { user, clearUser } = useUser();
   const { toast } = useToast();
@@ -33,14 +45,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const menuItems = [
     {
-      title: "Dashboard",
-      icon: Home,
-      href: "/admin",
-    },
-    {
-      title: "News",
-      icon: Newspaper,
-      href: "/admin/news",
+      title: "Publications",
+      icon: FileText,
+      href: "/admin/publications",
     },
     {
       title: "Projects",
@@ -48,9 +55,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       href: "/admin/projects",
     },
     {
-      title: "Publications",
-      icon: FileText,
-      href: "/admin/publications",
+      title: "News",
+      icon: Newspaper,
+      href: "/admin/news",
     },
     {
       title: "Gallery",
@@ -61,14 +68,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
-        <Sidebar>
+      <div className="flex min-h-[calc(100vh-4rem)] w-full">
+        <Sidebar className="mt-16 h-[calc(100%-4rem)]">
+          <SidebarHeader className="flex h-12 justify-center border-b font-semibold uppercase">
+            <h3 className="px-2">Admin Panel</h3>
+          </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuItems.map((item) => (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href={"/admin"}>
+                        <Home className="mr-2 h-4 w-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarSeparator />
+                  {menuItems?.map((item) => (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton asChild>
                         <Link href={item.href}>
@@ -81,25 +99,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton onClick={handleLogout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Logout</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
           </SidebarContent>
+          <SidebarFooter className="flex h-12 items-center border-t">
+            <SidebarMenuButton onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </SidebarMenuButton>
+          </SidebarFooter>
         </Sidebar>
         <main className="flex-1">
-          <header className="flex h-16 items-center gap-4 border-b px-4">
+          <header className="flex h-12 items-center gap-4 border-b px-4">
             <SidebarTrigger />
             <div className="ml-auto flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground text-sm">
                 {user?.info?.name || "Admin"}
               </span>
             </div>
@@ -110,4 +122,3 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </SidebarProvider>
   );
 }
-

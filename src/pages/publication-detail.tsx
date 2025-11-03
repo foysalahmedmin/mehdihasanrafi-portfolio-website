@@ -2,16 +2,6 @@ import { PublicationCard } from "@/components/cards/publication-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import type {
-  TBulkPublicationResponse,
-  TPublicationResponse,
-} from "@/types/publication.type";
-import { URLS } from "@/config/urls";
-import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ExternalLink, FileText, Tag, Calendar, Clock, User, BookOpen, Building2, Download, Eye } from "lucide-react";
-import { Link, useRoute } from "wouter";
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +9,28 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { URLS } from "@/config/urls";
+import { getPublicationBySlug } from "@/services/publication.service";
+import type {
+  TBulkPublicationResponse,
+  TPublicationResponse,
+} from "@/types/publication.type";
+import { useQuery } from "@tanstack/react-query";
+import {
+  ArrowLeft,
+  BookOpen,
+  Building2,
+  Calendar,
+  Clock,
+  Download,
+  ExternalLink,
+  Eye,
+  Tag,
+  User,
+} from "lucide-react";
+import { useState } from "react";
+import { Link, useRoute } from "wouter";
 
 export default function PublicationDetail() {
   const [, params] = useRoute("/publications/:slug");
@@ -29,11 +41,7 @@ export default function PublicationDetail() {
     useQuery<TPublicationResponse>({
       queryKey: ["/api/publications", slug],
       queryFn: async () => {
-        const response = await fetch(`/api/publications/${slug}`);
-        if (!response.ok) {
-          throw new Error("Publication not found");
-        }
-        return response.json();
+        return await getPublicationBySlug(slug!);
       },
       enabled: !!slug,
     });
@@ -55,7 +63,7 @@ export default function PublicationDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col">
         <section className="py-12 lg:py-16">
           <div className="container mx-auto max-w-4xl px-6 lg:px-8">
             <Skeleton className="mb-8 h-8 w-32" />
@@ -74,7 +82,7 @@ export default function PublicationDetail() {
 
   if (!publication) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center">
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center">
         <Card className="max-w-md p-12 text-center">
           <CardDescription className="mb-4 text-lg">
             Publication not found
@@ -90,10 +98,10 @@ export default function PublicationDetail() {
     );
   }
 
-  const pdfUrl = publication?.pdf 
-    ? (publication.pdf.startsWith("http") 
-        ? publication.pdf 
-        : `${URLS.publications.pdf}/${publication.pdf}`)
+  const pdfUrl = publication?.pdf
+    ? publication.pdf.startsWith("http")
+      ? publication.pdf
+      : `${URLS.publications.pdf}/${publication.pdf}`
     : null;
 
   const highlightedAuthors = publication?.authors?.map((author) =>
@@ -121,7 +129,7 @@ export default function PublicationDetail() {
       {/* Publication Header */}
       <section className="bg-accent/20 border-b py-12 lg:py-16">
         <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="space-y-6 fade-up">
+          <div className="fade-up space-y-6">
             <div className="space-y-4">
               {publication.category && (
                 <Badge className="text-sm">{publication.category}</Badge>
@@ -133,11 +141,13 @@ export default function PublicationDetail() {
               {/* Authors */}
               {publication.authors && publication.authors.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
+                  <User className="text-muted-foreground h-4 w-4" />
                   <p
                     className="text-lg"
                     dangerouslySetInnerHTML={{
-                      __html: highlightedAuthors?.join(", ") || publication.authors.join(", "),
+                      __html:
+                        highlightedAuthors?.join(", ") ||
+                        publication.authors.join(", "),
                     }}
                   />
                 </div>
@@ -178,7 +188,9 @@ export default function PublicationDetail() {
                 {publication.published_at && (
                   <div className="flex items-center gap-2">
                     <Calendar className="h-3.5 w-3.5" />
-                    <span>{new Date(publication.published_at).toDateString()}</span>
+                    <span>
+                      {new Date(publication.published_at).toDateString()}
+                    </span>
                   </div>
                 )}
                 {publication.read_time && (
@@ -199,7 +211,7 @@ export default function PublicationDetail() {
                     href={`https://doi.org/${publication.doi}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-primary hover:underline text-sm"
+                    className="text-primary inline-flex items-center gap-2 text-sm hover:underline"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                     <span>DOI: {publication.doi}</span>
@@ -214,7 +226,7 @@ export default function PublicationDetail() {
                     href={publication.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-primary hover:underline"
+                    className="text-primary inline-flex items-center gap-2 hover:underline"
                   >
                     <ExternalLink className="h-4 w-4" />
                     <span>View Publication Source</span>
@@ -227,9 +239,11 @@ export default function PublicationDetail() {
             {publication.thumbnail && (
               <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
                 <img
-                  src={publication.thumbnail.startsWith("http") 
-                    ? publication.thumbnail 
-                    : `${URLS.publications.thumbnail}/${publication.thumbnail}`}
+                  src={
+                    publication.thumbnail.startsWith("http")
+                      ? publication.thumbnail
+                      : `${URLS.publications.thumbnail}/${publication.thumbnail}`
+                  }
                   alt={publication.title}
                   className="h-full w-full object-cover"
                 />
@@ -240,8 +254,8 @@ export default function PublicationDetail() {
             <div className="flex flex-wrap gap-3 pt-4">
               {pdfUrl && (
                 <>
-                  <Button 
-                    variant="default" 
+                  <Button
+                    variant="default"
                     onClick={() => setPdfViewerOpen(true)}
                     data-testid="button-view-pdf"
                   >
@@ -265,13 +279,18 @@ export default function PublicationDetail() {
 
             {/* Additional Images */}
             {publication.images && publication.images.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {publication.images.map((image, index) => (
-                  <div key={index} className="overflow-hidden rounded-lg shadow-lg">
+                  <div
+                    key={index}
+                    className="overflow-hidden rounded-lg shadow-lg"
+                  >
                     <img
-                      src={image.startsWith("http") 
-                        ? image 
-                        : `${URLS.publications.image}/${image}`}
+                      src={
+                        image.startsWith("http")
+                          ? image
+                          : `${URLS.publications.image}/${image}`
+                      }
                       alt={`${publication.title} - Image ${index + 1}`}
                       className="h-full w-full object-cover"
                     />
@@ -287,8 +306,8 @@ export default function PublicationDetail() {
       {publication.abstract && (
         <section className="border-b py-12 lg:py-16">
           <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-            <h2 className="mb-6 text-2xl font-semibold fade-down">Abstract</h2>
-            <p className="text-muted-foreground text-lg leading-relaxed fade-up">
+            <h2 className="fade-down mb-6 text-2xl font-semibold">Abstract</h2>
+            <p className="text-muted-foreground fade-up text-lg leading-relaxed">
               {publication.abstract}
             </p>
           </div>
@@ -299,7 +318,7 @@ export default function PublicationDetail() {
       {publication.content && (
         <section className="border-b py-12 lg:py-16">
           <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-            <div className="prose prose-lg dark:prose-invert max-w-none fade-up">
+            <div className="prose prose-lg dark:prose-invert fade-up max-w-none">
               <div
                 className="leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: publication.content }}
@@ -331,15 +350,15 @@ export default function PublicationDetail() {
       {/* PDF Viewer Dialog */}
       {pdfUrl && (
         <Dialog open={pdfViewerOpen} onOpenChange={setPdfViewerOpen}>
-          <DialogContent className="max-w-6xl max-h-[90vh]">
+          <DialogContent className="max-h-[90vh] max-w-6xl">
             <DialogHeader>
               <DialogTitle>{publication.title}</DialogTitle>
               <DialogDescription>PDF Viewer</DialogDescription>
             </DialogHeader>
-            <div className="w-full h-[80vh]">
+            <div className="h-[80vh] w-full">
               <iframe
                 src={pdfUrl}
-                className="w-full h-full border rounded"
+                className="h-full w-full rounded border"
                 title="PDF Viewer"
               />
             </div>
@@ -351,10 +370,10 @@ export default function PublicationDetail() {
       {relatedPublications.length > 0 && (
         <section className="bg-accent/20 py-12 lg:py-16">
           <div className="container mx-auto px-6 lg:px-8">
-            <h2 className="mb-8 text-2xl font-semibold lg:text-3xl fade-down">
+            <h2 className="fade-down mb-8 text-2xl font-semibold lg:text-3xl">
               Related Publications
             </h2>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 fade-up">
+            <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
               {relatedPublications.map((relatedPub) => (
                 <PublicationCard
                   key={relatedPub._id}
