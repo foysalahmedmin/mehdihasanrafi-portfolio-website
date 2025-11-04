@@ -1,9 +1,8 @@
 import api from "@/lib/api";
 import type {
   TBulkGalleryResponse,
-  TGallery,
-  TGalleryResponse,
   TCreateGallery,
+  TGalleryResponse,
   TUpdateGallery,
 } from "@/types/gallery.type";
 import type { Response } from "@/types/response.type";
@@ -22,15 +21,16 @@ export async function createGallery(
   payload: CreateGalleryPayload,
 ): Promise<TGalleryResponse> {
   const formData = new FormData();
-  
+
   formData.append("media_type", payload.media_type);
-  
+
   if (payload.caption) formData.append("caption", payload.caption);
   if (payload.image_url) formData.append("image_url", payload.image_url);
   if (payload.video_url) formData.append("video_url", payload.video_url);
   if (payload.image) formData.append("image", payload.image);
   if (payload.video) formData.append("video", payload.video);
-  if (payload.order !== undefined) formData.append("order", String(payload.order));
+  if (payload.order !== undefined)
+    formData.append("order", String(payload.order));
   if (payload.is_active !== undefined) {
     formData.append("is_active", String(payload.is_active));
   }
@@ -82,4 +82,3 @@ export async function deleteGallery(id: string): Promise<Response<null>> {
   const response = await api.delete(`/api/gallery/${id}`);
   return response.data as Response<null>;
 }
-

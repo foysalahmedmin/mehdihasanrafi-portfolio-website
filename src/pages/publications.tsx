@@ -58,13 +58,13 @@ export default function Publications() {
       switch (sortBy) {
         case "date-desc":
           return (
-            new Date(b.published_at).getTime() -
-            new Date(a.published_at).getTime()
+            new Date(b.published_at ?? "").getTime() -
+            new Date(a.published_at ?? "").getTime()
           );
         case "date-asc":
           return (
-            new Date(a.published_at).getTime() -
-            new Date(b.published_at).getTime()
+            new Date(a.published_at ?? "").getTime() -
+            new Date(b.published_at ?? "").getTime()
           );
         case "title-asc":
           return a.title.localeCompare(b.title);
