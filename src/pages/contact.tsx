@@ -1,3 +1,6 @@
+import GoogleScholarIcon from "@/components/icons/GoogleScholarIcon";
+import ORCIDIcon from "@/components/icons/ORCIDIcon";
+import ResearchGateIcon from "@/components/icons/ResearchGateIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -17,16 +20,13 @@ import type { TContactResponse, TCreateContact } from "@/types/contact.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import {
-  Book,
   Facebook,
   Github,
-  Globe,
   Linkedin,
   Mail,
   MapPin,
   Phone,
   Twitter,
-  User,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -117,17 +117,17 @@ export default function Contact() {
 
   const researcherProfiles = [
     {
-      icon: User,
+      icon: ORCIDIcon,
       label: "ORCID",
       href: "https://orcid.org/0009-0001-0484-8258",
     },
     {
-      icon: Book,
+      icon: ResearchGateIcon,
       label: "ResearchGate",
       href: "https://www.researchgate.net/profile/Mehdi-Rafi-3",
     },
     {
-      icon: Globe,
+      icon: GoogleScholarIcon,
       label: "Google Scholar",
       href: "https://scholar.google.com/citations?user=Ocu2P8UAAAAJ&hl=en",
     },
