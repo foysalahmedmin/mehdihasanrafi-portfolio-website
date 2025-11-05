@@ -16,7 +16,18 @@ import { apiRequest } from "@/lib/queryClient";
 import type { TContactResponse, TCreateContact } from "@/types/contact.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Github, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
+import {
+  Book,
+  Facebook,
+  Github,
+  Globe,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+  User,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -75,27 +86,51 @@ export default function Contact() {
     {
       icon: Mail,
       label: "Email",
-      value: "mehedi.rafi@university.edu",
-      href: "mailto:mehedi.rafi@university.edu",
+      value: "rafimehdihasan@gmail.com",
+      href: "mailto:rafimehdihasan@gmail.com",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: "+880 1913-236542",
+      href: "tel:+8801913236542",
     },
     {
       icon: MapPin,
       label: "Office",
-      value: "Room 405, Environmental Sciences Building\nUniversity Campus",
+      value:
+        "Room 901, Tower-3, Communication lab, Military Institute of Science & Technology, Dhaka, Bangladesh.",
       href: null,
     },
   ];
 
   const socialLinks = [
-    { icon: Github, label: "GitHub", href: "https://github.com" },
+    {
+      icon: Facebook,
+      label: "Facebook",
+      href: "https://www.facebook.com/rafi.hassan.1297",
+    },
+    { icon: Github, label: "GitHub", href: "https://github.com/RafiHasan7673" },
     { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
     { icon: Twitter, label: "Twitter", href: "https://twitter.com" },
+  ];
+
+  const researcherProfiles = [
+    {
+      icon: User,
+      label: "ORCID",
+      href: "https://orcid.org/0009-0001-0484-8258",
+    },
+    {
+      icon: Book,
+      label: "ResearchGate",
+      href: "https://www.researchgate.net/profile/Mehdi-Rafi-3",
+    },
+    {
+      icon: Globe,
+      label: "Google Scholar",
+      href: "https://scholar.google.com/citations?user=Ocu2P8UAAAAJ&hl=en",
+    },
   ];
 
   return (
@@ -196,7 +231,7 @@ export default function Contact() {
                             <FormControl>
                               <Textarea
                                 placeholder="Your message..."
-                                rows={6}
+                                rows={12}
                                 {...field}
                                 data-testid="input-message"
                               />
@@ -279,19 +314,26 @@ export default function Contact() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-primary/5 border-primary/20">
-                <CardContent className="pt-6">
-                  <p className="text-muted-foreground text-sm">
-                    <strong className="text-foreground">Office Hours:</strong>
-                    <br />
-                    Monday - Friday
-                    <br />
-                    10:00 AM - 4:00 PM
-                    <br />
-                    <span className="mt-2 block text-xs">
-                      (Please schedule appointments in advance)
-                    </span>
-                  </p>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-xl">Research Profiles</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-3">
+                    {researcherProfiles.map((social) => (
+                      <a
+                        key={social.label}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-accent hover-elevate active-elevate-2 flex h-12 w-12 items-center justify-center rounded-md transition-all"
+                        data-testid={`link-social-${social.label.toLowerCase()}`}
+                        aria-label={social.label}
+                      >
+                        <social.icon className="h-5 w-5" />
+                      </a>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             </div>

@@ -20,6 +20,7 @@ A modern, responsive portfolio website for showcasing research work, publication
 ## ✨ Features
 
 ### Core Features
+
 - 🎨 **Modern UI/UX** - Beautiful, responsive design with smooth animations
 - 🌓 **Dark Mode** - Complete dark/light theme support
 - 📱 **Fully Responsive** - Works seamlessly on all devices
@@ -30,6 +31,7 @@ A modern, responsive portfolio website for showcasing research work, publication
 - 🎯 **Accessibility** - WCAG compliant components
 
 ### Pages
+
 - **Home** - Hero section, about preview, research interests, skills, projects, publications, gallery, news, testimonials
 - **About** - Biography, research interests, academic background, experience, skills, awards, clients, testimonials
 - **Projects** - List of research projects with filtering and search
@@ -40,6 +42,7 @@ A modern, responsive portfolio website for showcasing research work, publication
 - **Admin Panel** - Content management interface
 
 ### UI Components
+
 - Comprehensive component library built with Radix UI
 - Custom animations and transitions
 - Form validation with React Hook Form + Zod
@@ -51,6 +54,7 @@ A modern, responsive portfolio website for showcasing research work, publication
 ## 🛠️ Tech Stack
 
 ### Core
+
 - **Framework**: React 19
 - **Build Tool**: Vite 6
 - **Language**: TypeScript 5.7
@@ -58,11 +62,13 @@ A modern, responsive portfolio website for showcasing research work, publication
 - **Routing**: Wouter 3
 
 ### State Management
+
 - **Server State**: TanStack React Query 5
 - **Client State**: Redux Toolkit 2
 - **Form State**: React Hook Form 7
 
 ### UI Libraries
+
 - **Components**: Radix UI
 - **Icons**: Lucide React
 - **Editor**: BlockNote (TipTap)
@@ -70,6 +76,7 @@ A modern, responsive portfolio website for showcasing research work, publication
 - **Charts**: Recharts
 
 ### Utilities
+
 - **HTTP Client**: Axios
 - **Validation**: Zod
 - **Date Handling**: date-fns
@@ -215,33 +222,34 @@ mehdihasanrafi-portfolio-website/
 
 ### Public Routes
 
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/` | Home | Landing page with hero, about preview, and content sections |
-| `/about` | About | Detailed about page with biography, skills, awards, clients |
-| `/projects` | Projects | List of all research projects |
-| `/projects/:slug` | ProjectDetail | Individual project detail page |
-| `/publications` | Publications | List of all academic publications |
-| `/publications/:slug` | PublicationDetail | Individual publication detail page |
-| `/news` | NewsPage | List of news and updates |
-| `/news/:slug` | NewsDetail | Individual news detail page |
-| `/gallery` | Gallery | Image and video gallery |
-| `/contact` | Contact | Contact form and information |
+| Route                 | Component         | Description                                                 |
+| --------------------- | ----------------- | ----------------------------------------------------------- |
+| `/`                   | Home              | Landing page with hero, about preview, and content sections |
+| `/about`              | About             | Detailed about page with biography, skills, awards, clients |
+| `/projects`           | Projects          | List of all research projects                               |
+| `/projects/:slug`     | ProjectDetail     | Individual project detail page                              |
+| `/publications`       | Publications      | List of all academic publications                           |
+| `/publications/:slug` | PublicationDetail | Individual publication detail page                          |
+| `/news`               | NewsPage          | List of news and updates                                    |
+| `/news/:slug`         | NewsDetail        | Individual news detail page                                 |
+| `/gallery`            | Gallery           | Image and video gallery                                     |
+| `/contact`            | Contact           | Contact form and information                                |
 
 ### Admin Routes
 
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/admin/login` | AdminLogin | Admin authentication |
-| `/admin` | AdminDashboard | Admin dashboard |
-| `/admin/projects` | AdminProjectsPage | Project management |
+| Route                 | Component             | Description            |
+| --------------------- | --------------------- | ---------------------- |
+| `/admin/login`        | AdminLogin            | Admin authentication   |
+| `/admin`              | AdminDashboard        | Admin dashboard        |
+| `/admin/projects`     | AdminProjectsPage     | Project management     |
 | `/admin/publications` | AdminPublicationsPage | Publication management |
-| `/admin/news` | AdminNewsPage | News management |
-| `/admin/gallery` | AdminGalleryPage | Gallery management |
+| `/admin/news`         | AdminNewsPage         | News management        |
+| `/admin/gallery`      | AdminGalleryPage      | Gallery management     |
 
 ## 🧩 Components
 
 ### UI Components (Radix UI based)
+
 - Accordion, Alert, Alert Dialog
 - Avatar, Badge, Button
 - Card, Checkbox, Dialog
@@ -250,6 +258,7 @@ mehdihasanrafi-portfolio-website/
 - Tooltip, and many more...
 
 ### Custom Components
+
 - **AnimationApplier** - Handles scroll animations
 - **ProjectCard** - Project display card
 - **PublicationCard** - Publication display card
@@ -259,6 +268,7 @@ mehdihasanrafi-portfolio-website/
 - **HTMLEditor** - Rich text editor
 
 ### Features
+
 - Theme switching (light/dark)
 - Responsive navigation
 - Scroll animations
@@ -269,12 +279,14 @@ mehdihasanrafi-portfolio-website/
 ## 🎨 Styling
 
 ### Tailwind CSS
+
 - Custom theme configuration
 - Dark mode support
 - Responsive utilities
 - Custom animations
 
 ### CSS Custom Properties
+
 - Theme variables for colors
 - Typography scales
 - Spacing system
@@ -290,6 +302,7 @@ The frontend communicates with the backend API through service functions:
 - `gallery.service.ts` - Gallery
 
 All API calls use Axios with interceptors for:
+
 - Automatic token attachment
 - Token refresh on expiration
 - Error handling
@@ -326,6 +339,7 @@ This creates an optimized production build in the `dist/` directory.
 ### Static Hosting
 
 The built files in `dist/` can be hosted on any static hosting service:
+
 - GitHub Pages
 - AWS S3 + CloudFront
 - Firebase Hosting
@@ -335,9 +349,9 @@ The built files in `dist/` can be hosted on any static hosting service:
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `VITE_API_URL` | Backend API URL | `https://mehdihasanrafi.com` |
+| Variable       | Description              | Default                      |
+| -------------- | ------------------------ | ---------------------------- |
+| `VITE_API_URL` | Backend API URL          | `https://mehdihasanrafi.com` |
 | `VITE_APP_URL` | Frontend application URL | `https://mehdihasanrafi.com` |
 
 ### API Configuration
@@ -347,6 +361,7 @@ API base URL is configured in `src/config/env/index.ts` and can be overridden wi
 ## 📱 Responsive Design
 
 The website is fully responsive with breakpoints:
+
 - **Mobile**: < 640px
 - **Tablet**: 640px - 1024px
 - **Desktop**: > 1024px
@@ -362,6 +377,7 @@ The website is fully responsive with breakpoints:
 ## 🎭 Animations
 
 ### Scroll Animations
+
 - Fade up
 - Fade down
 - Fade left
@@ -414,8 +430,9 @@ This project is licensed under the ISC License.
 ## 👤 Author
 
 **Mehedi Hasan Rafi**
+
 - Portfolio: [https://mehdihasanrafi.com](https://mehdihasanrafi.com)
-- Email: mehedi.rafi@university.edu
+- Email: rafimehdihasan@gmail.com
 
 ## 🙏 Acknowledgments
 
@@ -428,4 +445,3 @@ This project is licensed under the ISC License.
 ---
 
 **Built with ❤️ for research portfolio showcase**
-

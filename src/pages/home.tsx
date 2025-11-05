@@ -25,11 +25,9 @@ import {
   Cloud,
   Code,
   Cpu,
-  Database,
   FolderKanban,
   Globe,
   GraduationCap,
-  Layers,
   Microscope,
   Play,
   Quote,
@@ -41,20 +39,95 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 
+const researchInterests = [
+  {
+    title: "Lightning Meteorology",
+    description:
+      "Investigating the formation, distribution, and intensity of lightning events to understand their relationship with convective systems and severe weather processes.",
+    icon: Cloud,
+  },
+  {
+    title: "Remote Sensing",
+    description:
+      "Employing satellite and radar technologies to observe atmospheric properties, monitor storm development, and assess environmental impacts with high spatial and temporal resolution.",
+    icon: Satellite,
+  },
+  {
+    title: "Tropical Storms",
+    description:
+      "Studying the genesis, structure, and evolution of tropical cyclones to improve prediction models and assess their link to global climate variability.",
+    icon: Wind,
+  },
+  {
+    title: "Aerosol Emission",
+    description:
+      "Analyzing sources, transport, and radiative effects of aerosols, as well as their role in cloud formation and atmospheric chemistry.",
+    icon: BarChart3,
+  },
+  {
+    title: "Climate Change",
+    description:
+      "Examining the long-term effects of greenhouse gases, aerosol–cloud interactions, and feedback mechanisms that drive global and regional climate shifts.",
+    icon: Target,
+  },
+  {
+    title: "Atmospheric Dynamics",
+    description:
+      "Understanding the physical and dynamical processes of variations in electron density, mechanisms behind ionospheric disturbances, and their connections to space weather and upper-atmospheric dynamics.",
+    icon: Globe,
+  },
+];
+
+const skills = [
+  {
+    category: "Research Skills",
+    icon: Microscope,
+    items: [
+      "Climate Modeling",
+      "Remote Sensing",
+      "Statistical Methods",
+      "Data Analysis",
+      "Weather Prediction",
+    ],
+  },
+  {
+    category: "Technical Skills",
+    icon: Code,
+    items: [
+      "Python, R, NCL & Perl",
+      "MATLAB & Fortran",
+      "Machine Learning & Deep Learning",
+      "GIS Software & Google Earth Engine",
+      "Data Visualization",
+    ],
+  },
+  {
+    category: "Atmospheric Science",
+    icon: Brain,
+    items: [
+      "Atmospheric Chemistry",
+      "Climate Dynamics",
+      "Satellite Data Processing",
+      "Atmospheric Physics",
+      "Environmental Monitoring",
+    ],
+  },
+];
+
 const testimonials = [
   {
     quote:
-      "Mehedi demonstrates exceptional analytical skills and dedication to atmospheric research. His work on climate modeling has been instrumental to our team's success.",
-    author: "Dr. Sarah Johnson",
-    role: "Professor of Atmospheric Science",
-    institution: "University of Environmental Studies",
+      "Mehedi demonstrates exceptional programming and analytical skills and dedication to the research. His work on lightning meteorology has been instrumental to our team's success.",
+    author: "Robert H. Holzworth",
+    role: "Professor Emeritus, Earth and Space Sciences",
+    institution: "University of Washington",
   },
   {
     quote:
-      "An outstanding researcher with a keen eye for detail. Mehedi's contributions to our remote sensing projects have been invaluable.",
-    author: "Dr. Michael Chen",
-    role: "Senior Research Scientist",
-    institution: "Climate Research Institute",
+      "An outstanding researcher with a keen eye for detail. Mehedi's contributions to our ionospheric research projects have been invaluable.",
+    author: "Dr. Haris Haralambous",
+    role: "Professor of Computer Engineering and Informatics",
+    institution: "Frederick University, Cyprus",
   },
 ];
 
@@ -110,14 +183,14 @@ export default function Home() {
                   Mehedi Hasan Rafi
                 </h1>
                 <p className="text-muted-foreground text-xl font-medium lg:text-2xl">
-                  PhD Researcher in Atmospheric Studies
+                  PhD Candidate in Earth & Atmospheric Science
                 </p>
               </div>
               <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed">
                 Exploring the complexities of Earth's atmosphere through
-                advanced climate modeling, remote sensing, and data analysis.
+                advanced climate research, remote sensing, and data analysis.
                 Committed to understanding atmospheric processes and their
-                impact on our planet's climate system.
+                impact on our planet's climate change.
               </p>
               <div className="flex flex-wrap justify-center gap-4 pt-4 lg:justify-start">
                 <Link href="/projects">
@@ -192,7 +265,7 @@ export default function Home() {
                       About Me
                     </CardTitle>
                     <CardDescription className="text-muted-foreground max-w-2xl text-lg">
-                      Pioneering atmospheric research through advanced
+                      Pioneering earth & atmospheric research through advanced
                       computational modeling and remote sensing technologies
                     </CardDescription>
                   </div>
@@ -218,11 +291,12 @@ export default function Home() {
                             Research Focus
                           </h3>
                           <p className="text-muted-foreground leading-relaxed">
-                            Specializing in atmospheric dynamics, climate
-                            modeling, and environmental science. My research
-                            investigates Earth's atmospheric systems using
-                            cutting-edge remote sensing and computational models
-                            to understand climate change patterns.
+                            Specializing in lightning meteorology, atmospheric
+                            dynamics, climate modeling, and environmental
+                            science. My research investigates Earth's
+                            atmospheric systems using cutting-edge remote
+                            sensing and computational models to understand
+                            climate change patterns.
                           </p>
                         </div>
                       </div>
@@ -259,10 +333,10 @@ export default function Home() {
                             Academic Excellence
                           </h3>
                           <p className="text-muted-foreground leading-relaxed">
-                            PhD researcher with strong foundation in physics and
-                            environmental science, committed to advancing
-                            knowledge in atmospheric composition and weather
-                            prediction systems through rigorous academic
+                            PhD researcher with a strong foundation in space
+                            physics and environmental science, committed to
+                            advancing knowledge in atmospheric composition and
+                            weather prediction systems through rigorous academic
                             research.
                           </p>
                         </div>
@@ -293,7 +367,7 @@ export default function Home() {
                 <div className="flex flex-wrap gap-4 pt-4">
                   <Badge variant="outline" className="px-3 py-1 text-sm">
                     <Cloud className="mr-1 h-3 w-3" />
-                    Climate Science
+                    Lightning Meteorology
                   </Badge>
                   <Badge variant="outline" className="px-3 py-1 text-sm">
                     <Satellite className="mr-1 h-3 w-3" />
@@ -301,11 +375,15 @@ export default function Home() {
                   </Badge>
                   <Badge variant="outline" className="px-3 py-1 text-sm">
                     <Cpu className="mr-1 h-3 w-3" />
-                    Computational Models
+                    Tropical Storm
                   </Badge>
                   <Badge variant="outline" className="px-3 py-1 text-sm">
                     <TrendingUp className="mr-1 h-3 w-3" />
-                    Data Analysis
+                    Aerosol Emission
+                  </Badge>
+                  <Badge variant="outline" className="px-3 py-1 text-sm">
+                    <Wind className="mr-1 h-3 w-3" />
+                    Climate Change
                   </Badge>
                   <Badge variant="outline" className="px-3 py-1 text-sm">
                     <Wind className="mr-1 h-3 w-3" />
@@ -338,7 +416,7 @@ export default function Home() {
               Research Focus
             </Badge>
             <h2 className="mb-4 text-3xl font-semibold lg:text-4xl">
-              Research Interests & Specializations
+              Research Interests
             </h2>
             <p className="text-muted-foreground mx-auto max-w-2xl">
               Exploring cutting-edge areas in atmospheric science and climate
@@ -347,103 +425,22 @@ export default function Home() {
           </div>
 
           <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="border-border/60 hover:border-primary/40 transition-colors">
-              <CardHeader>
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Cloud className="text-primary h-6 w-6" />
+            {researchInterests?.map((card, index) => (
+              <Card
+                key={index}
+                className="border-border/60 hover:border-primary/40 transition-colors"
+              >
+                <CardHeader>
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="bg-primary/10 rounded-lg p-2">
+                      <card.icon className="text-primary h-6 w-6" />
+                    </div>
+                    <CardTitle className="text-xl">{card.title}</CardTitle>
                   </div>
-                  <CardTitle className="text-xl">Climate Modeling</CardTitle>
-                </div>
-                <CardDescription>
-                  Developing advanced computational models to simulate and
-                  predict climate patterns, understanding long-term atmospheric
-                  dynamics.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-border/60 hover:border-primary/40 transition-colors">
-              <CardHeader>
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Satellite className="text-primary h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-xl">Remote Sensing</CardTitle>
-                </div>
-                <CardDescription>
-                  Utilizing satellite and ground-based technologies to monitor
-                  atmospheric composition, cloud properties, and environmental
-                  changes.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-border/60 hover:border-primary/40 transition-colors">
-              <CardHeader>
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Wind className="text-primary h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-xl">
-                    Atmospheric Dynamics
-                  </CardTitle>
-                </div>
-                <CardDescription>
-                  Investigating physical processes governing atmospheric
-                  circulation, jet streams, and weather system interactions.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-border/60 hover:border-primary/40 transition-colors">
-              <CardHeader>
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <BarChart3 className="text-primary h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-xl">Data Analysis</CardTitle>
-                </div>
-                <CardDescription>
-                  Applying machine learning and statistical methods to analyze
-                  atmospheric data and develop predictive models.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-border/60 hover:border-primary/40 transition-colors">
-              <CardHeader>
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Target className="text-primary h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-xl">
-                    Extreme Weather Events
-                  </CardTitle>
-                </div>
-                <CardDescription>
-                  Studying mechanisms behind extreme weather phenomena in the
-                  context of climate change and global warming.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-border/60 hover:border-primary/40 transition-colors">
-              <CardHeader>
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Globe className="text-primary h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-xl">
-                    Air Quality & Pollution
-                  </CardTitle>
-                </div>
-                <CardDescription>
-                  Analyzing atmospheric pollutants, transport mechanisms, and
-                  developing strategies for environmental protection.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+                  <CardDescription>{card.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -477,107 +474,26 @@ export default function Home() {
           </div>
 
           <div className="fade-up grid grid-cols-1 gap-8 md:grid-cols-3">
-            {/* Research Skills */}
-            <Card className="bg-card/50 border-2">
-              <CardHeader>
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Microscope className="text-primary h-5 w-5" />
+            {skills.map((skill, idx) => (
+              <Card key={idx} className="bg-card/50 border-2">
+                <CardHeader>
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="bg-primary/10 rounded-lg p-2">
+                      <skill.icon className="text-primary h-5 w-5" />
+                    </div>
+                    <CardTitle>{skill.category}</CardTitle>
                   </div>
-                  <CardTitle>Research Skills</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Zap className="text-primary h-4 w-4" />
-                  <span className="text-sm">Climate Modeling</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="text-primary h-4 w-4" />
-                  <span className="text-sm">Remote Sensing</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="text-primary h-4 w-4" />
-                  <span className="text-sm">Statistical Methods</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="text-primary h-4 w-4" />
-                  <span className="text-sm">Data Analysis</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="text-primary h-4 w-4" />
-                  <span className="text-sm">Weather Prediction</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Technical Skills */}
-            <Card className="bg-card/50 border-2">
-              <CardHeader>
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Code className="text-primary h-5 w-5" />
-                  </div>
-                  <CardTitle>Technical Skills</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Layers className="text-primary h-4 w-4" />
-                  <span className="text-sm">Python & R</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Layers className="text-primary h-4 w-4" />
-                  <span className="text-sm">MATLAB</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Layers className="text-primary h-4 w-4" />
-                  <span className="text-sm">Machine Learning</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Layers className="text-primary h-4 w-4" />
-                  <span className="text-sm">GIS Software</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Layers className="text-primary h-4 w-4" />
-                  <span className="text-sm">Data Visualization</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Atmospheric Science */}
-            <Card className="bg-card/50 border-2">
-              <CardHeader>
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="bg-primary/10 rounded-lg p-2">
-                    <Brain className="text-primary h-5 w-5" />
-                  </div>
-                  <CardTitle>Atmospheric Science</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Database className="text-primary h-4 w-4" />
-                  <span className="text-sm">Atmospheric Chemistry</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Database className="text-primary h-4 w-4" />
-                  <span className="text-sm">Climate Dynamics</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Database className="text-primary h-4 w-4" />
-                  <span className="text-sm">Satellite Data Processing</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Database className="text-primary h-4 w-4" />
-                  <span className="text-sm">Atmospheric Physics</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Database className="text-primary h-4 w-4" />
-                  <span className="text-sm">Environmental Monitoring</span>
-                </div>
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {skill.items.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <Zap className="text-primary h-4 w-4" />
+                      <span className="text-sm">{item}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
