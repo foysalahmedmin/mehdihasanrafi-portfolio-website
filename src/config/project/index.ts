@@ -1,14 +1,14 @@
 export const PROJECT = {
-  website: "https://foysalahmedmin.com",
-  name: "Z-News Admin Panel",
-  description: "Z-News Admin Panel",
+  website: "https://mehdihasanrafi.com",
+  name: "Mehdi Hasan Rafi - PhD Researcher in Atmospheric Studies",
+  description: "Mehdi Hasan Rafi - PhD Researcher in Atmospheric Studies",
   keywords: [
-    "Admin Panel",
-    "Z-News",
-    "Z-News Admin Panel",
-    "News",
-    "Blogs",
-    "Articles",
+    "Mehdi Hasan Rafi",
+    "PhD Researcher",
+    "Atmospheric Studies",
+    "Climate Modeling",
+    "Remote Sensing",
+    "Data Analysis",
   ],
   version: "1.0.0",
 };

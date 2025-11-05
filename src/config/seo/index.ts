@@ -1,13 +1,13 @@
 export const SEO = {
-  title: "Z-News Admin Panel",
-  description: "Z-News Admin Panel",
+  title: "Mehdi Hasan Rafi - PhD Researcher in Atmospheric Studies",
+  description: "Mehdi Hasan Rafi - PhD Researcher in Atmospheric Studies",
   keywords: [
-    "Admin Panel",
-    "Z-News",
-    "Z-News Admin Panel",
-    "News",
-    "Blogs",
-    "Articles",
+    "Mehdi Hasan Rafi",
+    "PhD Researcher",
+    "Atmospheric Studies",
+    "Climate Modeling",
+    "Remote Sensing",
+    "Data Analysis",
   ],
   image: "/images/logo.png",
 };
