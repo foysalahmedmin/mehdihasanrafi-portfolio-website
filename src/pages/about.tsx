@@ -1,7 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
-import { Award, Briefcase, GraduationCap, Quote, Search } from "lucide-react";
+import {
+  Award,
+  Briefcase,
+  ChevronDown,
+  GraduationCap,
+  Quote,
+  Search,
+  Trophy,
+  Building2,
+  Users,
+} from "lucide-react";
 
 export default function About() {
   usePageSEO({
@@ -100,6 +110,70 @@ export default function About() {
       title: "Data Analysis & Machine Learning",
       description:
         "Applying advanced statistical methods and machine learning techniques to analyze large-scale atmospheric datasets and improve predictive models.",
+    },
+  ];
+
+  const awards = [
+    {
+      title: "Outstanding Research Contribution Award",
+      organization: "Climate Research Society",
+      year: "2023",
+      description:
+        "Recognized for exceptional contributions to climate modeling and atmospheric research",
+    },
+    {
+      title: "Best Young Researcher Award",
+      organization: "International Atmospheric Science Conference",
+      year: "2022",
+      description:
+        "Awarded for innovative work in remote sensing applications and data analysis",
+    },
+    {
+      title: "Graduate Research Excellence Scholarship",
+      organization: "University of Environmental Studies",
+      year: "2021",
+      description:
+        "Full scholarship awarded for outstanding academic performance and research potential",
+    },
+    {
+      title: "Best Paper Award",
+      organization: "Environmental Science Journal",
+      year: "2023",
+      description:
+        "Recognized for groundbreaking research on atmospheric dynamics and climate patterns",
+    },
+  ];
+
+  const clients = [
+    {
+      name: "University of Environmental Studies",
+      type: "Academic Institution",
+      description: "Collaborative research on climate modeling and atmospheric dynamics",
+    },
+    {
+      name: "Climate Research Institute",
+      type: "Research Organization",
+      description: "Remote sensing projects and satellite data analysis",
+    },
+    {
+      name: "Atmospheric Research Laboratory",
+      type: "Research Facility",
+      description: "Advanced climate modeling and predictive analytics",
+    },
+    {
+      name: "National Weather Service",
+      type: "Government Agency",
+      description: "Weather prediction systems and extreme weather event analysis",
+    },
+    {
+      name: "Environmental Protection Agency",
+      type: "Government Agency",
+      description: "Air quality monitoring and pollution control strategies",
+    },
+    {
+      name: "Global Climate Initiative",
+      type: "International Organization",
+      description: "Climate change research and sustainable development projects",
     },
   ];
 
@@ -301,8 +375,69 @@ export default function About() {
         </div>
       </section>
 
-      {/* Skills and Achievements */}
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
+
+      {/* Awards and Achievements */}
       <section className="bg-accent/20 border-b py-16 lg:py-24">
+        <div className="container mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="fade-down mb-12">
+            <div className="mb-3 flex items-center gap-3">
+              <Trophy className="text-primary h-8 w-8" />
+              <h2 className="text-3xl font-semibold lg:text-4xl">
+                Awards and Achievements
+              </h2>
+            </div>
+            <p className="text-muted-foreground">
+              Recognition for outstanding contributions to atmospheric research
+            </p>
+          </div>
+
+          <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2">
+            {awards.map((award, index) => (
+              <Card key={index} className="border-2">
+                <CardHeader>
+                  <div className="mb-4 flex items-start justify-between gap-4">
+                    <div className="bg-primary/10 rounded-lg p-3">
+                      <Award className="text-primary h-6 w-6" />
+                    </div>
+                    <Badge variant="secondary" className="font-mono">
+                      {award.year}
+                    </Badge>
+                  </div>
+                  <CardTitle className="mb-2 text-xl">{award.title}</CardTitle>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    {award.organization}
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {award.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
+
+      {/* Skills and Achievements */}
+      <section className="border-b py-16 lg:py-24">
         <div className="container mx-auto max-w-5xl px-6 lg:px-8">
           <div className="fade-down mb-12">
             <div className="mb-3 flex items-center gap-3">
@@ -332,6 +467,55 @@ export default function About() {
                       </Badge>
                     ))}
                   </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
+
+      {/* Worked With - Clients Section */}
+      <section className="bg-accent/20 border-b py-16 lg:py-24">
+        <div className="container mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="fade-down mb-12">
+            <div className="mb-3 flex items-center gap-3">
+              <Users className="text-primary h-8 w-8" />
+              <h2 className="text-3xl font-semibold lg:text-4xl">
+                Worked With
+              </h2>
+            </div>
+            <p className="text-muted-foreground">
+              Collaborations with leading institutions and organizations
+            </p>
+          </div>
+
+          <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {clients.map((client, index) => (
+              <Card key={index} className="border-border/60 hover:border-primary/40 transition-colors">
+                <CardHeader>
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="bg-primary/10 rounded-lg p-2">
+                      <Building2 className="text-primary h-5 w-5" />
+                    </div>
+                    <CardTitle className="text-lg">{client.name}</CardTitle>
+                  </div>
+                  <Badge variant="outline" className="w-fit">
+                    {client.type}
+                  </Badge>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {client.description}
+                  </p>
                 </CardContent>
               </Card>
             ))}

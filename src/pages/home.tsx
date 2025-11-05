@@ -18,13 +18,18 @@ import type { TBulkPublicationResponse } from "@/types/publication.type";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowRight,
+  BarChart3,
   BookOpen,
+  Brain,
   ChevronDown,
   Cloud,
+  Code,
   Cpu,
+  Database,
   FolderKanban,
   Globe,
   GraduationCap,
+  Layers,
   Microscope,
   Play,
   Quote,
@@ -32,6 +37,7 @@ import {
   Target,
   TrendingUp,
   Wind,
+  Zap,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -98,7 +104,7 @@ export default function Home() {
         <div className="container mx-auto px-6 py-16 lg:px-8 lg:py-24">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-5">
             {/* Text Content */}
-            <div className="fade-right space-y-6 lg:col-span-3">
+            <div className="fade-right order-2 space-y-6 text-center lg:order-1 lg:col-span-3 lg:text-start">
               <div className="space-y-3">
                 <h1 className="text-5xl leading-tight font-bold lg:text-6xl">
                   Mehedi Hasan Rafi
@@ -113,7 +119,7 @@ export default function Home() {
                 Committed to understanding atmospheric processes and their
                 impact on our planet's climate system.
               </p>
-              <div className="flex flex-wrap gap-4 pt-4">
+              <div className="flex flex-wrap justify-center gap-4 pt-4 lg:justify-start">
                 <Link href="/projects">
                   <Button size="lg" data-testid="button-explore-research">
                     <FolderKanban className="mr-2 h-5 w-5" />
@@ -136,9 +142,9 @@ export default function Home() {
             </div>
 
             {/* Portrait Image */}
-            <div className="fade-left lg:col-span-2">
+            <div className="fade-left order-1 lg:order-2 lg:col-span-2">
               <div className="relative mx-auto max-w-md">
-                <div className="aspect-[5/6] overflow-hidden rounded-lg shadow-xl">
+                <div className="aspect-square overflow-hidden rounded-full shadow-xl lg:aspect-[5/6] lg:rounded-lg">
                   <img
                     src={"/images/profile.png"}
                     alt="Mehedi Hasan Rafi"
@@ -153,10 +159,15 @@ export default function Home() {
         {/* Scroll Down Arrow */}
         <button
           onClick={scrollToAbout}
-          className="text-muted-foreground hover:text-foreground absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer transition-colors"
+          className="group absolute bottom-8 left-1/2 -translate-x-1/2"
           aria-label="Scroll to about section"
         >
-          <ChevronDown className="h-8 w-8" />
+          <div className="relative">
+            <div className="bg-background/70 border-border/60 ring-primary/20 group-hover:ring-primary/40 rounded-full border p-3 shadow-lg ring-1 backdrop-blur-md transition-all duration-300 group-hover:-translate-y-0.5">
+              <ChevronDown className="text-muted-foreground group-hover:text-foreground h-6 w-6 transition-colors" />
+            </div>
+            <div className="to-primary/25 absolute -inset-3 rounded-full bg-gradient-to-b from-transparent opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-100" />
+          </div>
         </button>
       </section>
 
@@ -195,76 +206,85 @@ export default function Home() {
               </CardHeader>
 
               <CardContent className="space-y-6 pt-6">
-                <div className="grid gap-8 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                        <Target className="text-primary h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="mb-2 text-lg font-semibold">
-                          Research Focus
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">
-                          Specializing in atmospheric dynamics, climate
-                          modeling, and environmental science. My research
-                          investigates Earth's atmospheric systems using
-                          cutting-edge remote sensing and computational models
-                          to understand climate change patterns.
-                        </p>
+                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
+                      <div className="flex items-start gap-4">
+                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
+                          <Target className="text-primary h-5 w-5" />
+                        </div>
+                        <div>
+                          <h3 className="mb-2 text-lg font-semibold">
+                            Research Focus
+                          </h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            Specializing in atmospheric dynamics, climate
+                            modeling, and environmental science. My research
+                            investigates Earth's atmospheric systems using
+                            cutting-edge remote sensing and computational models
+                            to understand climate change patterns.
+                          </p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                        <Microscope className="text-primary h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="mb-2 text-lg font-semibold">
-                          Methodology
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">
-                          Leveraging advanced computational frameworks,
-                          satellite data analysis, and machine learning
-                          techniques to develop accurate predictive models for
-                          atmospheric behavior and climate trends.
-                        </p>
+                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
+                      <div className="flex items-start gap-4">
+                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
+                          <Microscope className="text-primary h-5 w-5" />
+                        </div>
+                        <div>
+                          <h3 className="mb-2 text-lg font-semibold">
+                            Methodology
+                          </h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            Leveraging advanced computational frameworks,
+                            satellite data analysis, and machine learning
+                            techniques to develop accurate predictive models for
+                            atmospheric behavior and climate trends.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                        <GraduationCap className="text-primary h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="mb-2 text-lg font-semibold">
-                          Academic Excellence
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">
-                          PhD researcher with strong foundation in physics and
-                          environmental science, committed to advancing
-                          knowledge in atmospheric composition and weather
-                          prediction systems through rigorous academic research.
-                        </p>
+                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
+                      <div className="flex items-start gap-4">
+                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
+                          <GraduationCap className="text-primary h-5 w-5" />
+                        </div>
+                        <div>
+                          <h3 className="mb-2 text-lg font-semibold">
+                            Academic Excellence
+                          </h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            PhD researcher with strong foundation in physics and
+                            environmental science, committed to advancing
+                            knowledge in atmospheric composition and weather
+                            prediction systems through rigorous academic
+                            research.
+                          </p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                        <Globe className="text-primary h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="mb-2 text-lg font-semibold">
-                          Global Impact
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">
-                          Dedicated to contributing meaningful insights that
-                          address global environmental challenges and support
-                          sustainable development through evidence-based
-                          scientific research.
-                        </p>
+                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
+                      <div className="flex items-start gap-4">
+                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
+                          <Globe className="text-primary h-5 w-5" />
+                        </div>
+                        <div>
+                          <h3 className="mb-2 text-lg font-semibold">
+                            Global Impact
+                          </h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            Dedicated to contributing meaningful insights that
+                            address global environmental challenges and support
+                            sustainable development through evidence-based
+                            scientific research.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -291,6 +311,270 @@ export default function Home() {
                     <Wind className="mr-1 h-3 w-3" />
                     Atmospheric Dynamics
                   </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
+
+      {/* Research Interests Section */}
+      <section className="border-b py-16 lg:py-24">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="fade-down mb-12 text-center">
+            <Badge
+              variant="secondary"
+              className="mb-4 px-3 py-1 text-sm font-semibold"
+            >
+              Research Focus
+            </Badge>
+            <h2 className="mb-4 text-3xl font-semibold lg:text-4xl">
+              Research Interests & Specializations
+            </h2>
+            <p className="text-muted-foreground mx-auto max-w-2xl">
+              Exploring cutting-edge areas in atmospheric science and climate
+              research
+            </p>
+          </div>
+
+          <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Cloud className="text-primary h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl">Climate Modeling</CardTitle>
+                </div>
+                <CardDescription>
+                  Developing advanced computational models to simulate and
+                  predict climate patterns, understanding long-term atmospheric
+                  dynamics.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Satellite className="text-primary h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl">Remote Sensing</CardTitle>
+                </div>
+                <CardDescription>
+                  Utilizing satellite and ground-based technologies to monitor
+                  atmospheric composition, cloud properties, and environmental
+                  changes.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Wind className="text-primary h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl">
+                    Atmospheric Dynamics
+                  </CardTitle>
+                </div>
+                <CardDescription>
+                  Investigating physical processes governing atmospheric
+                  circulation, jet streams, and weather system interactions.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <BarChart3 className="text-primary h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl">Data Analysis</CardTitle>
+                </div>
+                <CardDescription>
+                  Applying machine learning and statistical methods to analyze
+                  atmospheric data and develop predictive models.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Target className="text-primary h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl">
+                    Extreme Weather Events
+                  </CardTitle>
+                </div>
+                <CardDescription>
+                  Studying mechanisms behind extreme weather phenomena in the
+                  context of climate change and global warming.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Globe className="text-primary h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl">
+                    Air Quality & Pollution
+                  </CardTitle>
+                </div>
+                <CardDescription>
+                  Analyzing atmospheric pollutants, transport mechanisms, and
+                  developing strategies for environmental protection.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
+
+      {/* Skills & Expertise Section */}
+      <section className="bg-accent/20 border-b py-16 lg:py-24">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="fade-down mb-12 text-center">
+            <Badge
+              variant="secondary"
+              className="mb-4 px-3 py-1 text-sm font-semibold"
+            >
+              Technical Expertise
+            </Badge>
+            <h2 className="mb-4 text-3xl font-semibold lg:text-4xl">
+              Skills & Tools
+            </h2>
+            <p className="text-muted-foreground mx-auto max-w-2xl">
+              Proficient in a wide range of research methodologies and
+              computational tools
+            </p>
+          </div>
+
+          <div className="fade-up grid grid-cols-1 gap-8 md:grid-cols-3">
+            {/* Research Skills */}
+            <Card className="bg-card/50 border-2">
+              <CardHeader>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Microscope className="text-primary h-5 w-5" />
+                  </div>
+                  <CardTitle>Research Skills</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Zap className="text-primary h-4 w-4" />
+                  <span className="text-sm">Climate Modeling</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="text-primary h-4 w-4" />
+                  <span className="text-sm">Remote Sensing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="text-primary h-4 w-4" />
+                  <span className="text-sm">Statistical Methods</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="text-primary h-4 w-4" />
+                  <span className="text-sm">Data Analysis</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="text-primary h-4 w-4" />
+                  <span className="text-sm">Weather Prediction</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Technical Skills */}
+            <Card className="bg-card/50 border-2">
+              <CardHeader>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Code className="text-primary h-5 w-5" />
+                  </div>
+                  <CardTitle>Technical Skills</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Layers className="text-primary h-4 w-4" />
+                  <span className="text-sm">Python & R</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Layers className="text-primary h-4 w-4" />
+                  <span className="text-sm">MATLAB</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Layers className="text-primary h-4 w-4" />
+                  <span className="text-sm">Machine Learning</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Layers className="text-primary h-4 w-4" />
+                  <span className="text-sm">GIS Software</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Layers className="text-primary h-4 w-4" />
+                  <span className="text-sm">Data Visualization</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Atmospheric Science */}
+            <Card className="bg-card/50 border-2">
+              <CardHeader>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Brain className="text-primary h-5 w-5" />
+                  </div>
+                  <CardTitle>Atmospheric Science</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Database className="text-primary h-4 w-4" />
+                  <span className="text-sm">Atmospheric Chemistry</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Database className="text-primary h-4 w-4" />
+                  <span className="text-sm">Climate Dynamics</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Database className="text-primary h-4 w-4" />
+                  <span className="text-sm">Satellite Data Processing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Database className="text-primary h-4 w-4" />
+                  <span className="text-sm">Atmospheric Physics</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Database className="text-primary h-4 w-4" />
+                  <span className="text-sm">Environmental Monitoring</span>
                 </div>
               </CardContent>
             </Card>

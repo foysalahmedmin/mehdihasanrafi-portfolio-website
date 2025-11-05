@@ -1,27 +1,32 @@
-.fade-up[data-observe-fade-up="true"] {
-  @apply translate-y-10 opacity-0 transition-all duration-500 ease-out;
-}
-.fade-up[data-observe-fade-up="true"].active {
-  @apply translate-y-0 opacity-100;
-}
-
-.fade-down[data-observe-fade-down="true"] {
-  @apply -translate-y-10 opacity-0 transition-all duration-500 ease-out;
-}
-.fade-down[data-observe-fade-down="true"].active {
-  @apply translate-y-0 opacity-100;
+/* Simple fade animations - default hidden state */
+.fade-up,
+.fade-down,
+.fade-left,
+.fade-right {
+  @apply transition-all duration-500 ease-out;
 }
 
-.fade-left[data-observe-fade-left="true"] {
-  @apply -translate-x-10 opacity-0 transition-all duration-500 ease-out;
-}
-.fade-left[data-observe-fade-left="true"].active {
-  @apply translate-x-0 opacity-100;
+/* Hidden states */
+.fade-up:not(.active) {
+  @apply translate-y-10 opacity-0;
 }
 
-.fade-right[data-observe-fade-right="true"] {
-  @apply translate-x-10 opacity-0 transition-all duration-500 ease-out;
+.fade-down:not(.active) {
+  @apply -translate-y-10 opacity-0;
 }
-.fade-right[data-observe-fade-right="true"].active {
-  @apply translate-x-0 opacity-100;
+
+.fade-left:not(.active) {
+  @apply -translate-x-10 opacity-0;
+}
+
+.fade-right:not(.active) {
+  @apply translate-x-10 opacity-0;
+}
+
+/* Active states - visible */
+.fade-up.active,
+.fade-down.active,
+.fade-left.active,
+.fade-right.active {
+  @apply translate-x-0 translate-y-0 opacity-100;
 }

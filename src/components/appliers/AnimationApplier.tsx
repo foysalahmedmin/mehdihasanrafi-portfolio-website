@@ -1,43 +1,76 @@
 "use client";
 
-import useClassIntersectionObserver from "@/hooks/observers/useClassIntersectionObserver";
+import { useEffect } from "react";
 
 const AnimationApplier = () => {
-  useClassIntersectionObserver({
-    selector: ".fade-up",
-    classNames: "active",
-    options: { threshold: 0 },
-    isToggle: false,
-    isUnobservable: true,
-    dynamic: true,
-  });
+  useEffect(() => {
+    // Simple function to observe elements
+    const observeElements = () => {
+      const selectors = [".fade-up", ".fade-down", ".fade-left", ".fade-right"];
 
-  useClassIntersectionObserver({
-    selector: ".fade-down",
-    classNames: "active",
-    options: { threshold: 0 },
-    isToggle: false,
-    isUnobservable: true,
-    dynamic: true,
-  });
+      selectors.forEach((selector) => {
+        const elements = document.querySelectorAll(
+          `${selector}:not([data-animated])`,
+        );
 
-  useClassIntersectionObserver({
-    selector: ".fade-left",
-    classNames: "active",
-    options: { threshold: 0 },
-    isToggle: false,
-    isUnobservable: true,
-    dynamic: true,
-  });
+        elements.forEach((element) => {
+          // Mark as animated to avoid duplicate observation
+          element.setAttribute("data-animated", "true");
 
-  useClassIntersectionObserver({
-    selector: ".fade-right",
-    classNames: "active",
-    options: { threshold: 0 },
-    isToggle: false,
-    isUnobservable: true,
-    dynamic: true,
-  });
+          // Create IntersectionObserver
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("active");
+                  // Once animated, we can optionally unobserve
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            {
+              threshold: 0.1,
+              rootMargin: "0px 0px -50px 0px",
+            },
+          );
+
+          // Check if element is already in viewport
+          const rect = element.getBoundingClientRect();
+          const isVisible =
+            rect.top < window.innerHeight &&
+            rect.bottom > 0 &&
+            rect.left < window.innerWidth &&
+            rect.right > 0;
+
+          if (isVisible) {
+            // If already visible, add active class immediately
+            element.classList.add("active");
+          } else {
+            // Otherwise, observe it
+            observer.observe(element);
+          }
+        });
+      });
+    };
+
+    // Initial observation
+    observeElements();
+
+    // Watch for new elements (dynamic content)
+    const mutationObserver = new MutationObserver(() => {
+      observeElements();
+    });
+
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Cleanup
+    return () => {
+      mutationObserver.disconnect();
+    };
+  }, []);
 
   return null;
 };
