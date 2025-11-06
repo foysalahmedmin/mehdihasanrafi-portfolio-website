@@ -23,7 +23,7 @@ export function NewsCard({ news }: NewsCardProps) {
             <img
               src={
                 news.thumbnail
-                  ? `${URLS.news}/${news.thumbnail}`
+                  ? `${URLS.news.thumbnail}/${news.thumbnail}`
                   : "/images/thumbnail.png"
               }
               alt={news.title}

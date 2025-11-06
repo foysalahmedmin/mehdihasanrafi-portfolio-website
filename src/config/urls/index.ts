@@ -8,9 +8,6 @@ export const URLS = {
     thumbnail: `${ENV.api_url}/uploads/news/images`,
     image: `${ENV.api_url}/uploads/news/images`,
     video: `${ENV.api_url}/uploads/news/videos`,
-    seo: {
-      image: `${ENV.api_url}/uploads/news/seo/images`,
-    },
   },
   projects: {
     thumbnail: `${ENV.api_url}/uploads/projects/images`,
