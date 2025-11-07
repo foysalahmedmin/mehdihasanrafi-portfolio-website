@@ -48,10 +48,24 @@ import {
 } from "@/services/publication.service";
 import type { TPublication } from "@/types/publication.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, Pencil, Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import AdminLayout from "./layout";
+
+type FileState = {
+  file: File | null;
+  existingUrl?: string;
+  shouldRemove: boolean;
+};
+
+const publication_categories = [
+  "Abstract",
+  "Journal",
+  "Conference",
+  "Book chapter",
+  "Others",
+];
 
 export default function AdminPublicationsPage() {
   const [, setLocation] = useLocation();
@@ -71,9 +85,22 @@ export default function AdminPublicationsPage() {
     status: "draft",
     is_featured: false,
   });
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [pdf, setPdf] = useState<File | null>(null);
+
+  // File states with management
+  const [thumbnail, setThumbnail] = useState<FileState>({
+    file: null,
+    existingUrl: undefined,
+    shouldRemove: false,
+  });
+  const [pdf, setPdf] = useState<FileState>({
+    file: null,
+    existingUrl: undefined,
+    shouldRemove: false,
+  });
   const [images, setImages] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [removedImages, setRemovedImages] = useState<string[]>([]);
+
   const [tags, setTags] = useState<string[]>([]);
   const [authors, setAuthors] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
@@ -162,9 +189,11 @@ export default function AdminPublicationsPage() {
       status: "draft",
       is_featured: false,
     });
-    setThumbnail(null);
-    setPdf(null);
+    setThumbnail({ file: null, existingUrl: undefined, shouldRemove: false });
+    setPdf({ file: null, existingUrl: undefined, shouldRemove: false });
     setImages([]);
+    setExistingImages([]);
+    setRemovedImages([]);
     setTags([]);
     setAuthors([]);
     setTagInput("");
@@ -173,13 +202,7 @@ export default function AdminPublicationsPage() {
   };
 
   const handleCreate = () => {
-    if (
-      !formData.title ||
-      !formData.slug ||
-      !formData.content ||
-      !formData.abstract ||
-      !formData.venue
-    ) {
+    if (!formData.title || !formData.slug || !formData.category) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields",
@@ -189,8 +212,8 @@ export default function AdminPublicationsPage() {
     }
     createMutation.mutate({
       ...formData,
-      thumbnail: thumbnail || undefined,
-      pdf: pdf || undefined,
+      thumbnail: thumbnail.file || undefined,
+      pdf: pdf.file || undefined,
       images: images.length > 0 ? images : undefined,
       tags: tags.length > 0 ? tags : undefined,
       authors: authors.length > 0 ? authors : undefined,
@@ -217,21 +240,31 @@ export default function AdminPublicationsPage() {
       is_featured: publication.is_featured || false,
       read_time: publication.read_time,
       published_at: publication.published_at
-        ? new Date(publication.published_at).toISOString()
+        ? new Date(publication.published_at).toISOString().slice(0, 16)
         : undefined,
     });
     setTags(publication.tags || []);
     setAuthors(publication.authors || []);
+
+    // Set existing files
+    setThumbnail({
+      file: null,
+      existingUrl: publication.thumbnail ?? undefined,
+      shouldRemove: false,
+    });
+    setPdf({
+      file: null,
+      existingUrl: publication.pdf ?? undefined,
+      shouldRemove: false,
+    });
+    setExistingImages(publication.images || []);
+    setRemovedImages([]);
+
     setIsEditDialogOpen(true);
   };
 
   const handleUpdate = () => {
-    if (
-      !selectedPublication ||
-      !formData.title ||
-      !formData.slug ||
-      !formData.content
-    ) {
+    if (!selectedPublication || !formData.title || !formData.slug) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields",
@@ -239,16 +272,42 @@ export default function AdminPublicationsPage() {
       });
       return;
     }
+
+    const payload: any = {
+      ...formData,
+      tags: tags.length > 0 ? tags : undefined,
+      authors: authors.length > 0 ? authors : undefined,
+    };
+
+    // Handle thumbnail
+    if (thumbnail.shouldRemove) {
+      payload.thumbnail = null;
+    } else if (thumbnail.file) {
+      payload.thumbnail = thumbnail.file;
+    } else {
+      payload.thumbnail = selectedPublication.thumbnail || null;
+    }
+
+    // Handle PDF
+    if (pdf.shouldRemove) {
+      payload.pdf = null;
+    } else if (pdf.file) {
+      payload.pdf = pdf.file;
+    } else {
+      payload.pdf = selectedPublication.pdf || null;
+    }
+
+    // Handle images
+    if (removedImages.length > 0) {
+      payload.removed_images = removedImages;
+    }
+    if (images.length > 0) {
+      payload.images = images;
+    }
+
     updateMutation.mutate({
       id: selectedPublication._id,
-      payload: {
-        ...formData,
-        thumbnail: thumbnail || undefined,
-        pdf: pdf || undefined,
-        images: images.length > 0 ? images : undefined,
-        tags: tags.length > 0 ? tags : undefined,
-        authors: authors.length > 0 ? authors : undefined,
-      },
+      payload,
     });
   };
 
@@ -261,6 +320,48 @@ export default function AdminPublicationsPage() {
     if (selectedPublication) {
       deleteMutation.mutate(selectedPublication._id);
     }
+  };
+
+  // File management functions
+  const handleThumbnailChange = (file: File | null) => {
+    setThumbnail({
+      file,
+      existingUrl: thumbnail.existingUrl,
+      shouldRemove: false,
+    });
+  };
+
+  const removeExistingThumbnail = () => {
+    setThumbnail({
+      file: null,
+      existingUrl: undefined,
+      shouldRemove: true,
+    });
+  };
+
+  const handlePdfChange = (file: File | null) => {
+    setPdf({
+      file,
+      existingUrl: pdf.existingUrl,
+      shouldRemove: false,
+    });
+  };
+
+  const removeExistingPdf = () => {
+    setPdf({
+      file: null,
+      existingUrl: undefined,
+      shouldRemove: true,
+    });
+  };
+
+  const handleImagesChange = (newImages: File[]) => {
+    setImages(newImages);
+  };
+
+  const removeExistingImage = (imageUrl: string) => {
+    setExistingImages(existingImages.filter((img) => img !== imageUrl));
+    setRemovedImages([...removedImages, imageUrl]);
   };
 
   const addTag = () => {
@@ -352,7 +453,27 @@ export default function AdminPublicationsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Venue *</Label>
+                    <Label>Category *</Label>
+                    <Select
+                      value={formData.category || ""}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, category: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {publication_categories.map((c) => (
+                          <SelectItem key={c} value={c}>
+                            {c}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Venue</Label>
                     <Input
                       value={formData.venue}
                       onChange={(e) =>
@@ -360,19 +481,10 @@ export default function AdminPublicationsPage() {
                       }
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label>Category</Label>
-                    <Input
-                      value={formData.category || ""}
-                      onChange={(e) =>
-                        setFormData({ ...formData, category: e.target.value })
-                      }
-                    />
-                  </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Abstract *</Label>
+                  <Label>Abstract</Label>
                   <Textarea
                     rows={4}
                     value={formData.abstract}
@@ -383,7 +495,7 @@ export default function AdminPublicationsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Content *</Label>
+                  <Label>Content</Label>
                   <TipTapEditor
                     content={formData.content || ""}
                     onChange={(content) =>
@@ -586,7 +698,7 @@ export default function AdminPublicationsPage() {
                       type="file"
                       accept="image/*"
                       onChange={(e) =>
-                        setThumbnail(e.target.files?.[0] || null)
+                        handleThumbnailChange(e.target.files?.[0] || null)
                       }
                     />
                   </div>
@@ -595,7 +707,9 @@ export default function AdminPublicationsPage() {
                     <Input
                       type="file"
                       accept="application/pdf"
-                      onChange={(e) => setPdf(e.target.files?.[0] || null)}
+                      onChange={(e) =>
+                        handlePdfChange(e.target.files?.[0] || null)
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -605,7 +719,7 @@ export default function AdminPublicationsPage() {
                       accept="image/*"
                       multiple
                       onChange={(e) =>
-                        setImages(Array.from(e.target.files || []))
+                        handleImagesChange(Array.from(e.target.files || []))
                       }
                     />
                   </div>
@@ -766,7 +880,27 @@ export default function AdminPublicationsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Venue *</Label>
+                  <Label>Category *</Label>
+                  <Select
+                    value={formData.category || ""}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, category: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {publication_categories.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Venue</Label>
                   <Input
                     value={formData.venue}
                     onChange={(e) =>
@@ -774,19 +908,10 @@ export default function AdminPublicationsPage() {
                     }
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>Category</Label>
-                  <Input
-                    value={formData.category || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
-                    }
-                  />
-                </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Abstract *</Label>
+                <Label>Abstract</Label>
                 <Textarea
                   rows={4}
                   value={formData.abstract}
@@ -797,7 +922,7 @@ export default function AdminPublicationsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Content *</Label>
+                <Label>Content</Label>
                 <TipTapEditor
                   content={formData.content || ""}
                   onChange={(content) => setFormData({ ...formData, content })}
@@ -984,33 +1109,130 @@ export default function AdminPublicationsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              {/* File Management Section */}
+              <div className="space-y-4">
+                {/* Thumbnail Management */}
                 <div className="space-y-2">
-                  <Label>Thumbnail (leave empty to keep current)</Label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
-                  />
+                  <Label>Thumbnail</Label>
+                  {thumbnail.existingUrl && !thumbnail.shouldRemove ? (
+                    <div className="flex items-center gap-2 rounded-md border p-2">
+                      <span className="flex-1 truncate text-sm">
+                        Current: {thumbnail.existingUrl.split("/").pop()}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeExistingThumbnail}
+                        className="text-destructive hover:text-destructive/90"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleThumbnailChange(e.target.files?.[0] || null)
+                      }
+                    />
+                  )}
+                  {thumbnail.shouldRemove && (
+                    <p className="text-muted-foreground text-sm">
+                      Thumbnail will be removed on save
+                    </p>
+                  )}
                 </div>
+
+                {/* PDF Management */}
                 <div className="space-y-2">
-                  <Label>PDF (leave empty to keep current)</Label>
-                  <Input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={(e) => setPdf(e.target.files?.[0] || null)}
-                  />
+                  <Label>PDF</Label>
+                  {pdf.existingUrl && !pdf.shouldRemove ? (
+                    <div className="flex items-center gap-2 rounded-md border p-2">
+                      <span className="flex-1 truncate text-sm">
+                        Current: {pdf.existingUrl.split("/").pop()}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeExistingPdf}
+                        className="text-destructive hover:text-destructive/90"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={(e) =>
+                        handlePdfChange(e.target.files?.[0] || null)
+                      }
+                    />
+                  )}
+                  {pdf.shouldRemove && (
+                    <p className="text-muted-foreground text-sm">
+                      PDF will be removed on save
+                    </p>
+                  )}
                 </div>
+
+                {/* Additional Images Management */}
                 <div className="space-y-2">
                   <Label>Additional Images</Label>
+
+                  {/* Existing Images */}
+                  {existingImages.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium">Current Images:</p>
+                      {existingImages.map((imageUrl, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 rounded-md border p-2"
+                        >
+                          <span className="flex-1 truncate text-sm">
+                            {imageUrl.split("/").pop()}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeExistingImage(imageUrl)}
+                            className="text-destructive hover:text-destructive/90"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* New Images Input */}
                   <Input
                     type="file"
                     accept="image/*"
                     multiple
                     onChange={(e) =>
-                      setImages(Array.from(e.target.files || []))
+                      handleImagesChange(Array.from(e.target.files || []))
                     }
                   />
+
+                  {/* Show selected new images */}
+                  {images.length > 0 && (
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">New Images to Add:</p>
+                      {images.map((image, index) => (
+                        <div
+                          key={index}
+                          className="text-muted-foreground text-sm"
+                        >
+                          {image.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

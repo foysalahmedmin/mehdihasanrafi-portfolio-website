@@ -13,8 +13,8 @@ export type CreateProjectPayload = {
   content: string;
   category: string;
   author?: string;
-  thumbnail?: File;
-  images?: File[];
+  thumbnail?: File | string | null;
+  images?: File[] | string[] | null;
   tags?: string[];
   status?: "draft" | "pending" | "published" | "archived";
   is_featured?: boolean;
@@ -23,8 +23,8 @@ export type CreateProjectPayload = {
 };
 
 export type UpdateProjectPayload = Partial<CreateProjectPayload> & {
-  thumbnail?: File | null;
-  images?: File[];
+  thumbnail?: File | string | null;
+  images?: File[] | string[] | null;
 };
 
 // GET - Get all projects
@@ -83,6 +83,10 @@ export async function updateProject(
   id: string,
   payload: UpdateProjectPayload,
 ): Promise<TProjectResponse> {
+  console.log(payload);
+
+  if (payload.title) return {};
+
   const formData = new FormData();
 
   if (payload.title) formData.append("title", payload.title);

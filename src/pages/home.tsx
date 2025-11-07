@@ -1,6 +1,6 @@
 import { NewsCard } from "@/components/cards/news-card";
 import { ProjectCard } from "@/components/cards/project-card";
-import { PublicationCard } from "@/components/cards/publication-card";
+import { PublicationList } from "@/components/cards/publication-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -507,6 +507,55 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Publications Preview Section */}
+      <section className="border-b py-16 lg:py-24">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="fade-down mb-8 flex flex-wrap items-center justify-between gap-4 lg:mb-12">
+            <div>
+              <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
+                Recent Publications
+              </h2>
+              <p className="text-muted-foreground">
+                Latest academic contributions
+              </p>
+            </div>
+            <Link href="/publications">
+              <Button
+                variant="outline"
+                data-testid="button-see-all-publications"
+              >
+                See All Publications
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+
+          {recentPublications.length > 0 ? (
+            <ul className="fade-up grid list-none grid-cols-1 gap-4">
+              {recentPublications.map((publication) => (
+                <PublicationList
+                  key={publication._id}
+                  publication={publication}
+                />
+              ))}
+            </ul>
+          ) : (
+            <Card className="p-12 text-center">
+              <CardDescription>No publications available yet.</CardDescription>
+            </Card>
+          )}
+        </div>
+      </section>
+
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
+
       {/* Projects Preview Section */}
       <section className="bg-accent/20 border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
@@ -536,55 +585,6 @@ export default function Home() {
           ) : (
             <Card className="p-12 text-center">
               <CardDescription>No projects available yet.</CardDescription>
-            </Card>
-          )}
-        </div>
-      </section>
-
-      {/* Section Divider with Arrow */}
-      <div className="flex items-center justify-center py-8">
-        <div className="text-muted-foreground flex flex-col items-center gap-2">
-          <div className="bg-border h-12 w-px"></div>
-          <ChevronDown className="h-6 w-6 animate-pulse" />
-          <div className="bg-border h-12 w-px"></div>
-        </div>
-      </div>
-
-      {/* Publications Preview Section */}
-      <section className="border-b py-16 lg:py-24">
-        <div className="container mx-auto px-6 lg:px-8">
-          <div className="fade-down mb-8 flex flex-wrap items-center justify-between gap-4 lg:mb-12">
-            <div>
-              <h2 className="mb-2 text-3xl font-semibold lg:text-4xl">
-                Recent Publications
-              </h2>
-              <p className="text-muted-foreground">
-                Latest academic contributions
-              </p>
-            </div>
-            <Link href="/publications">
-              <Button
-                variant="outline"
-                data-testid="button-see-all-publications"
-              >
-                See All Publications
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-
-          {recentPublications.length > 0 ? (
-            <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-              {recentPublications.map((publication) => (
-                <PublicationCard
-                  key={publication._id}
-                  publication={publication}
-                />
-              ))}
-            </div>
-          ) : (
-            <Card className="p-12 text-center">
-              <CardDescription>No publications available yet.</CardDescription>
             </Card>
           )}
         </div>
@@ -705,6 +705,7 @@ export default function Home() {
           )}
         </div>
       </section>
+
       <section className="py-16 lg:py-24">
         <div className="container mx-auto max-w-5xl px-6 lg:px-8">
           <div className="fade-down mb-12">

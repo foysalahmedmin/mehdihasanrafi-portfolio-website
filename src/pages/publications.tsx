@@ -1,4 +1,4 @@
-import { PublicationCard } from "@/components/cards/publication-card";
+import { PublicationList } from "@/components/cards/publication-list";
 import { SearchFilter } from "@/components/search-filter";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -6,6 +6,14 @@ import { usePageSEO } from "@/hooks/utils/usePageSeo";
 import type { TBulkPublicationResponse } from "@/types/publication.type";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+
+const publication_categories = [
+  "Abstract",
+  "Journal",
+  "Conference",
+  "Book chapter",
+  "Others",
+];
 
 export default function Publications() {
   usePageSEO({
@@ -24,11 +32,19 @@ export default function Publications() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("date-desc");
 
-  // Get unique tags as categories
+  // Get unique tags as categories - FIXED: Ensure only strings are returned
   const categories = useMemo(() => {
-    const tags = new Set<string>();
-    publications.forEach((p) => p?.tags?.forEach((tag) => tags.add(tag)));
-    return Array.from(tags).sort();
+    const cats = new Set(
+      publications
+        .map((p) => {
+          if (p?.category && publication_categories.includes(p.category)) {
+            return p.category;
+          }
+          return null;
+        })
+        .filter((category): category is string => category !== null),
+    );
+    return Array.from(cats).sort();
   }, [publications]);
 
   // Filter and sort publications
@@ -50,7 +66,7 @@ export default function Publications() {
 
     // Category filter (by tags)
     if (selectedCategory !== "all") {
-      filtered = filtered.filter((p) => p?.tags?.includes(selectedCategory));
+      filtered = filtered.filter((p) => p?.category === selectedCategory);
     }
 
     // Sort
@@ -77,6 +93,43 @@ export default function Publications() {
 
     return filtered;
   }, [publications, searchQuery, selectedCategory, sortBy]);
+
+  // Group publications by category according to publication_categories order
+  const groupedPublications = useMemo(() => {
+    const groups: Record<string, typeof filteredPublications> = {};
+
+    // Initialize all categories with empty arrays
+    publication_categories.forEach((category) => {
+      groups[category] = [];
+    });
+
+    // Add "Other" category for publications that don't match any predefined category
+    groups["Other"] = [];
+
+    // Group publications
+    filteredPublications.forEach((publication) => {
+      const category =
+        publication.category &&
+        publication_categories.includes(publication.category)
+          ? publication.category
+          : "Other";
+
+      if (groups[category]) {
+        groups[category].push(publication);
+      } else {
+        groups["Other"].push(publication);
+      }
+    });
+
+    // Remove empty categories
+    Object.keys(groups).forEach((category) => {
+      if (groups[category].length === 0) {
+        delete groups[category];
+      }
+    });
+
+    return groups;
+  }, [filteredPublications]);
 
   const handleClear = () => {
     setSearchQuery("");
@@ -122,25 +175,43 @@ export default function Publications() {
 
           {/* Publications Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            <ul className="grid list-none grid-cols-1 gap-4">
               {[...Array(6)].map((_, i) => (
-                <Card key={i} className="space-y-4 p-6">
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-5/6" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-4/5" />
-                </Card>
+                <li key={i} className="border-b pb-4 last:border-0 last:pb-0">
+                  {/* Simulate author + title + journal line */}
+                  <div className="flex flex-wrap items-center">
+                    <span className="w-2/10 pr-1">
+                      <Skeleton className="h-4 w-full" />
+                    </span>
+                    <span className="w-5/10 px-1">
+                      <Skeleton className="h-4 w-full" />
+                    </span>
+                    <span className="w-3/10 pl-1">
+                      <Skeleton className="h-4 w-full" />
+                    </span>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ul>
           ) : filteredPublications.length > 0 ? (
-            <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-              {filteredPublications.map((publication) => (
-                <PublicationCard
-                  key={publication._id}
-                  publication={publication}
-                />
-              ))}
+            <div className="fade-up">
+              {Object.entries(groupedPublications).map(
+                ([category, publications]) => (
+                  <div key={category} className="mb-8 last:mb-0">
+                    <h2 className="text-foreground/80 mb-4 border-b pb-2 text-2xl font-semibold">
+                      {category}
+                    </h2>
+                    <ul className="grid list-none grid-cols-1 gap-4">
+                      {publications.map((publication) => (
+                        <PublicationList
+                          key={publication._id}
+                          publication={publication}
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                ),
+              )}
             </div>
           ) : (
             <Card className="p-16 text-center">

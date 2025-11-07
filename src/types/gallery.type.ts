@@ -20,9 +20,9 @@ export type TCreateGallery = {
   caption?: string;
   media_type: TMediaType;
   image_url?: string;
-  image?: File | null;
+  image?: File | string | null;
   video_url?: string;
-  video?: File | null;
+  video?: File | string | null;
   order?: number;
   is_active?: boolean;
 };

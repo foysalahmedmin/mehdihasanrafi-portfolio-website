@@ -10,9 +10,9 @@ export type CreateNewsPayload = {
   content: string;
   category: string;
   author?: string;
-  thumbnail?: File;
-  images?: File[];
-  video?: string;
+  thumbnail?: File | string | null;
+  images?: File[] | string[] | null;
+  video?: File | string | null;
   youtube?: string;
   tags?: string[];
   status?: "draft" | "pending" | "published" | "archived";
@@ -22,8 +22,9 @@ export type CreateNewsPayload = {
 };
 
 export type UpdateNewsPayload = Partial<CreateNewsPayload> & {
-  thumbnail?: File | null;
-  images?: File[];
+  thumbnail?: File | string | null;
+  images?: File[] | string[] | null;
+  video?: File | string | null;
 };
 
 // GET - Get all news

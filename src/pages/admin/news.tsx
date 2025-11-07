@@ -48,10 +48,16 @@ import {
 } from "@/services/news.service";
 import type { TNews } from "@/types/news.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, Pencil, Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import AdminLayout from "./layout";
+
+type FileState = {
+  file: File | null;
+  existingUrl?: string;
+  shouldRemove: boolean;
+};
 
 export default function AdminNewsPage() {
   const [, setLocation] = useLocation();
@@ -69,8 +75,14 @@ export default function AdminNewsPage() {
     status: "draft",
     is_featured: false,
   });
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnail, setThumbnail] = useState<FileState>({
+    file: null,
+    existingUrl: undefined,
+    shouldRemove: false,
+  });
   const [images, setImages] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [removedImages, setRemovedImages] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 
@@ -148,8 +160,14 @@ export default function AdminNewsPage() {
       status: "draft",
       is_featured: false,
     });
-    setThumbnail(null);
+    setThumbnail({
+      file: null,
+      existingUrl: undefined,
+      shouldRemove: false,
+    });
     setImages([]);
+    setExistingImages([]);
+    setRemovedImages([]);
     setTags([]);
     setTagInput("");
     setSelectedNews(null);
@@ -171,7 +189,7 @@ export default function AdminNewsPage() {
     }
     createMutation.mutate({
       ...formData,
-      thumbnail: thumbnail || undefined,
+      thumbnail: thumbnail.file || undefined,
       images: images.length > 0 ? images : undefined,
       tags: tags.length > 0 ? tags : undefined,
     } as CreateNewsPayload);
@@ -191,12 +209,22 @@ export default function AdminNewsPage() {
       youtube: news.youtube,
       read_time: news.read_time,
       published_at: news.published_at
-        ? new Date(news.published_at).toISOString()
+        ? new Date(news.published_at).toISOString().slice(0, 16)
         : undefined,
       status: news.status || "draft",
       is_featured: news.is_featured || false,
     });
     setTags(news.tags || []);
+
+    // Set existing files
+    setThumbnail({
+      file: null,
+      existingUrl: news.thumbnail ?? undefined,
+      shouldRemove: false,
+    });
+    setExistingImages(news.images || []);
+    setRemovedImages([]);
+
     setIsEditDialogOpen(true);
   };
 
@@ -214,14 +242,32 @@ export default function AdminNewsPage() {
       });
       return;
     }
+
+    const payload: any = {
+      ...formData,
+      tags: tags.length > 0 ? tags : undefined,
+    };
+
+    // Handle thumbnail
+    if (thumbnail.shouldRemove) {
+      payload.thumbnail = null;
+    } else if (thumbnail.file) {
+      payload.thumbnail = thumbnail.file;
+    } else {
+      payload.thumbnail = selectedNews.thumbnail || null;
+    }
+
+    // Handle images
+    if (removedImages.length > 0) {
+      payload.removed_images = removedImages;
+    }
+    if (images.length > 0) {
+      payload.images = images;
+    }
+
     updateMutation.mutate({
       id: selectedNews._id,
-      payload: {
-        ...formData,
-        thumbnail: thumbnail || undefined,
-        images: images.length > 0 ? images : undefined,
-        tags: tags.length > 0 ? tags : undefined,
-      },
+      payload,
     });
   };
 
@@ -234,6 +280,32 @@ export default function AdminNewsPage() {
     if (selectedNews) {
       deleteMutation.mutate(selectedNews._id);
     }
+  };
+
+  // File management functions
+  const handleThumbnailChange = (file: File | null) => {
+    setThumbnail({
+      file,
+      existingUrl: thumbnail.existingUrl,
+      shouldRemove: false,
+    });
+  };
+
+  const removeExistingThumbnail = () => {
+    setThumbnail({
+      file: null,
+      existingUrl: undefined,
+      shouldRemove: true,
+    });
+  };
+
+  const handleImagesChange = (newImages: File[]) => {
+    setImages(newImages);
+  };
+
+  const removeExistingImage = (imageUrl: string) => {
+    setExistingImages(existingImages.filter((img) => img !== imageUrl));
+    setRemovedImages([...removedImages, imageUrl]);
   };
 
   const addTag = () => {
@@ -423,7 +495,7 @@ export default function AdminNewsPage() {
                       type="file"
                       accept="image/*"
                       onChange={(e) =>
-                        setThumbnail(e.target.files?.[0] || null)
+                        handleThumbnailChange(e.target.files?.[0] || null)
                       }
                     />
                   </div>
@@ -434,7 +506,7 @@ export default function AdminNewsPage() {
                       accept="image/*"
                       multiple
                       onChange={(e) =>
-                        setImages(Array.from(e.target.files || []))
+                        handleImagesChange(Array.from(e.target.files || []))
                       }
                     />
                   </div>
@@ -706,25 +778,96 @@ export default function AdminNewsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* File Management Section */}
+              <div className="space-y-4">
+                {/* Thumbnail Management */}
                 <div className="space-y-2">
-                  <Label>Thumbnail (leave empty to keep current)</Label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
-                  />
+                  <Label>Thumbnail</Label>
+                  {thumbnail.existingUrl && !thumbnail.shouldRemove ? (
+                    <div className="flex items-center gap-2 rounded-md border p-2">
+                      <span className="flex-1 truncate text-sm">
+                        Current: {thumbnail.existingUrl.split("/").pop()}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeExistingThumbnail}
+                        className="text-destructive hover:text-destructive/90"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleThumbnailChange(e.target.files?.[0] || null)
+                      }
+                    />
+                  )}
+                  {thumbnail.shouldRemove && (
+                    <p className="text-muted-foreground text-sm">
+                      Thumbnail will be removed on save
+                    </p>
+                  )}
                 </div>
+
+                {/* Additional Images Management */}
                 <div className="space-y-2">
                   <Label>Additional Images</Label>
+
+                  {/* Existing Images */}
+                  {existingImages.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium">Current Images:</p>
+                      {existingImages.map((imageUrl, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 rounded-md border p-2"
+                        >
+                          <span className="flex-1 truncate text-sm">
+                            {imageUrl.split("/").pop()}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeExistingImage(imageUrl)}
+                            className="text-destructive hover:text-destructive/90"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* New Images Input */}
                   <Input
                     type="file"
                     accept="image/*"
                     multiple
                     onChange={(e) =>
-                      setImages(Array.from(e.target.files || []))
+                      handleImagesChange(Array.from(e.target.files || []))
                     }
                   />
+
+                  {/* Show selected new images */}
+                  {images.length > 0 && (
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">New Images to Add:</p>
+                      {images.map((image, index) => (
+                        <div
+                          key={index}
+                          className="text-muted-foreground text-sm"
+                        >
+                          {image.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

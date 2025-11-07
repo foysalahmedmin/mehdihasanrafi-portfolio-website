@@ -17,7 +17,7 @@ export type TPublication = {
   volume?: string;
   code?: string;
   doi?: string | null;
-  category?: string;
+  category: string;
   author?: string;
   authors?: string[];
   description?: string;

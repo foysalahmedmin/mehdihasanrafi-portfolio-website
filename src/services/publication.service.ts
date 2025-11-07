@@ -21,9 +21,9 @@ export type CreatePublicationPayload = {
   category?: string;
   author?: string;
   authors?: string[];
-  thumbnail?: File;
-  pdf?: File;
-  images?: File[];
+  thumbnail?: File | string | null;
+  pdf?: File | string | null;
+  images?: File[] | string[] | null;
   tags?: string[];
   status?: "draft" | "pending" | "published" | "archived";
   is_featured?: boolean;
@@ -32,9 +32,9 @@ export type CreatePublicationPayload = {
 };
 
 export type UpdatePublicationPayload = Partial<CreatePublicationPayload> & {
-  thumbnail?: File | null;
-  pdf?: File | null;
-  images?: File[];
+  thumbnail?: File | string | null;
+  pdf?: File | string | null;
+  images?: File[] | string[] | null;
 };
 
 // GET - Get all publications
@@ -157,7 +157,7 @@ export async function updatePublication(
   }
 
   if (payload.images) {
-    payload.images.forEach((image) => formData.append("images", image));
+    payload?.images?.forEach((image) => formData.append("images", image));
   }
 
   const response = await api.patch(`/api/publications/${id}`, formData, {

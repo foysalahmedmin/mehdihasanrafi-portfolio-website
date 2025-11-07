@@ -1,4 +1,4 @@
-import { PublicationCard } from "@/components/cards/publication-card";
+import { PublicationList } from "@/components/cards/publication-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
@@ -373,14 +373,14 @@ export default function PublicationDetail() {
             <h2 className="fade-down mb-8 text-2xl font-semibold lg:text-3xl">
               Related Publications
             </h2>
-            <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            <ul className="fade-up grid list-none grid-cols-1 gap-4">
               {relatedPublications.map((relatedPub) => (
-                <PublicationCard
+                <PublicationList
                   key={relatedPub._id}
                   publication={relatedPub}
                 />
               ))}
-            </div>
+            </ul>
           </div>
         </section>
       )}

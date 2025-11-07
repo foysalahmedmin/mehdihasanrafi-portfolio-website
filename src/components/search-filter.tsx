@@ -14,7 +14,7 @@ interface SearchFilterProps {
   onSearchChange: (value: string) => void;
   selectedCategory: string;
   onCategoryChange: (value: string) => void;
-  categories: string[];
+  categories?: string[];
   sortBy: string;
   onSortChange: (value: string) => void;
   resultsCount: number;
@@ -60,7 +60,7 @@ export function SearchFilter({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <SelectItem key={category} value={category}>
                 {category}
               </SelectItem>
