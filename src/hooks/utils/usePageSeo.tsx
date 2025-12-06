@@ -8,7 +8,7 @@ interface PageSEO {
 export function usePageSEO({ title, description }: PageSEO) {
   useEffect(() => {
     // Update document title
-    document.title = `${title} | Mehedi Hasan Rafi`;
+    document.title = `${title} | Mehdi Hasan Rafi`;
 
     // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]');
@@ -26,9 +26,11 @@ export function usePageSEO({ title, description }: PageSEO) {
       ogTitle.setAttribute("property", "og:title");
       document.head.appendChild(ogTitle);
     }
-    ogTitle.setAttribute("content", `${title} | Mehedi Hasan Rafi`);
+    ogTitle.setAttribute("content", `${title} | MehdiHasan Rafi`);
 
-    let ogDescription = document.querySelector('meta[property="og:description"]');
+    let ogDescription = document.querySelector(
+      'meta[property="og:description"]',
+    );
     if (!ogDescription) {
       ogDescription = document.createElement("meta");
       ogDescription.setAttribute("property", "og:description");
@@ -38,7 +40,8 @@ export function usePageSEO({ title, description }: PageSEO) {
 
     // Cleanup on unmount
     return () => {
-      document.title = "Mehedi Hasan Rafi - PhD Researcher in Atmospheric Studies";
+      document.title =
+        "MehdiHasan Rafi - PhD Researcher in Atmospheric Studies";
     };
   }, [title, description]);
 }

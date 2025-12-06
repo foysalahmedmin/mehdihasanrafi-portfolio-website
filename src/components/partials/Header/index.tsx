@@ -34,7 +34,7 @@ export function Header() {
               className="hover:text-primary cursor-pointer text-xl font-bold transition-colors"
               data-testid="link-home"
             >
-              Mehedi Hasan <span className="text-primary">Rafi</span>
+              Mehdi Hasan <span className="text-primary">Rafi</span>
               <span className="text-primary">.</span>
             </span>
           </Link>

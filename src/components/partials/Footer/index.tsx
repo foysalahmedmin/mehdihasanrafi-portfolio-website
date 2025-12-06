@@ -27,12 +27,12 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12">
           {/* About Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Mehedi Hasan Rafi</h3>
+            <h3 className="text-lg font-semibold">Mehdi Hasan Rafi</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
               PhD Researcher specializing in Earth & Atmospheric science.
             </p>
             <p className="text-muted-foreground text-xs">
-              © {currentYear} Mehedi Hasan Rafi. All rights reserved.
+              © {currentYear} MehdiHasan Rafi. All rights reserved.
             </p>
           </div>
 

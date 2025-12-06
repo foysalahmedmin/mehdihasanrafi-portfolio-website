@@ -1,4 +1,4 @@
-# 🌐 Mehedi Hasan Rafi - Portfolio Website
+# 🌐 Mehdi Hasan Rafi - Portfolio Website
 
 A modern, responsive portfolio website for showcasing research work, publications, projects, and achievements. Built with React, TypeScript, Vite, and Tailwind CSS.
 
@@ -429,7 +429,7 @@ This project is licensed under the ISC License.
 
 ## 👤 Author
 
-**Mehedi Hasan Rafi**
+**MehdiHasan Rafi**
 
 - Portfolio: [https://mehdihasanrafi.com](https://mehdihasanrafi.com)
 - Email: rafimehdihasan@gmail.com
