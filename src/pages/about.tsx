@@ -27,7 +27,7 @@ export default function About() {
   usePageSEO({
     title: "About",
     description:
-      "Learn about Mehedi Hasan Rafi's academic background, research experience, and expertise in atmospheric science. Discover his educational journey, skills, and contributions to climate modeling.",
+      "Learn about Mehdi Hasan Rafi's academic background, research experience, and expertise in atmospheric science. Discover his educational journey, skills, and contributions to climate modeling.",
   });
   const education = [
     {
@@ -245,14 +245,14 @@ export default function About() {
   const testimonials = [
     {
       quote:
-        "Mehedi demonstrates exceptional programming and analytical skills and dedication to the research. His work on lightning meteorology has been instrumental to our team's success.",
+        "Mehdi demonstrates exceptional programming and analytical skills and dedication to the research. His work on lightning meteorology has been instrumental to our team's success.",
       author: "Robert H. Holzworth",
       role: "Professor Emeritus, Earth and Space Sciences",
       institution: "University of Washington",
     },
     {
       quote:
-        "An outstanding researcher with a keen eye for detail. Mehedi's contributions to our ionospheric research projects have been invaluable.",
+        "An outstanding researcher with a keen eye for detail. Mehdi's contributions to our ionospheric research projects have been invaluable.",
       author: "Dr. Haris Haralambous",
       role: "Professor of Computer Engineering and Informatics",
       institution: "Frederick University, Cyprus",
@@ -271,7 +271,7 @@ export default function About() {
                 <div className="aspect-[3/4] overflow-hidden rounded-lg shadow-lg">
                   <img
                     src={"/images/profile.png"}
-                    alt="Mehedi Hasan Rafi"
+                    alt="Mehdi Hasan Rafi"
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -282,10 +282,10 @@ export default function About() {
             <div className="fade-left space-y-6 lg:col-span-2">
               <div>
                 <h1 className="mb-4 text-4xl font-bold lg:text-5xl">
-                  About Mehedi Hasan Rafi
+                  About Mehdi Hasan Rafi
                 </h1>
                 <p className="text-muted-foreground text-xl">
-                  PhD Researcher in Atmospheric Studies
+                  PhD Candidate in Earth & Atmospheric Science
                 </p>
               </div>
 

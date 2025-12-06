@@ -117,14 +117,14 @@ const skills = [
 const testimonials = [
   {
     quote:
-      "Mehedi demonstrates exceptional programming and analytical skills and dedication to the research. His work on lightning meteorology has been instrumental to our team's success.",
+      "Mehdi demonstrates exceptional programming and analytical skills and dedication to the research. His work on lightning meteorology has been instrumental to our team's success.",
     author: "Robert H. Holzworth",
     role: "Professor Emeritus, Earth and Space Sciences",
     institution: "University of Washington",
   },
   {
     quote:
-      "An outstanding researcher with a keen eye for detail. Mehedi's contributions to our ionospheric research projects have been invaluable.",
+      "An outstanding researcher with a keen eye for detail. Mehdi's contributions to our ionospheric research projects have been invaluable.",
     author: "Dr. Haris Haralambous",
     role: "Professor of Computer Engineering and Informatics",
     institution: "Frederick University, Cyprus",
@@ -135,7 +135,7 @@ export default function Home() {
   usePageSEO({
     title: "Home",
     description:
-      "Mehedi Hasan Rafi is a PhD researcher specializing in atmospheric studies, climate modeling, and environmental science. Explore research projects, publications, and academic contributions.",
+      "Mehdi Hasan Rafi is a PhD researcher specializing in atmospheric studies, climate modeling, and environmental science. Explore research projects, publications, and academic contributions.",
   });
 
   const { data: projectsResponse } = useQuery<TBulkProjectResponse>({
@@ -180,7 +180,7 @@ export default function Home() {
             <div className="fade-right order-2 space-y-6 text-center lg:order-1 lg:col-span-3 lg:text-start">
               <div className="space-y-3">
                 <h1 className="text-5xl leading-tight font-bold lg:text-6xl">
-                  Mehedi Hasan Rafi
+                  Mehdi Hasan Rafi
                 </h1>
                 <p className="text-muted-foreground text-xl font-medium lg:text-2xl">
                   PhD Candidate in Earth & Atmospheric Science
@@ -220,7 +220,7 @@ export default function Home() {
                 <div className="aspect-square overflow-hidden rounded-full shadow-xl lg:aspect-[5/6] lg:rounded-lg">
                   <img
                     src={"/images/profile.png"}
-                    alt="Mehedi Hasan Rafi"
+                    alt="Mehdi Hasan Rafi"
                     className="h-full w-full object-cover"
                   />
                 </div>
