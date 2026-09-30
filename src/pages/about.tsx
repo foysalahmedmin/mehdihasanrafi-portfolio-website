@@ -313,25 +313,26 @@ export default function About() {
 
               <div className="space-y-4 text-base leading-relaxed">
                 <p>
-                  I am a dedicated PhD researcher with a profound interest in
-                  understanding the complexities of Earth’s atmosphere. My
-                  academic journey has been driven by a passion for Earth and
-                  Atmospheric science and a commitment to addressing the
-                  challenges of climate change through rigorous scientific
-                  inquiry.
+                  I am a PhD researcher working in Earth and atmospheric
+                  science with a focus on ionospheric and atmospheric
+                  research. My work involves studying ionospheric
+                  irregularities, plasma dynamics, space weather and lightning
+                  using ground based observations, satellite data and
+                  computational methods.
                 </p>
                 <p>
-                  Currently pursuing my doctoral degree, I specialize in
-                  Lightning Meteorology, climate modeling, remote sensing
-                  applications, and atmospheric data analysis. My research
-                  focuses on developing advanced computational models to predict
-                  atmospheric behavior and understand the intricate processes
-                  that govern our planet’s climate system.
+                  My research brings together multi instrument observations,
+                  scientific data analysis, remote sensing and machine
+                  learning to better understand atmospheric and ionospheric
+                  processes. I have research experience with Jicamarca Radio
+                  Observatory, GNSS observations, incoherent scatter radar and
+                  lightning detection systems.
                 </p>
                 <p>
-                  When I’m not immersed in research, I enjoy exploring nature,
-                  photography, and staying up to date on the latest advancements
-                  in climate science and technology.
+                  I am particularly interested in understanding how changes in
+                  the upper atmosphere and ionosphere affect space based
+                  technologies and how scientific observations can be used to
+                  improve monitoring and prediction.
                 </p>
               </div>
             </div>
