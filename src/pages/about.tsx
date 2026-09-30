@@ -59,25 +59,60 @@ export default function About() {
 
   const experience = [
     {
-      role: "Research Assistant",
-      organization:
-        "Military Institute of Science and Technology, Dhaka, Bangladesh",
-      period: "2023 – Present",
-      description:
-        "Conducting advanced research and guiding undergraduate students",
-    },
-    {
-      role: "Co-Investigator",
-      organization: "Frederic University, Cyprus",
-      period: "2023 – Present",
-      description: "Contributing to the ionospheric research project",
-    },
-    {
       role: "Researcher",
-      organization: "World-Wide Lightning Location Network (WWLLN)",
-      period: "2022 – Present",
+      organization:
+        "International Research Experience Program (IREP) — Instituto Geofísico del Perú (IGP), known as Jicamarca Radio Observatory, Lima, Peru",
+      period: "May 2026 – August 2026",
       description:
-        "Monitoring and analyzing lightning activity on a global scale",
+        "Investigating the nighttime equatorial plasma irregularities and their relationship with E×B vertical plasma drift was conducted using ROTI and Incoherent Scatter Radar (ISR) observations in the equatorial region.",
+    },
+    {
+      role: "Research Scholar",
+      organization:
+        "Project GARE, Bangladesh — Funding Authority: Bangladesh Bureau of Educational Information & Statistics",
+      period: "2025 – 2026",
+      description:
+        "Responsible for analyzing lightning patterns during convective seasons, developing lightning vulnerability maps and supporting the development of a beneficiary database to improve lightning early warning systems in Bangladesh.",
+    },
+    {
+      role: "Research Scholar (Remote)",
+      organization:
+        "Istituto Nazionale di Geofisica e Vulcanologia (INGV), Italy — PI: Dr. Claudio Cessaroni",
+      period: "Jun 2024 – Present",
+      description:
+        "Responsible for analyzing ionospheric scintillation effects over Bangladesh and the broader South Asian region.",
+    },
+    {
+      role: "Doctoral Fellow — Research Scholar",
+      organization:
+        "Military Institute of Science & Technology, Dhaka, Bangladesh",
+      period: "Apr 2023 – Mar 2026",
+      description:
+        "Responsible for conducting advanced research and leading undergraduate researchers to collaborate with faculty members.",
+    },
+    {
+      role: "Co-Investigator (Remote)",
+      organization:
+        "Frederick University, Cyprus — Cyprus Ionospheric Research Group, PI: Dr. Haris Haralambous",
+      period: "Jul 2023 – Jun 2024",
+      description:
+        "Investigating the correlation between the Rate of Total Electron Content Index and Spread F over Europe and America.",
+    },
+    {
+      role: "Research Scholar",
+      organization:
+        "Project BANBAIS, Bangladesh — Funding Authority: GoB, Ministry of Education, Bangladesh",
+      period: "FY 2023 – 2025",
+      description:
+        "Responsible for developing an ionospheric monitoring system for Bangladesh: Empowering Geospace Research.",
+    },
+    {
+      role: "Co-Investigator (Remote)",
+      organization:
+        "University of Washington, Seattle, United States — World Wide Lightning Location Network, PI: Emeritus Professor Robert H. Holzworth",
+      period: "2022 – 2023",
+      description:
+        "Responsible for analyzing VLF receiver data and determining the network detection efficiency.",
     },
   ];
 
