@@ -13,6 +13,7 @@ import {
   Globe,
   GraduationCap,
   Layers,
+  Mic,
   Microscope,
   Navigation,
   Quote,
@@ -321,6 +322,51 @@ export default function About() {
       role: "Member of IEEE Bangladesh Section",
       period: "Present",
       icon: Zap,
+    },
+  ];
+
+  const invitedTalks = [
+    {
+      title:
+        "Ionospheric Research and Development in Bangladesh: Current Status and Future Scope",
+      venue: "Jicamarca Radio Observatory, Peru",
+      date: "9 June 2026",
+      type: "Invited Talk",
+    },
+    {
+      title:
+        "Research Experience at Jicamarca Radio Observatory: Reflections on Peru's History and Culture",
+      venue:
+        "104th Anniversary Program of the Jicamarca Radio Observatory, Lima, Peru",
+      date: "28 July 2026",
+      type: "Invited Talk",
+    },
+    {
+      title:
+        "Lightning Characteristics within Tropical Cyclones over the Indian Ocean",
+      venue:
+        "American Geophysical Union (AGU) Annual Meeting, Advancing Earth and Space Science, New Orleans, United States",
+      date: "December 2025",
+      type: "Conference Presentation",
+    },
+    {
+      title: "Lightning Research Using the International Space Station",
+      venue: "Military Institute of Science and Technology (MIST), Bangladesh",
+      date: "January 2023",
+      type: "Seminar",
+    },
+    {
+      title:
+        "Development of the World Wide Lightning Location Network (WWLLN) and Lightning Research in Bangladesh",
+      venue: "2022 International Conference on Energy and Power Engineering (ICEPE)",
+      date: "November 2022",
+      type: "Invited Talk",
+    },
+    {
+      title: "Machine Learning Applications for Lightning Prediction",
+      venue: "RAWSET Conference, KL University, India",
+      date: "November 2022",
+      type: "Invited Talk",
     },
   ];
 
@@ -718,6 +764,66 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
+
+      {/* Invited Talks and Seminars */}
+      <section className="border-b py-16 lg:py-24">
+        <div className="container mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="fade-down mb-12">
+            <div className="mb-3 flex items-center gap-3">
+              <Mic className="text-primary h-8 w-8" />
+              <h2 className="text-3xl font-semibold lg:text-4xl">
+                Invited Talks & Seminars
+              </h2>
+            </div>
+            <p className="text-muted-foreground">
+              Invited talks, seminars, and conference presentations
+            </p>
+          </div>
+
+          <div className="fade-up space-y-6">
+            {invitedTalks.map((talk, index) => (
+              <Card key={index}>
+                <CardHeader>
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="space-y-2">
+                      <CardTitle className="text-xl">"{talk.title}"</CardTitle>
+                      <p className="text-muted-foreground text-base font-medium">
+                        {talk.venue}
+                      </p>
+                    </div>
+                    <Badge variant="secondary" className="font-mono">
+                      {talk.date}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Badge variant="outline" className="w-fit">
+                    {talk.type}
+                  </Badge>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section Divider with Arrow */}
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground flex flex-col items-center gap-2">
+          <div className="bg-border h-12 w-px"></div>
+          <ChevronDown className="h-6 w-6 animate-pulse" />
+          <div className="bg-border h-12 w-px"></div>
+        </div>
+      </div>
 
       {/* Testimonials */}
       <section className="py-16 lg:py-24">
