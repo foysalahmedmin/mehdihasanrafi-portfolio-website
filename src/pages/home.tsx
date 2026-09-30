@@ -24,7 +24,6 @@ import {
   ChevronDown,
   Cloud,
   Code,
-  Cpu,
   FolderKanban,
   Globe,
   GraduationCap,
@@ -37,7 +36,6 @@ import {
   Signal,
   Sun,
   Target,
-  TrendingUp,
   Waves,
   Wind,
   Zap,
@@ -268,152 +266,99 @@ export default function Home() {
       </section>
 
       {/* About Preview Section */}
-      <section
-        id="about-section"
-        className="from-background to-muted/20 border-b bg-gradient-to-b py-20 lg:py-28"
-      >
+      <section id="about-section" className="border-b py-16 lg:py-24">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="fade-up">
-            <Card className="bg-card/50 border-2 shadow-lg backdrop-blur-sm transition-all duration-300">
-              <CardHeader className="pb-6">
-                <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                  <div className="space-y-3">
-                    <Badge
-                      variant="secondary"
-                      className="px-3 py-1 text-sm font-semibold"
-                    >
-                      Research & Innovation
-                    </Badge>
-                    <CardTitle className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent lg:text-5xl">
-                      About Me
-                    </CardTitle>
-                    <CardDescription className="text-muted-foreground max-w-2xl text-lg">
-                      Pioneering earth & atmospheric research through advanced
-                      computational modeling and remote sensing technologies
-                    </CardDescription>
+          <div className="fade-down mb-8 flex flex-wrap items-end justify-between gap-4 lg:mb-12">
+            <div className="space-y-3">
+              <Badge
+                variant="secondary"
+                className="px-3 py-1 text-sm font-semibold"
+              >
+                Research & Innovation
+              </Badge>
+              <h2 className="text-3xl font-semibold lg:text-4xl">About Me</h2>
+              <p className="text-muted-foreground max-w-2xl">
+                Pioneering earth & atmospheric research through advanced
+                computational modeling and remote sensing technologies
+              </p>
+            </div>
+            <Link href="/about">
+              <Button variant="outline" data-testid="button-explore-journey">
+                Explore My Journey
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+
+          <div className="fade-up grid gap-6 md:grid-cols-2">
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Target className="text-primary h-6 w-6" />
                   </div>
-                  <Link href="/about" className="lg:self-start">
-                    <Button>
-                      Explore My Journey
-                      <ArrowRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Button>
-                  </Link>
+                  <CardTitle className="text-xl">Research Focus</CardTitle>
                 </div>
+                <CardDescription>
+                  Specializing in lightning meteorology, atmospheric dynamics,
+                  climate modeling, and environmental science. My research
+                  investigates Earth's atmospheric systems using cutting-edge
+                  remote sensing and computational models to understand
+                  climate change patterns.
+                </CardDescription>
               </CardHeader>
+            </Card>
 
-              <CardContent className="space-y-6 pt-6">
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div className="space-y-4">
-                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                          <Target className="text-primary h-5 w-5" />
-                        </div>
-                        <div>
-                          <h3 className="mb-2 text-lg font-semibold">
-                            Research Focus
-                          </h3>
-                          <p className="text-muted-foreground leading-relaxed">
-                            Specializing in lightning meteorology, atmospheric
-                            dynamics, climate modeling, and environmental
-                            science. My research investigates Earth's
-                            atmospheric systems using cutting-edge remote
-                            sensing and computational models to understand
-                            climate change patterns.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                          <Microscope className="text-primary h-5 w-5" />
-                        </div>
-                        <div>
-                          <h3 className="mb-2 text-lg font-semibold">
-                            Methodology
-                          </h3>
-                          <p className="text-muted-foreground leading-relaxed">
-                            Leveraging advanced computational frameworks,
-                            satellite data analysis, and machine learning
-                            techniques to develop accurate predictive models for
-                            atmospheric behavior and climate trends.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Microscope className="text-primary h-6 w-6" />
                   </div>
+                  <CardTitle className="text-xl">Methodology</CardTitle>
+                </div>
+                <CardDescription>
+                  Leveraging advanced computational frameworks, satellite data
+                  analysis, and machine learning techniques to develop
+                  accurate predictive models for atmospheric behavior and
+                  climate trends.
+                </CardDescription>
+              </CardHeader>
+            </Card>
 
-                  <div className="space-y-4">
-                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                          <GraduationCap className="text-primary h-5 w-5" />
-                        </div>
-                        <div>
-                          <h3 className="mb-2 text-lg font-semibold">
-                            Academic Excellence
-                          </h3>
-                          <p className="text-muted-foreground leading-relaxed">
-                            PhD researcher with a strong foundation in space
-                            physics and environmental science, committed to
-                            advancing knowledge in atmospheric composition and
-                            weather prediction systems through rigorous academic
-                            research.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-card/40 hover:bg-card/60 border-border/60 hover:border-primary/40 rounded-xl border p-5 transition-colors">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary/10 mt-1 rounded-lg p-2">
-                          <Globe className="text-primary h-5 w-5" />
-                        </div>
-                        <div>
-                          <h3 className="mb-2 text-lg font-semibold">
-                            Global Impact
-                          </h3>
-                          <p className="text-muted-foreground leading-relaxed">
-                            Dedicated to contributing meaningful insights that
-                            address global environmental challenges and support
-                            sustainable development through evidence-based
-                            scientific research.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <GraduationCap className="text-primary h-6 w-6" />
                   </div>
+                  <CardTitle className="text-xl">
+                    Academic Excellence
+                  </CardTitle>
                 </div>
+                <CardDescription>
+                  PhD researcher with a strong foundation in space physics and
+                  environmental science, committed to advancing knowledge in
+                  atmospheric composition and weather prediction systems
+                  through rigorous academic research.
+                </CardDescription>
+              </CardHeader>
+            </Card>
 
-                <div className="flex flex-wrap gap-4 pt-4">
-                  <Badge variant="outline" className="px-3 py-1 text-sm">
-                    <Cloud className="mr-1 h-3 w-3" />
-                    Lightning Meteorology
-                  </Badge>
-                  <Badge variant="outline" className="px-3 py-1 text-sm">
-                    <Satellite className="mr-1 h-3 w-3" />
-                    Remote Sensing
-                  </Badge>
-                  <Badge variant="outline" className="px-3 py-1 text-sm">
-                    <Cpu className="mr-1 h-3 w-3" />
-                    Tropical Storm
-                  </Badge>
-                  <Badge variant="outline" className="px-3 py-1 text-sm">
-                    <TrendingUp className="mr-1 h-3 w-3" />
-                    Aerosol Emission
-                  </Badge>
-                  <Badge variant="outline" className="px-3 py-1 text-sm">
-                    <Wind className="mr-1 h-3 w-3" />
-                    Climate Change
-                  </Badge>
-                  <Badge variant="outline" className="px-3 py-1 text-sm">
-                    <Wind className="mr-1 h-3 w-3" />
-                    Atmospheric Dynamics
-                  </Badge>
+            <Card className="border-border/60 hover:border-primary/40 transition-colors">
+              <CardHeader>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="bg-primary/10 rounded-lg p-2">
+                    <Globe className="text-primary h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl">Global Impact</CardTitle>
                 </div>
-              </CardContent>
+                <CardDescription>
+                  Dedicated to contributing meaningful insights that address
+                  global environmental challenges and support sustainable
+                  development through evidence-based scientific research.
+                </CardDescription>
+              </CardHeader>
             </Card>
           </div>
         </div>
