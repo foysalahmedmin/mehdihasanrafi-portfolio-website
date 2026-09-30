@@ -129,10 +129,10 @@ const skills = [
     icon: Brain,
     items: [
       "Atmospheric Chemistry",
-      "Climate Dynamics",
-      "Satellite Data Processing",
+      "Space Weather",
+      "Satellite Observations",
       "Atmospheric Physics",
-      "Environmental Monitoring",
+      "Radar System Acquisition",
     ],
   },
 ];
