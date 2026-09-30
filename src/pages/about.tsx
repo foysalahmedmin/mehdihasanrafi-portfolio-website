@@ -214,7 +214,7 @@ export default function About() {
       title: "Outstanding Research Contribution Award",
       organization:
         "Bangladesh Council of Scientific and Industrial Research (BCSIR)",
-      year: "2024",
+      year: "2025",
       description:
         "Recognized for exceptional contributions to lightning and atmospheric research",
     },
@@ -234,6 +234,13 @@ export default function About() {
         "Recognized for groundbreaking research on atmospheric dynamics",
     },
     {
+      title: "Best Researcher Award (Weather & Atmosphere)",
+      organization:
+        "Organized by World Science Awards. Theme: Empowering Research & Inspiring Innovation.",
+      year: "2024",
+      description: "Recognized for outstanding academic achievements",
+    },
+    {
       title: "Dr. Aminul Islam Scholarship",
       organization: "Daffodil International University",
       year: "2018",
@@ -245,6 +252,24 @@ export default function About() {
   const clients = [
     {
       name: "Journal of Geophysical Research (Climate Dynamics)",
+      type: "Reviewer",
+      description:
+        "Reviewed scientific manuscripts and conference submissions in climate and environmental research",
+    },
+    {
+      name: "Springer Nature (Theoretical and Applied Climatology)",
+      type: "Reviewer",
+      description:
+        "Reviewed scientific manuscripts and conference submissions in climate and environmental research",
+    },
+    {
+      name: "Frontiers in Astronomy and Space Sciences",
+      type: "Reviewer",
+      description:
+        "Reviewed scientific manuscripts and conference submissions in climate and environmental research",
+    },
+    {
+      name: "International Conference on Advances in Civil and Ecological Engineering Research, Macao, China",
       type: "Reviewer",
       description:
         "Reviewed scientific manuscripts and conference submissions in climate and environmental research",
@@ -391,7 +416,7 @@ export default function About() {
 
           <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2">
             {researchInterests.map((interest, index) => (
-              <Card key={index} className="h-full">
+              <Card key={index} className="h-full md:last:col-span-2">
                 <CardHeader>
                   <CardTitle className="text-xl">{interest.title}</CardTitle>
                 </CardHeader>
@@ -516,7 +541,7 @@ export default function About() {
 
           <div className="fade-up grid grid-cols-1 gap-6 md:grid-cols-2">
             {awards.map((award, index) => (
-              <Card key={index} className="border-2">
+              <Card key={index} className="border-2 md:last:col-span-2">
                 <CardHeader>
                   <div className="mb-4 flex items-start justify-between gap-4">
                     <div className="bg-primary/10 rounded-lg p-3">
