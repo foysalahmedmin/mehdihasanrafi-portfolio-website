@@ -83,10 +83,6 @@ export async function updateProject(
   id: string,
   payload: UpdateProjectPayload,
 ): Promise<TProjectResponse> {
-  console.log(payload);
-
-  if (payload.title) return {};
-
   const formData = new FormData();
 
   if (payload.title) formData.append("title", payload.title);

@@ -207,7 +207,6 @@ export default function AdminProjectsPage() {
   const handleEdit = (project: TProject) => {
     setSelectedProject(project);
 
-    console.log(project);
     setFormData({
       title: project.title,
       slug: project.slug,
