@@ -18,7 +18,7 @@ import type { TBulkPublicationResponse } from "@/types/publication.type";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowRight,
-  BarChart3,
+  Atom,
   BookOpen,
   Brain,
   ChevronDown,
@@ -28,12 +28,17 @@ import {
   FolderKanban,
   Globe,
   GraduationCap,
+  Layers,
   Microscope,
+  Navigation,
   Play,
   Quote,
   Satellite,
+  Signal,
+  Sun,
   Target,
   TrendingUp,
+  Waves,
   Wind,
   Zap,
 } from "lucide-react";
@@ -41,40 +46,58 @@ import { Link } from "wouter";
 
 const researchInterests = [
   {
+    title: "Upper Atmosphere",
+    description:
+      "Investigating the structure, variability and physical processes of the upper atmosphere using ground based and satellite observations.",
+    icon: Layers,
+  },
+  {
+    title: "Ionospheric Irregularities",
+    description:
+      "Studying the formation, evolution and characteristics of ionospheric irregularities and their relationship with plasma dynamics.",
+    icon: Waves,
+  },
+  {
+    title: "Ionospheric Scintillation",
+    description:
+      "Analyzing ionospheric scintillation using GNSS observations to understand signal fluctuations and space weather effects.",
+    icon: Signal,
+  },
+  {
+    title: "Ionospheric Plasma Dynamics",
+    description:
+      "Examining plasma dynamics, vertical plasma drift and E×B processes associated with nighttime equatorial ionospheric variability.",
+    icon: Atom,
+  },
+  {
+    title: "Space Weather Applications",
+    description:
+      "Investigating ionospheric variability and space weather effects to support monitoring, prediction and communication applications.",
+    icon: Sun,
+  },
+  {
+    title: "Satellite Navigation",
+    description:
+      "Studying ionospheric effects on GNSS signals and satellite navigation through TEC, scintillation and related observations.",
+    icon: Navigation,
+  },
+  {
     title: "Lightning Meteorology",
     description:
-      "Investigating the formation, distribution, and intensity of lightning events to understand their relationship with convective systems and severe weather processes.",
+      "Investigating the distribution, intensity and evolution of lightning and its relationship with convection and severe weather.",
     icon: Cloud,
   },
   {
     title: "Remote Sensing",
     description:
-      "Employing satellite and radar technologies to observe atmospheric properties, monitor storm development, and assess environmental impacts with high spatial and temporal resolution.",
+      "Using satellite, radar and ground based observations to investigate atmospheric and ionospheric processes.",
     icon: Satellite,
   },
   {
     title: "Tropical Storms",
     description:
-      "Studying the genesis, structure, and evolution of tropical cyclones to improve prediction models and assess their link to global climate variability.",
+      "Studying the development, structure and evolution of tropical cyclones and their associated atmospheric and lightning characteristics.",
     icon: Wind,
-  },
-  {
-    title: "Aerosol Emission",
-    description:
-      "Analyzing sources, transport, and radiative effects of aerosols, as well as their role in cloud formation and atmospheric chemistry.",
-    icon: BarChart3,
-  },
-  {
-    title: "Climate Change",
-    description:
-      "Examining the long-term effects of greenhouse gases, aerosol–cloud interactions, and feedback mechanisms that drive global and regional climate shifts.",
-    icon: Target,
-  },
-  {
-    title: "Atmospheric Dynamics",
-    description:
-      "Understanding the physical and dynamical processes of variations in electron density, mechanisms behind ionospheric disturbances, and their connections to space weather and upper-atmospheric dynamics.",
-    icon: Globe,
   },
 ];
 
