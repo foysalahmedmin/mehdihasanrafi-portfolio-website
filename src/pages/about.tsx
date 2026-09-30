@@ -301,7 +301,7 @@ export default function About() {
             </div>
 
             {/* Biography */}
-            <div className="fade-left space-y-6 lg:col-span-2">
+            <div className="fade-left space-y-6 lg:col-span-2 lg:self-center">
               <div>
                 <h1 className="mb-4 text-4xl font-bold lg:text-5xl">
                   About Mehdi Hasan Rafi
@@ -313,20 +313,19 @@ export default function About() {
 
               <div className="space-y-4 text-base leading-relaxed">
                 <p>
-                  I am a PhD researcher working in Earth and atmospheric
-                  science with a focus on ionospheric and atmospheric
-                  research. My work involves studying ionospheric
-                  irregularities, plasma dynamics, space weather and lightning
-                  using ground based observations, satellite data and
-                  computational methods.
+                  I am a PhD researcher working in Earth and atmospheric science
+                  with a focus on ionospheric and atmospheric research. My work
+                  involves studying ionospheric irregularities, plasma dynamics,
+                  space weather and lightning using ground based observations,
+                  satellite data and computational methods.
                 </p>
                 <p>
                   My research brings together multi instrument observations,
-                  scientific data analysis, remote sensing and machine
-                  learning to better understand atmospheric and ionospheric
-                  processes. I have research experience with Jicamarca Radio
-                  Observatory, GNSS observations, incoherent scatter radar and
-                  lightning detection systems.
+                  scientific data analysis, remote sensing and machine learning
+                  to better understand atmospheric and ionospheric processes. I
+                  have research experience with Jicamarca Radio Observatory,
+                  GNSS observations, incoherent scatter radar and lightning
+                  detection systems.
                 </p>
                 <p>
                   I am particularly interested in understanding how changes in
