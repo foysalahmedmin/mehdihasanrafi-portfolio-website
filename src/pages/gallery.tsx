@@ -7,8 +7,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { URLS } from "@/config/urls";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
+import { getGalleryMediaUrl } from "@/utils/gallery-media";
 import type { TBulkGalleryResponse } from "@/types/gallery.type";
 import { useQuery } from "@tanstack/react-query";
 import { Image as ImageIcon, Play } from "lucide-react";
@@ -32,27 +32,8 @@ export default function Gallery() {
     caption?: string;
   } | null>(null);
 
-  const getMediaUrl = (item: (typeof gallery)[0]) => {
-    if (item.media_type === "image") {
-      if (item.image_url) return item.image_url;
-      if (item.image) {
-        return item.image.startsWith("http")
-          ? item.image
-          : `${URLS.gallery.image}/${item.image}`;
-      }
-    } else {
-      if (item.video_url) return item.video_url;
-      if (item.video) {
-        return item.video.startsWith("http")
-          ? item.video
-          : `${URLS.gallery.video}/${item.video}`;
-      }
-    }
-    return "";
-  };
-
   const handleMediaClick = (item: (typeof gallery)[0]) => {
-    const url = getMediaUrl(item);
+    const url = getGalleryMediaUrl(item);
     if (url) {
       setSelectedMedia({
         url,
@@ -91,7 +72,7 @@ export default function Gallery() {
           ) : gallery.length > 0 ? (
             <div className="fade-up grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {gallery.map((item) => {
-                const mediaUrl = getMediaUrl(item);
+                const mediaUrl = getGalleryMediaUrl(item);
                 if (!mediaUrl) return null;
 
                 return (

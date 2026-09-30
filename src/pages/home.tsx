@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { usePageSEO } from "@/hooks/utils/usePageSeo";
+import { getGalleryMediaUrl } from "@/utils/gallery-media";
 import type { TBulkGalleryResponse } from "@/types/gallery.type";
 import type { TBulkNewsResponse } from "@/types/news.type";
 import type { TBulkProjectResponse } from "@/types/project.type";
@@ -172,7 +173,7 @@ export default function Home() {
   });
 
   const { data: galleryResponse } = useQuery<TBulkGalleryResponse>({
-    queryKey: ["/api/gallery"],
+    queryKey: ["/api/gallery/public"],
   });
 
   const projects = projectsResponse?.data || [];
@@ -183,7 +184,8 @@ export default function Home() {
   const recentProjects = projects.slice(0, 3);
   const recentPublications = publications.slice(0, 3);
   const recentNews = bulkNews.slice(0, 3);
-  const recentGallery = gallery.filter((item) => item.is_active).slice(0, 6);
+  // /api/gallery/public already returns only active items, admin-ordered.
+  const recentGallery = gallery.slice(0, 6);
 
   const scrollToAbout = () => {
     document
@@ -589,39 +591,44 @@ export default function Home() {
 
           {recentGallery.length > 0 ? (
             <div className="fade-up grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
-              {recentGallery.map((item) => (
-                <div
-                  key={item._id}
-                  className="group bg-muted relative aspect-square overflow-hidden rounded-lg"
-                >
-                  {item.media_type === "image" ? (
-                    <img
-                      src={item.image_url || item.image}
-                      alt={item.caption || "Gallery image"}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="relative h-full w-full">
-                      <video
-                        src={item.video_url || item.video}
-                        className="h-full w-full object-cover"
-                        muted
-                        loop
+              {recentGallery.map((item) => {
+                const mediaUrl = getGalleryMediaUrl(item);
+                if (!mediaUrl) return null;
+
+                return (
+                  <div
+                    key={item._id}
+                    className="group bg-muted relative aspect-square overflow-hidden rounded-lg"
+                  >
+                    {item.media_type === "image" ? (
+                      <img
+                        src={mediaUrl}
+                        alt={item.caption || "Gallery image"}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <Play className="h-12 w-12 text-white" />
+                    ) : (
+                      <div className="relative h-full w-full">
+                        <video
+                          src={mediaUrl}
+                          className="h-full w-full object-cover"
+                          muted
+                          loop
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <Play className="h-12 w-12 text-white" />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {item.caption && (
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                      <p className="line-clamp-2 text-sm text-white">
-                        {item.caption}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                    {item.caption && (
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                        <p className="line-clamp-2 text-sm text-white">
+                          {item.caption}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <Card className="p-12 text-center">
