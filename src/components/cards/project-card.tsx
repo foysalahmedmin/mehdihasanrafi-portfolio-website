@@ -23,7 +23,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <img
               src={
                 project.thumbnail
-                  ? `${URLS.projects.thumbnail}/${project.thumbnail}`
+                  ? project.thumbnail.startsWith("http")
+                    ? project.thumbnail
+                    : `${URLS.projects.thumbnail}/${project.thumbnail}`
                   : "/images/thumbnail.png"
               }
               alt={project.title}
