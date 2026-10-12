@@ -10,7 +10,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { URLS } from "@/config/urls";
 import { getPublicationBySlug } from "@/services/publication.service";
 import type {
   TBulkPublicationResponse,
@@ -98,11 +97,7 @@ export default function PublicationDetail() {
     );
   }
 
-  const pdfUrl = publication?.pdf
-    ? publication.pdf.startsWith("http")
-      ? publication.pdf
-      : `${URLS.publications.pdf}/${publication.pdf}`
-    : null;
+  const pdfUrl = publication?.pdf || null;
 
   const highlightedAuthors = publication?.authors?.map((author) =>
     author?.includes("Rafi") ? `<strong>${author}</strong>` : author,
@@ -240,9 +235,7 @@ export default function PublicationDetail() {
               <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
                 <img
                   src={
-                    publication.thumbnail.startsWith("http")
-                      ? publication.thumbnail
-                      : `${URLS.publications.thumbnail}/${publication.thumbnail}`
+                    publication.thumbnail
                   }
                   alt={publication.title}
                   className="h-full w-full object-cover"
@@ -287,9 +280,7 @@ export default function PublicationDetail() {
                   >
                     <img
                       src={
-                        image.startsWith("http")
-                          ? image
-                          : `${URLS.publications.image}/${image}`
+                        image
                       }
                       alt={`${publication.title} - Image ${index + 1}`}
                       className="h-full w-full object-cover"

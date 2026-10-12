@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { URLS } from "@/config/urls";
 import { getProjectBySlug } from "@/services/project.service";
 import type {
   TBulkProjectResponse,
@@ -162,9 +161,7 @@ export default function ProjectDetail() {
               <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
                 <img
                   src={
-                    project.thumbnail.startsWith("http")
-                      ? project.thumbnail
-                      : `${URLS.projects.thumbnail}/${project.thumbnail}`
+                    project.thumbnail
                   }
                   alt={project.title}
                   className="h-full w-full object-cover"
@@ -182,9 +179,7 @@ export default function ProjectDetail() {
                   >
                     <img
                       src={
-                        image.startsWith("http")
-                          ? image
-                          : `${URLS.projects.image}/${image}`
+                        image
                       }
                       alt={`${project.title} - Image ${index + 1}`}
                       className="h-full w-full object-cover"

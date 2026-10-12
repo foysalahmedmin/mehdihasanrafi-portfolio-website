@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { URLS } from "@/config/urls";
 import { getNewsBySlug } from "@/services/news.service";
 import type { TBulkNewsResponse, TNewsResponse } from "@/types/news.type";
 import { useQuery } from "@tanstack/react-query";
@@ -154,9 +153,7 @@ export default function NewsDetail() {
               <div className="aspect-[21/9] overflow-hidden rounded-lg shadow-lg">
                 <img
                   src={
-                    news.thumbnail.startsWith("http")
-                      ? news.thumbnail
-                      : `${URLS.news.thumbnail}/${news.thumbnail}`
+                    news.thumbnail
                   }
                   alt={news.title}
                   className="h-full w-full object-cover"
@@ -174,9 +171,7 @@ export default function NewsDetail() {
                   >
                     <img
                       src={
-                        image.startsWith("http")
-                          ? image
-                          : `${URLS.news.image}/${image}`
+                        image
                       }
                       alt={`${news.title} - Image ${index + 1}`}
                       className="h-full w-full object-cover"

@@ -5,7 +5,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { URLS } from "@/config";
 import type { TProject } from "@/types/project.type";
 import { Calendar, Clock } from "lucide-react";
 import { Link } from "wouter";
@@ -22,11 +21,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <div className="relative aspect-video overflow-hidden">
             <img
               src={
-                project.thumbnail
-                  ? project.thumbnail.startsWith("http")
-                    ? project.thumbnail
-                    : `${URLS.projects.thumbnail}/${project.thumbnail}`
-                  : "/images/thumbnail.png"
+                project.thumbnail || "/images/thumbnail.png"
               }
               alt={project.title}
               className="h-full w-full object-cover"

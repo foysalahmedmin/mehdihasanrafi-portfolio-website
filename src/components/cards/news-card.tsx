@@ -5,7 +5,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { URLS } from "@/config";
 import type { TNews } from "@/types/news.type";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
 import { Link } from "wouter";
@@ -22,11 +21,7 @@ export function NewsCard({ news }: NewsCardProps) {
           <div className="relative aspect-video overflow-hidden">
             <img
               src={
-                news.thumbnail
-                  ? news.thumbnail.startsWith("http")
-                    ? news.thumbnail
-                    : `${URLS.news.thumbnail}/${news.thumbnail}`
-                  : "/images/thumbnail.png"
+                news.thumbnail || "/images/thumbnail.png"
               }
               alt={news.title}
               className="h-full w-full object-cover"
